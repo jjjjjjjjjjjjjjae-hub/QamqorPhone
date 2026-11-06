@@ -277,6 +277,169 @@ h1 span{background-size:200% 200%;animation:qamqorGradient 6s ease infinite}
  }
 }
 
+
+/* CINEMATIC MOTION — PREMIUM TECH EXPERIENCE */
+:root{--mx:0;--my:0}
+body{isolation:isolate;overflow-x:hidden}
+body:before{
+ content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;
+ background:
+  radial-gradient(circle at 18% 22%,#1e70bd20 0,transparent 27%),
+  radial-gradient(circle at 82% 38%,#16a6b520 0,transparent 24%),
+  radial-gradient(circle at 52% 88%,#4c69d012 0,transparent 27%);
+ filter:blur(20px);animation:ambientDrift 18s ease-in-out infinite alternate
+}
+body:after{
+ content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.16;
+ background-image:linear-gradient(#8abfff10 1px,transparent 1px),linear-gradient(90deg,#8abfff10 1px,transparent 1px);
+ background-size:54px 54px;
+ mask-image:linear-gradient(to bottom,black,transparent 78%)
+}
+@keyframes ambientDrift{0%{transform:translate3d(-2%,0,0) scale(1)}100%{transform:translate3d(2%,2%,0) scale(1.08)}}
+@keyframes orbitSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes orbitSpinReverse{to{transform:translate(-50%,-50%) rotate(-360deg)}}
+@keyframes scanSweep{0%,12%{top:8%;opacity:0}25%{opacity:.8}78%{opacity:.5}100%{top:90%;opacity:0}}
+@keyframes particleRise{0%,100%{transform:translate3d(0,8px,0) scale(.7);opacity:.25}50%{transform:translate3d(8px,-18px,0) scale(1.25);opacity:1}}
+@keyframes cardHover{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-9px) rotate(-1deg)}}
+@keyframes pulseRing{0%{box-shadow:0 0 0 0 #65b4ff44}70%{box-shadow:0 0 0 13px #65b4ff00}100%{box-shadow:0 0 0 0 #65b4ff00}}
+@keyframes deviceFloatPro{
+ 0%,100%{transform:translate3d(0,0,0) rotateX(var(--device-tilt-y,0deg)) rotateY(var(--device-tilt-x,0deg)) rotateZ(-7deg)}
+ 50%{transform:translate3d(0,-15px,0) rotateX(var(--device-tilt-y,0deg)) rotateY(var(--device-tilt-x,0deg)) rotateZ(-3deg)}
+}
+.premium-art{
+ isolation:isolate;perspective:1100px;transform-style:preserve-3d;
+ background:radial-gradient(ellipse at 50% 48%,#1a4169 0,#102640 43%,#091523 100%);
+ border:1px solid #4675a44d;
+ box-shadow:0 35px 100px #0008,inset 0 1px 0 #ffffff18;
+ overflow:hidden
+}
+.premium-art:before{
+ width:330px;height:330px;right:-100px;top:-140px;
+ background:#1687e9;filter:blur(55px);opacity:.28
+}
+.premium-art:after{
+ width:260px;height:260px;left:-90px;bottom:-130px;
+ background:#00a9a1;filter:blur(65px);opacity:.23
+}
+.art-grid{
+ position:absolute;inset:0;z-index:0;opacity:.22;
+ background-image:linear-gradient(#9bcfff17 1px,transparent 1px),linear-gradient(90deg,#9bcfff17 1px,transparent 1px);
+ background-size:31px 31px;
+ mask-image:radial-gradient(ellipse at center,#000 0,transparent 75%)
+}
+.orbit{
+ position:absolute;left:50%;top:49%;border:1px solid #83c8ff35;border-radius:50%;
+ transform:translate(-50%,-50%);pointer-events:none;z-index:1
+}
+.orbit-one{width:340px;height:180px;animation:orbitSpin 18s linear infinite}
+.orbit-two{width:260px;height:290px;border-color:#35d3c52b;animation:orbitSpinReverse 23s linear infinite}
+.orbit i{position:absolute;left:50%;top:-5px;width:9px;height:9px;border-radius:50%;background:#a1dcff;box-shadow:0 0 16px 5px #58aaff77}
+.orbit-two i{top:auto;left:auto;right:18%;bottom:4%;background:#45e4d4;box-shadow:0 0 16px 5px #45e4d477}
+.scan-line{
+ position:absolute;left:8%;right:8%;top:10%;height:1px;z-index:4;pointer-events:none;
+ background:linear-gradient(90deg,transparent,#8bd6ffb0,transparent);
+ box-shadow:0 0 18px 3px #54b6ff44;animation:scanSweep 5.5s ease-in-out infinite
+}
+.device{
+ z-index:3;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+ background:linear-gradient(145deg,#f3fbff 0%,#bbdcfa 48%,#e6f5ff 100%);
+ border:6px solid #9fc4e8;box-shadow:0 30px 70px #0009,0 0 65px #66baff42,inset 0 0 0 2px #ffffffa8;
+ animation:deviceFloatPro 5.8s ease-in-out infinite;
+ transform-style:preserve-3d;will-change:transform
+}
+.device:before{z-index:2}
+.device-camera{position:absolute;top:7px;width:42px;height:9px;border-radius:10px;background:#183858;box-shadow:inset 0 1px 2px #0008}
+.device b{
+ display:grid;place-items:center;width:83px;height:83px;border-radius:25px;
+ color:#fff;font-size:48px;letter-spacing:-3px;
+ background:linear-gradient(145deg,#6dc1ff,#1267c9);
+ box-shadow:0 14px 28px #176bd044,inset 0 1px 0 #ffffff88
+}
+.device small{font-size:8px;font-weight:900;letter-spacing:3px;color:#37648c}
+.device-shine{
+ position:absolute;inset:0;overflow:hidden;border-radius:20px;pointer-events:none
+}
+.device-shine:after{
+ content:"";position:absolute;top:-20%;bottom:-20%;left:-70%;width:45%;
+ background:linear-gradient(90deg,transparent,#ffffff99,transparent);
+ transform:skewX(-20deg);animation:qamqorShine 4.8s ease-in-out infinite
+}
+.tool{
+ z-index:5;right:calc(50% - 116px);bottom:52px;
+ border:1px solid #80caff88;background:linear-gradient(145deg,#2b5d87,#102943);
+ box-shadow:0 15px 40px #0009,0 0 25px #55baff30;
+ animation:toolPulse 4s ease-in-out infinite
+}
+@keyframes toolPulse{0%,100%{transform:translateY(0) rotate(-7deg) scale(1)}50%{transform:translateY(-11px) rotate(8deg) scale(1.04)}}
+.mini-card{
+ position:absolute;z-index:6;display:flex;align-items:center;gap:10px;
+ padding:11px 14px;border:1px solid #8bcaff3b;border-radius:14px;
+ background:linear-gradient(145deg,#183754eF,#0d1e32ed);
+ box-shadow:0 15px 35px #0007,inset 0 1px 0 #ffffff18;
+ backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+ animation:cardHover 5s ease-in-out infinite
+}
+.mini-card b{display:block;color:#f3f8ff;font-size:11px;letter-spacing:.1px}
+.mini-card small{display:block;margin-top:3px;color:#9cb8d5;font-size:9px}
+.mini-top{top:18%;left:7%;animation-delay:-1s}
+.mini-bottom{right:6%;bottom:15%;animation-delay:-2.7s}
+.mini-icon,.mini-check{
+ width:30px;height:30px;display:grid;place-items:center;flex:none;border-radius:10px;
+ color:#bce4ff;background:#2d6da044;border:1px solid #77bcff55;font-size:15px
+}
+.mini-check{color:#72efc2;background:#147a6244;border-color:#5de3bd55}
+.art-particle{position:absolute;z-index:2;width:5px;height:5px;border-radius:50%;background:#a5e0ff;box-shadow:0 0 14px 4px #53b8ff88;animation:particleRise 4s ease-in-out infinite}
+.particle-one{top:22%;right:20%}.particle-two{bottom:28%;left:17%;animation-delay:-1.4s}.particle-three{top:62%;right:12%;animation-delay:-2.2s}
+.art-caption{position:absolute;bottom:18px;left:0;right:0;text-align:center;z-index:2;color:#82a8ca77;font-size:8px;letter-spacing:5px;font-weight:900}
+.hero>div:first-child .tag{animation:qamqorFadeUp .65s .05s both}
+.hero h1{animation:qamqorFadeUp .75s .12s both}
+.hero .lead{animation:qamqorFadeUp .75s .22s both}
+.hero-actions{animation:qamqorFadeUp .75s .32s both}
+.points{animation:qamqorFadeUp .75s .42s both}
+.header-cta{position:relative;overflow:hidden}
+.header-cta:after,.hero-cta:after,.submit:after{
+ content:"";position:absolute;top:-40%;bottom:-40%;left:-90%;width:55%;
+ background:linear-gradient(90deg,transparent,#ffffff55,transparent);
+ transform:skewX(-20deg);transition:none
+}
+.header-cta:hover:after,.hero-cta:hover:after,.submit:hover:after{animation:buttonShine .8s ease}
+@keyframes buttonShine{to{left:150%}}
+.hero-cta{box-shadow:0 12px 30px #2878e850,0 0 0 1px #8bcaff22 inset}
+.submit{position:relative;overflow:hidden}
+.card{border-color:#385472;box-shadow:0 30px 100px #0007,inset 0 1px 0 #ffffff12}
+.card:before{opacity:.9;filter:drop-shadow(0 0 8px #70bbff)}
+input,select,textarea{transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease,background .2s ease}
+input:focus,select:focus,textarea:focus{transform:translateY(-1px)}
+.map-field{box-shadow:inset 0 1px 0 #ffffff0a}
+#serviceMap{box-shadow:0 14px 38px #0005}
+@media(max-width:760px){
+ .premium-art{min-height:280px}
+ .orbit-one{width:290px;height:155px}.orbit-two{width:220px;height:245px}
+ .mini-top{left:4%;top:13%}.mini-bottom{right:3%;bottom:12%}
+ .mini-card{padding:9px 10px;gap:7px}
+ .mini-card b{font-size:10px}.mini-card small{font-size:8px}
+}
+@media(max-width:560px){
+ .premium-art{min-height:245px}
+ .orbit-one{width:260px;height:135px}.orbit-two{width:190px;height:220px}
+ .device{width:105px;height:180px;border-width:5px}
+ .device b{width:65px;height:65px;font-size:38px;border-radius:20px}
+ .mini-top{top:11%;left:3%}.mini-bottom{bottom:9%;right:2%}
+ .tool{right:calc(50% - 86px);bottom:35px}
+ .art-caption{bottom:9px;letter-spacing:3px}
+}
+@media(prefers-reduced-motion:reduce){
+ body:before,.orbit,.scan-line,.device,.tool,.mini-card,.art-particle,.device-shine:after{animation:none!important}
+}
+
+
+html.qamqor-reveal-ready .qamqor-reveal{
+ opacity:0;transform:translate3d(0,34px,0);
+ transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);
+ transition-delay:var(--reveal-delay,0ms)
+}
+html.qamqor-reveal-ready .qamqor-reveal.qamqor-visible{opacity:1;transform:translate3d(0,0,0)}
+
 </style>
 </head>
 <body>
@@ -285,7 +448,18 @@ h1 span{background-size:200% 200%;animation:qamqorGradient 6s ease infinite}
 <main>
 <section class="hero">
 <div><div class="tag">Жөндеу • Қолдау • Сенім</div><h1>Телефоныңызға<br><span>көмек керек пе?</span></h1><p class="lead">Телефоныңызды жөндету енді оңай. Өтінім қалдырыңыз — маман сізбен байланысып, жөндеу жолын келіседі.</p><div class="hero-actions"><a class="hero-cta" href="#repair">Маман шақыру <span>→</span></a><span class="hero-note"><i></i> Онлайн өтінім қабылдаймыз</span></div><div class="points"><span class="point">✓ Экран және дисплей</span><span class="point">✓ Батарея</span><span class="point">✓ Зарядтау ұясы</span></div></div>
-<div class="art" aria-label="QAMQOR PHONE телефон белгісі"><div class="device"><b>Q</b></div><div class="tool">⌁</div></div>
+<div class="art premium-art" aria-label="QAMQOR PHONE телефон белгісі">
+  <div class="art-grid"></div>
+  <div class="orbit orbit-one"><i></i></div>
+  <div class="orbit orbit-two"><i></i></div>
+  <div class="scan-line"></div>
+  <div class="art-particle particle-one"></div><div class="art-particle particle-two"></div><div class="art-particle particle-three"></div>
+  <div class="device"><div class="device-camera"></div><b>Q</b><small>QAMQOR</small><span class="device-shine"></span></div>
+  <div class="tool">⌁</div>
+  <div class="mini-card mini-top"><span class="mini-icon">✦</span><span><b>Сапалы сервис</b><small>Ұқыпты жөндеу</small></span></div>
+  <div class="mini-card mini-bottom"><span class="mini-check">✓</span><span><b>Маман шақыру</b><small>Өтінім онлайн</small></span></div>
+  <div class="art-caption">CARE • REPAIR • TRUST</div>
+</div>
 </section>
 <section class="card" id="repair">
 <div class="cardhead"><div><div class="tag">Онлайн өтінім</div><h2>Жөндеуге өтініш қалдыру</h2><p class="sub">Жұлдызшамен белгіленген жолдарды толтырыңыз.</p></div><div class="step">ӨТІНІМ · 1/1</div></div>
@@ -320,7 +494,46 @@ h1 span{background-size:200% 200%;animation:qamqorGradient 6s ease infinite}
 </main>
 <footer><div><strong>QAMQOR PHONE</strong> · Телефон жөндеу қызметі</div><div>© <span id="year"></span> Барлық құқық қорғалған</div></footer>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous">
+
+// Premium scroll reveal + subtle 3D pointer response. No external library required.
+(() => {
+  const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const art = document.querySelector(".premium-art");
+  if (art && !reduceMotion && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    art.addEventListener("pointermove", event => {
+      const rect = art.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width - 0.5;
+      const y = (event.clientY - rect.top) / rect.height - 0.5;
+      art.style.setProperty("--device-tilt-x", (x * 12).toFixed(2) + "deg");
+      art.style.setProperty("--device-tilt-y", (-y * 10).toFixed(2) + "deg");
+    });
+    art.addEventListener("pointerleave", () => {
+      art.style.setProperty("--device-tilt-x", "0deg");
+      art.style.setProperty("--device-tilt-y", "0deg");
+    });
+  }
+
+  const revealTargets = document.querySelectorAll(".card, footer, .map-field, #telegramVerifyBox");
+  if (!reduceMotion && "IntersectionObserver" in window) {
+    document.documentElement.classList.add("qamqor-reveal-ready");
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("qamqor-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {threshold: 0.12, rootMargin: "0px 0px -35px 0px"});
+    revealTargets.forEach((element, index) => {
+      element.classList.add("qamqor-reveal");
+      element.style.setProperty("--reveal-delay", Math.min(index * 90, 270) + "ms");
+      observer.observe(element);
+    });
+  }
+})();
+
+</script>
 <script>
 const form = document.getElementById("repairForm");
 const notice = document.getElementById("notice");
