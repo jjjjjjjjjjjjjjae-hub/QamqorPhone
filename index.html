@@ -443,24 +443,420 @@ input,textarea,[contenteditable="true"]{
 }
 #serviceMap{touch-action:auto}
 
+
+/* QAMQOR PHONE — signature experience */
+:root{
+  --bg:#070b12;
+  --surface:#111a27;
+  --surface-2:#172438;
+  --line:rgba(153,190,232,.16);
+  --blue:#168cff;
+  --blue2:#65b7ff;
+  --ice:#dceeff;
+  --muted:#99aec6;
+}
+html{scroll-padding-top:100px}
+body{
+  color:#e8f3ff;
+  background:
+    radial-gradient(ellipse at 8% 5%,rgba(18,113,226,.15),transparent 34rem),
+    radial-gradient(ellipse at 90% 22%,rgba(78,86,210,.12),transparent 38rem),
+    radial-gradient(ellipse at 50% 78%,rgba(12,91,145,.08),transparent 40rem),
+    #070b12;
+}
+.wrap{width:min(1220px,calc(100% - 56px))}
+.site-header{
+  height:82px;
+  display:flex;
+  gap:28px;
+  background:rgba(7,11,18,.78);
+  border-bottom:1px solid rgba(188,218,255,.10);
+  box-shadow:0 14px 44px rgba(0,0,0,.16);
+}
+.brand{text-decoration:none;flex-shrink:0}
+.main-nav{display:flex;align-items:center;gap:27px;margin-left:auto}
+.main-nav a{
+  color:#9db2ca;text-decoration:none;font-size:12px;font-weight:650;
+  transition:color .2s ease;
+}
+.main-nav a:hover{color:#fff}
+.header-right{gap:16px}
+.topnote{display:flex;align-items:center;gap:9px;color:#a6bad1}
+.topnote i{width:7px;height:7px;border-radius:50%;background:#45d59a;box-shadow:0 0 0 5px rgba(69,213,154,.12)}
+.header-cta,.hero-cta,.submit,.wizard-next{
+  border:1px solid rgba(170,220,255,.25);
+  background:linear-gradient(135deg,#2298ff 0%,#0870e4 58%,#0959c0 100%);
+  box-shadow:0 10px 30px rgba(8,112,228,.23),inset 0 1px rgba(255,255,255,.23);
+}
+.header-cta:hover,.hero-cta:hover,.submit:hover,.wizard-next:hover{
+  background:linear-gradient(135deg,#54b4ff,#1685f4 65%,#0b67d8);
+  transform:translateY(-2px);
+}
+.hero{
+  grid-template-columns:minmax(0,1.02fr) minmax(400px,.98fr);
+  align-items:center;
+  justify-items:stretch;
+  text-align:left;
+  gap:clamp(34px,6vw,82px);
+  padding:clamp(72px,9vw,120px) 0 78px;
+}
+.hero>div:first-child{max-width:none}
+.hero-copy{position:relative;z-index:2}
+.hero-copy .tag{font-size:10px}
+.hero h1{
+  max-width:660px;
+  margin:22px 0 22px;
+  font-size:clamp(46px,6.4vw,79px);
+  line-height:.99;
+  letter-spacing:-.078em;
+  color:#f1f7ff;
+}
+.hero h1 span{
+  color:#7fc4ff;
+  background:linear-gradient(105deg,#49a9ff 4%,#a7d8ff 52%,#8d9dff 100%);
+  background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero .lead{
+  max-width:540px;
+  margin:0;
+  color:#a8bbd1;
+  font-size:15px;
+  line-height:1.85;
+}
+.hero-actions{justify-content:flex-start;gap:13px;margin-top:30px}
+.hero-cta{min-height:54px;padding:16px 25px;font-size:14px}
+.hero-secondary{
+  min-height:52px;display:inline-flex;align-items:center;gap:11px;
+  padding:14px 19px;border:1px solid rgba(174,204,239,.18);
+  border-radius:999px;background:rgba(19,31,48,.48);
+  color:#c9def6;text-decoration:none;font-size:13px;font-weight:650;
+  transition:background .2s,border-color .2s,transform .2s;
+}
+.hero-secondary:hover{background:rgba(32,58,88,.72);border-color:#4c91d4;transform:translateY(-2px)}
+.hero-points{display:grid;gap:11px;margin-top:30px;color:#9fb5cf;font-size:12px;font-weight:600}
+.hero-points span{display:flex;align-items:center;gap:10px}
+.hero-points i{
+  width:19px;height:19px;display:grid;place-items:center;border-radius:50%;
+  background:rgba(37,183,130,.14);border:1px solid rgba(65,218,164,.32);
+  color:#61e0b0;font-size:11px;font-style:normal;
+}
+.art,.premium-art{
+  width:100%;min-height:475px;max-width:610px;justify-self:end;
+  border-radius:38px;overflow:hidden;
+  border:1px solid rgba(155,199,246,.18);
+  background:
+    radial-gradient(ellipse at 51% 48%,rgba(31,133,242,.28),transparent 43%),
+    radial-gradient(ellipse at 85% 12%,rgba(123,106,255,.17),transparent 38%),
+    linear-gradient(145deg,#17263a 0%,#0d1726 56%,#11162a 100%);
+  box-shadow:0 42px 110px rgba(0,0,0,.47),inset 0 1px rgba(255,255,255,.10);
+  perspective:1000px;
+}
+.art-grid{
+  position:absolute;inset:0;opacity:.17;pointer-events:none;
+  background-image:linear-gradient(rgba(173,213,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(173,213,255,.12) 1px,transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(135deg,#000,transparent 78%);
+}
+.art-orbit{
+  position:absolute;left:50%;top:48%;border:1px solid rgba(118,183,255,.20);
+  border-radius:50%;transform:translate(-50%,-50%) rotate(-25deg);
+}
+.orbit-one{width:390px;height:390px}
+.orbit-two{width:470px;height:470px;border-style:dashed;opacity:.55;animation:orbitSpin 42s linear infinite}
+.art-glow{
+  position:absolute;left:18%;right:18%;top:18%;bottom:18%;border-radius:50%;
+  background:radial-gradient(circle,rgba(36,136,255,.26),transparent 68%);
+  filter:blur(28px);
+}
+.device{
+  width:202px;height:352px;z-index:2;
+  padding:8px;border:5px solid #65758d;border-radius:43px;
+  background:linear-gradient(145deg,#ecf5ff,#8da9ca 58%,#d5e7fa);
+  box-shadow:0 38px 85px rgba(0,0,0,.58),inset 0 0 0 1px rgba(255,255,255,.9),0 0 50px rgba(52,147,255,.16);
+  transform:rotate(-8deg) rotateX(var(--device-tilt-y,0deg)) rotateY(var(--device-tilt-x,0deg));
+  animation:qPhoneFloat 6.5s ease-in-out infinite;
+}
+.device-camera{
+  top:10px;width:63px;height:16px;border-radius:99px;background:#101a2b;
+  box-shadow:inset 0 1px 3px #000,0 1px 0 rgba(255,255,255,.24);
+}
+.device-screen{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:9px;border-radius:31px;overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 32%,rgba(66,151,255,.25),transparent 38%),
+    linear-gradient(155deg,#f8fbff,#d7e8fa 60%,#b5d4f4);
+  color:#183a61;box-shadow:inset 0 0 0 1px rgba(255,255,255,.7);
+}
+.device-logo{
+  width:94px;height:94px;display:grid;place-items:center;margin-top:12px;
+  border-radius:27px;background:#fff;overflow:hidden;
+  box-shadow:0 15px 34px rgba(23,78,140,.18);
+}
+.device-logo img{width:100%;height:100%;object-fit:contain}
+.device-screen>strong{font-size:14px;letter-spacing:.15em;font-weight:850}
+.device-screen>span{font-size:8px;letter-spacing:.26em;color:#6685a9;font-weight:800}
+.device-check{
+  width:42px;height:42px;display:grid;place-items:center;margin-top:10px;
+  border-radius:50%;background:linear-gradient(145deg,#158cff,#075fc8);
+  color:#fff;font-size:22px;font-weight:800;
+  box-shadow:0 9px 24px rgba(13,111,221,.28);
+}
+.device-shine{position:absolute;inset:0;border-radius:34px;background:linear-gradient(120deg,transparent 29%,rgba(255,255,255,.5) 47%,transparent 62%);pointer-events:none}
+.hero-float{
+  position:absolute;z-index:4;display:flex;align-items:center;gap:12px;
+  padding:14px 17px;border:1px solid rgba(191,220,255,.20);
+  border-radius:17px;background:rgba(12,25,42,.72);
+  box-shadow:0 18px 45px rgba(0,0,0,.23);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+}
+.hero-float strong,.hero-float small{display:block}
+.hero-float strong{color:#eff7ff;font-size:11px;font-weight:800;letter-spacing:.05em}
+.hero-float small{margin-top:4px;color:#9eb7d4;font-size:10px}
+.hero-float-top{top:14%;left:5%}
+.hero-float-bottom{right:5%;bottom:18%}
+.float-icon,.float-check{
+  width:34px;height:34px;display:grid;place-items:center;flex:0 0 34px;
+  border-radius:11px;background:linear-gradient(145deg,#2c9fff,#175fca);
+  color:white;font-size:17px;box-shadow:0 8px 20px rgba(17,117,225,.25);
+}
+.float-check{background:linear-gradient(145deg,#30d59a,#139b76);font-weight:800}
+.art-caption{
+  bottom:24px;color:#a6c9ee;font-size:9px;letter-spacing:.25em;
+}
+.services-section,.process-section{padding:34px 0 92px}
+.section-heading{max-width:650px;margin:0 auto 36px;text-align:center}
+.section-heading .tag{justify-content:center}
+.section-heading h2{
+  margin:15px 0 12px;color:#eef6ff;font-size:clamp(30px,4.5vw,48px);
+  line-height:1.05;letter-spacing:-.065em;font-weight:760;
+}
+.section-heading p{margin:0;color:#96acc5;font-size:14px;line-height:1.75}
+.service-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.service-card{
+  position:relative;min-height:236px;overflow:hidden;
+  padding:23px 23px 21px;border:1px solid rgba(154,191,231,.15);
+  border-radius:23px;background:linear-gradient(150deg,rgba(22,36,54,.88),rgba(12,20,32,.90));
+  box-shadow:inset 0 1px rgba(255,255,255,.045);
+  transition:transform .28s,border-color .28s,box-shadow .28s;
+}
+.service-card:before{
+  content:"";position:absolute;width:170px;height:170px;right:-90px;top:-100px;
+  border-radius:50%;background:rgba(32,139,255,.17);filter:blur(18px);
+}
+.service-card:hover{transform:translateY(-7px);border-color:rgba(86,167,248,.45);box-shadow:0 24px 55px rgba(0,0,0,.24),inset 0 1px rgba(255,255,255,.07)}
+.service-icon{
+  width:51px;height:51px;display:grid;place-items:center;margin-bottom:20px;
+  border:1px solid rgba(133,194,255,.22);border-radius:16px;
+  background:linear-gradient(145deg,rgba(37,143,255,.22),rgba(82,113,218,.12));
+  color:#9ed1ff;font-size:27px;font-weight:700;
+  box-shadow:inset 0 1px rgba(255,255,255,.08);
+}
+.icon-audio span{font-size:17px;letter-spacing:-.1em}
+.service-card-top{position:absolute;top:29px;left:87px;right:22px;display:flex;justify-content:space-between;align-items:center;color:#7898bc;font-size:9px;font-weight:800;letter-spacing:.16em}
+.service-arrow{color:#8dbfff;font-size:15px}
+.service-card h3{position:relative;margin:0 0 8px;color:#e9f4ff;font-size:18px;letter-spacing:-.04em}
+.service-card p{position:relative;min-height:42px;margin:0 0 18px;color:#96abc2;font-size:12px;line-height:1.65}
+.service-card>a{position:relative;display:inline-flex;align-items:center;gap:10px;color:#8fc7ff;text-decoration:none;font-size:11px;font-weight:800}
+.service-card>a:hover{color:#fff}
+.process-section{padding-top:5px}
+.process-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.process-card{
+  position:relative;min-height:220px;padding:25px;
+  border:1px solid rgba(153,191,234,.15);border-radius:22px;
+  background:linear-gradient(150deg,rgba(17,31,48,.84),rgba(10,18,29,.88));
+}
+.process-number{position:absolute;right:23px;top:22px;color:#607b9e;font-size:11px;font-weight:800;letter-spacing:.14em}
+.process-symbol{
+  width:50px;height:50px;display:grid;place-items:center;margin-bottom:24px;
+  border-radius:16px;background:rgba(27,136,242,.15);border:1px solid rgba(82,166,249,.2);
+  color:#96cbff;font-size:25px;
+}
+.process-card h3{margin:0 0 8px;color:#eaf4ff;font-size:17px;letter-spacing:-.035em}
+.process-card p{margin:0;color:#95abc3;font-size:12px;line-height:1.7}
+.process-cta{
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  margin-top:20px;padding:22px 25px;border:1px solid rgba(78,153,228,.24);
+  border-radius:21px;background:linear-gradient(110deg,rgba(20,82,145,.25),rgba(24,36,74,.34));
+}
+.process-cta strong,.process-cta span{display:block}
+.process-cta strong{color:#eff7ff;font-size:15px}
+.process-cta span{margin-top:5px;color:#9db4cd;font-size:12px}
+.process-cta a{
+  flex-shrink:0;display:inline-flex;align-items:center;gap:14px;
+  padding:13px 18px;border-radius:999px;background:#147ee9;color:#fff;
+  text-decoration:none;font-size:12px;font-weight:750;
+  box-shadow:0 9px 24px rgba(15,119,224,.22);
+}
+#repair{
+  width:min(900px,100%);margin:0 auto 88px;padding:clamp(25px,4vw,44px);
+  border-color:rgba(154,191,231,.18);border-radius:30px;
+  background:linear-gradient(150deg,rgba(18,29,44,.97),rgba(9,15,24,.98));
+  box-shadow:0 35px 90px rgba(0,0,0,.40),inset 0 1px rgba(255,255,255,.065);
+}
+.cardhead{align-items:flex-start}
+.cardhead h2{color:#f0f7ff}
+.wizard-progress,.wizard-step{
+  border-color:rgba(153,191,234,.15);
+  background:rgba(7,13,22,.56);
+}
+.wizard-step{border-radius:22px}
+.wizard-step-heading h3{color:#e9f4ff}
+.wizard-step-heading p{color:#92aac5}
+.wizard-step-number{box-shadow:0 8px 23px rgba(14,113,216,.13)}
+input,select,textarea{
+  color:#e8f3ff;background:#101b29;border-color:rgba(157,192,230,.18);
+}
+input::placeholder,textarea::placeholder{color:#7188a3}
+input:focus,select:focus,textarea:focus{background:#14243a}
+.choice{background:#101b29;border-color:rgba(157,192,230,.16)}
+.choice.active,.choice:hover{background:#172c45;border-color:#398fe0}
+.map-field,#telegramVerifyBox{background:rgba(12,23,37,.78);border-color:rgba(157,192,230,.16)}
+footer{
+  align-items:center;border-color:rgba(170,204,242,.12);
+  color:#829ab5;padding-top:24px;
+}
+footer strong{color:#d5e9ff}
+.qamqor-reveal-ready .qamqor-reveal{
+  opacity:0;transform:translateY(22px);
+  transition:opacity .65s ease var(--reveal-delay,0ms),transform .65s cubic-bezier(.2,.75,.2,1) var(--reveal-delay,0ms);
+}
+.qamqor-reveal-ready .qamqor-reveal.qamqor-visible{opacity:1;transform:translateY(0)}
+@keyframes orbitSpin{to{transform:translate(-50%,-50%) rotate(335deg)}}
+@keyframes qPhoneFloat{
+  0%,100%{transform:translateY(0) rotate(-8deg) rotateX(var(--device-tilt-y,0deg)) rotateY(var(--device-tilt-x,0deg))}
+  50%{transform:translateY(-13px) rotate(-5deg) rotateX(var(--device-tilt-y,0deg)) rotateY(var(--device-tilt-x,0deg))}
+}
+@media(max-width:900px){
+  .wrap{width:min(100% - 36px,760px)}
+  .site-header{gap:15px}
+  .main-nav{gap:15px}
+  .topnote{display:none}
+  .hero{grid-template-columns:1fr;gap:38px;padding:64px 0 65px}
+  .hero-copy{max-width:680px}
+  .hero .lead{max-width:600px}
+  .art,.premium-art{justify-self:center;max-width:650px;min-height:430px}
+  .service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:620px){
+  .wrap{width:calc(100% - 26px)}
+  .site-header{height:70px;gap:10px}
+  .brand{font-size:11px;gap:8px}
+  .mark{width:39px;height:39px;flex-basis:39px}
+  .brand small{font-size:6px}
+  .main-nav{display:none}
+  .header-right{margin-left:auto}
+  .header-cta{min-height:39px;padding:10px 13px;font-size:10px}
+  .hero{padding:48px 0 45px;gap:27px}
+  .hero h1{font-size:clamp(42px,11vw,59px);margin:18px 0;letter-spacing:-.075em}
+  .hero .lead{font-size:13px;line-height:1.75}
+  .hero-actions{display:grid;grid-template-columns:1fr;gap:10px;margin-top:23px}
+  .hero-cta,.hero-secondary{width:100%;justify-content:center}
+  .hero-points{gap:9px;margin-top:22px;font-size:11px}
+  .art,.premium-art{min-height:340px;border-radius:25px}
+  .device{width:150px;height:264px;border-radius:34px}
+  .device-screen{border-radius:24px}
+  .device-logo{width:73px;height:73px;border-radius:21px}
+  .orbit-one{width:275px;height:275px}
+  .orbit-two{width:320px;height:320px}
+  .hero-float{padding:10px 12px;gap:8px;border-radius:13px}
+  .hero-float-top{top:11%;left:3%}
+  .hero-float-bottom{right:3%;bottom:17%}
+  .hero-float strong{font-size:9px}
+  .hero-float small{font-size:8px}
+  .float-icon,.float-check{width:28px;height:28px;flex-basis:28px;font-size:14px}
+  .art-caption{bottom:15px;font-size:7px}
+  .services-section,.process-section{padding:24px 0 60px}
+  .section-heading{margin-bottom:25px}
+  .section-heading h2{font-size:34px}
+  .section-heading p{font-size:12px}
+  .service-grid,.process-grid{grid-template-columns:1fr;gap:11px}
+  .service-card{min-height:205px;padding:20px;border-radius:19px}
+  .service-card p{min-height:0}
+  .process-card{min-height:185px;padding:21px;border-radius:19px}
+  .process-cta{align-items:stretch;flex-direction:column;padding:19px;border-radius:18px}
+  .process-cta a{justify-content:center}
+  #repair{padding:20px 14px;margin-bottom:55px;border-radius:23px}
+  .cardhead{gap:10px}
+  .step{font-size:8px;padding:8px}
+  footer{font-size:10px;gap:11px}
+}
+@media(prefers-reduced-motion:reduce){
+  .orbit-two,.device{animation:none!important}
+  .qamqor-reveal-ready .qamqor-reveal{opacity:1;transform:none;transition:none}
+  *,*::before,*::after{scroll-behavior:auto!important}
+}
+
 </style>
 </head>
 <body>
 <div class="wrap">
-<header><div class="brand"><div class="mark"><img src="QamqorPhone.png" alt="QAMQOR PHONE логотипі" width="46" height="46"></div><div>QAMQOR PHONE<small>PHONE REPAIR SERVICE</small></div></div><div class="header-right"><div class="topnote">Телефоныңызға ұқыпты күтім</div><a class="header-cta" href="#repair">Өтінім қалдыру <span>↗</span></a></div></header>
+<header class="site-header"><a class="brand" href="#top" aria-label="QAMQOR PHONE басты беті"><div class="mark"><img src="QamqorPhone.png" alt="QAMQOR PHONE логотипі" width="46" height="46"></div><div>QAMQOR PHONE<small>PHONE REPAIR SERVICE</small></div></a><nav class="main-nav" aria-label="Негізгі навигация"><a href="#services">Қызметтер</a><a href="#steps">Қалай жұмыс істейді</a><a href="#repair">Өтінім</a></nav><div class="header-right"><span class="topnote"><i></i> Онлайн өтінім қабылдаймыз</span><a class="header-cta" href="#repair">Маман шақыру <span>↗</span></a></div></header>
 <main>
-<section class="hero">
-<div><div class="tag">Жөндеу • Қолдау • Сенім</div><h1>Телефоныңызға<br><span>көмек керек пе?</span></h1><p class="lead">Телефоныңызды жөндету енді оңай. Өтінім қалдырыңыз — маман сізбен байланысып, жөндеу жолын келіседі.</p><div class="hero-actions"><a class="hero-cta" href="#repair">Маман шақыру <span>→</span></a><span class="hero-note"><i></i> Онлайн өтінім қабылдаймыз</span></div><div class="points"><span class="point">✓ Экран және дисплей</span><span class="point">✓ Батарея</span><span class="point">✓ Зарядтау ұясы</span></div></div>
-<div class="art premium-art" aria-label="QAMQOR PHONE телефоны">
-  <div class="art-glow"></div>
-  <div class="device">
-    <div class="device-camera"></div>
-    <b>✓</b>
-    <small>QAMQOR PHONE</small>
-    <span class="device-shine"></span>
+<section class="hero" id="top">
+  <div class="hero-copy">
+    <div class="tag">Жөндеу • Қолдау • Сенім</div>
+    <h1>Телефоныңызға<br><span>қамқорлық</span> керек пе?</h1>
+    <p class="lead">Телефон жөндеуді оңай бастаңыз. Қажетті қызметті таңдаңыз, мекенжайыңызды белгілеңіз — маман өтініміңізді алып, сізбен байланысады.</p>
+    <div class="hero-actions">
+      <a class="hero-cta" href="#repair">Өтінім қалдыру <span>↗</span></a>
+      <a class="hero-secondary" href="#services">Қызметтерді көру <span>↓</span></a>
+    </div>
+    <div class="hero-points">
+      <span><i>✓</i> Ыңғайлы онлайн өтінім</span>
+      <span><i>✓</i> Картадан мекенжай белгілеу</span>
+      <span><i>✓</i> Менеджермен тікелей байланыс</span>
+    </div>
   </div>
-  <div class="art-caption">ЖӨНДЕУ · СІЗДІҢ МЕКЕНЖАЙДА</div>
-</div>
+  <div class="art premium-art" aria-label="QAMQOR PHONE жөндеу қызметінің иллюстрациясы">
+    <div class="art-grid"></div>
+    <div class="art-orbit orbit-one"></div>
+    <div class="art-orbit orbit-two"></div>
+    <div class="art-glow"></div>
+    <div class="hero-float hero-float-top"><span class="float-icon">✦</span><span><strong>QAMQOR CARE</strong><small>Сізге ыңғайлы сервис</small></span></div>
+    <div class="device">
+      <div class="device-camera"></div>
+      <div class="device-screen">
+        <div class="device-logo"><img src="QamqorPhone.png" alt=""></div>
+        <strong>QAMQOR</strong>
+        <span>PHONE SERVICE</span>
+        <div class="device-check">✓</div>
+      </div>
+      <span class="device-shine"></span>
+    </div>
+    <div class="hero-float hero-float-bottom"><span class="float-check">✓</span><span><strong>Өтінім онлайн</strong><small>Бірнеше қадам ғана</small></span></div>
+    <div class="art-caption">ЖӨНДЕУ · ҚОЛДАУ · ҚАМҚОРЛЫҚ</div>
+  </div>
+</section>
+
+<section class="services-section" id="services">
+  <div class="section-heading">
+    <span class="tag">QAMQOR PHONE ҚЫЗМЕТТЕРІ</span>
+    <h2>Қандай көмек керек?</h2>
+    <p>Мәселеңізге сай жөндеу түрін таңдаңыз. Толық өтінімді төмендегі формада қалдырасыз.</p>
+  </div>
+  <div class="service-grid">
+    <article class="service-card"><div class="service-icon icon-screen"><span>▣</span></div><div class="service-card-top"><span>01 / ДИСПЛЕЙ</span><span class="service-arrow">↗</span></div><h3>Экранды жөндеу</h3><p>Жарылған немесе дұрыс көрсетпейтін экран мәселесі.</p><a href="#repair">Өтінім беру <span>→</span></a></article>
+    <article class="service-card"><div class="service-icon icon-battery"><span>ϟ</span></div><div class="service-card-top"><span>02 / ҚУАТ</span><span class="service-arrow">↗</span></div><h3>Батарея ауыстыру</h3><p>Зарядты ұстамайтын немесе тез отырып қалатын батарея.</p><a href="#repair">Өтінім беру <span>→</span></a></article>
+    <article class="service-card"><div class="service-icon icon-charge"><span>⌁</span></div><div class="service-card-top"><span>03 / ЗАРЯДТАУ</span><span class="service-arrow">↗</span></div><h3>Зарядтау ұясы</h3><p>Кабель қосылмауы немесе зарядтаудың тұрақсыздығы.</p><a href="#repair">Өтінім беру <span>→</span></a></article>
+    <article class="service-card"><div class="service-icon icon-camera"><span>◎</span></div><div class="service-card-top"><span>04 / КАМЕРА</span><span class="service-arrow">↗</span></div><h3>Камераны жөндеу</h3><p>Камера ашылмауы, фокус немесе түсіру ақаулары.</p><a href="#repair">Өтінім беру <span>→</span></a></article>
+    <article class="service-card"><div class="service-icon icon-audio"><span>)))</span></div><div class="service-card-top"><span>05 / ДЫБЫС</span><span class="service-arrow">↗</span></div><h3>Динамик пен микрофон</h3><p>Дыбыс естілмеуі немесе сөйлескенде дауыс жетпеуі.</p><a href="#repair">Өтінім беру <span>→</span></a></article>
+    <article class="service-card"><div class="service-icon icon-tools"><span>✳</span></div><div class="service-card-top"><span>06 / БАСҚА</span><span class="service-arrow">↗</span></div><h3>Басқа ақаулар</h3><p>Телефон қосылмайды немесе өзге техникалық мәселе.</p><a href="#repair">Өтінім беру <span>→</span></a></article>
+  </div>
+</section>
+
+<section class="process-section" id="steps">
+  <div class="section-heading">
+    <span class="tag">ҚАРАПАЙЫМ ҮДЕРІС</span>
+    <h2>Үш қадам. Болды.</h2>
+    <p>Өтінім беру үдерісі түсінікті әрі ретімен ұйымдастырылған.</p>
+  </div>
+  <div class="process-grid">
+    <article class="process-card"><span class="process-number">01</span><div class="process-symbol">▣</div><h3>Телефонды таңдаңыз</h3><p>Модельді, жөндеу түрін және ақауды көрсетіңіз.</p></article>
+    <article class="process-card"><span class="process-number">02</span><div class="process-symbol">⌖</div><h3>Орныңызды белгілеңіз</h3><p>Мекенжайды жазыңыз да, картадан нүктені таңдаңыз.</p></article>
+    <article class="process-card"><span class="process-number">03</span><div class="process-symbol">↗</div><h3>Өтінімді жіберіңіз</h3><p>Telegram арқылы растаңыз. Өтінім менеджерге жіберіледі.</p></article>
+  </div>
+  <div class="process-cta"><div><strong>Жөндеуді бастауға дайынсыз ба?</strong><span>Өтінімді бірнеше қадаммен толтырыңыз.</span></div><a href="#repair">Өтінімге өту <b>↗</b></a></div>
 </section>
 <section class="card" id="repair">
 <div class="cardhead"><div><div class="tag">Онлайн өтінім</div><h2>Жөндеуге өтініш қалдыру</h2><p class="sub">Жұлдызшамен белгіленген жолдарды толтырыңыз.</p></div><div class="step">7 ҚАДАМ</div></div>
@@ -563,7 +959,8 @@ input,textarea,[contenteditable="true"]{
 </main>
 <footer><div><strong>QAMQOR PHONE</strong> · Телефон жөндеу қызметі</div><div>© <span id="year"></span> Барлық құқық қорғалған</div></footer>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+<script>
 
 // Premium scroll reveal + subtle 3D pointer response. No external library required.
 (() => {
@@ -583,7 +980,7 @@ input,textarea,[contenteditable="true"]{
     });
   }
 
-  const revealTargets = document.querySelectorAll(".card, footer, .map-field, #telegramVerifyBox");
+  const revealTargets = document.querySelectorAll(".card, footer, .map-field, #telegramVerifyBox, .service-card, .process-card, .section-heading, .hero-copy, .premium-art");
   if (!reduceMotion && "IntersectionObserver" in window) {
     document.documentElement.classList.add("qamqor-reveal-ready");
     const observer = new IntersectionObserver(entries => {
