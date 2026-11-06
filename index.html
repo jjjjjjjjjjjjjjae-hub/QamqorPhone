@@ -797,7 +797,7 @@ let selectedPoint = null;
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
-/* Phone model search: show a model-specific photo while the user searches. */
+/* Search a broad phone catalog; render a photo only when a verified image URL exists. */
 (() => {
   const input = document.getElementById("brand");
   const list = document.getElementById("phoneModelSuggestions");
@@ -807,27 +807,161 @@ document.getElementById("year").textContent = new Date().getFullYear();
   const clear = document.getElementById("phoneModelClear");
   if (!input || !list || !preview || !previewImage || !previewName || !clear) return;
 
-  const models = [
-    {name:"iPhone 13", aliases:"apple iphone 13 айфон 13", image:"https://www.apple.com/newsroom/images/product/iphone/geo/Apple_iphone13_hero_geo_09142021_inline.jpg.large.jpg"},
-    {name:"iPhone 13 mini", aliases:"apple iphone 13 mini айфон 13 мини", image:"https://static01.galaxus.com/productimages/4/8/8/8/7/1/1/0/iPhone_13_mini_Pink_PDP_Image_Position-1A__WWEN.jpg_sea.jpeg"},
-    {name:"iPhone 13 Pro", aliases:"apple iphone 13 pro айфон 13 про", image:"https://media.tatacroma.com/Croma%20Assets/Communication/Mobiles/Images/243511_0_o8kuhr.png"},
-    {name:"iPhone 13 Pro Max", aliases:"apple iphone 13 pro max айфон 13 про макс", image:"https://cdn.mafrservices.com/sys-master-root/hfb/h14/26549481177118/569558_main.jpg"},
-    {name:"iPhone 12", aliases:"apple iphone 12 айфон 12", image:"https://bestpricegh.com/cdn/shop/products/711wsjBtWeL_c1d056fb-4dcb-4549-87e5-3ba03e42d5e0.jpg?crop=center&height=2560&v=1603119589&width=2560"},
-    {name:"iPhone 14", aliases:"apple iphone 14 айфон 14", image:"https://www.mrfix.ua/storage/631/f47/aaa/product-product-apple-iphone-14-128gb-starlight-13610-1000x1000.jpg"},
-    {name:"Samsung Galaxy A54 5G", aliases:"samsung galaxy a54 a54 5g самсунг а54", image:"https://www.pbtech.co.nz/imgprod/E/X/EXMPHSAMA0054__1.jpg"},
-    {name:"Samsung Galaxy A34 5G", aliases:"samsung galaxy a34 a34 5g самсунг а34", image:"https://sota.store/image/cache/catalog/Samsung-2/samsung-a34-a346-blk-01-1600x1600.webp"},
-    {name:"Xiaomi Redmi Note 12", aliases:"xiaomi redmi note 12 редми ноут 12", image:"https://cdn.cimri.io/image/1200x1200/xiaomi-redmi-note-12-4g-128gb-6gb-ram-gri_868163989.jpg"}
+  const photoByModel = {
+    "iPhone 13": "https://www.apple.com/newsroom/images/product/iphone/geo/Apple_iphone13_hero_geo_09142021_inline.jpg.large.jpg",
+    "iPhone 13 mini": "https://static01.galaxus.com/productimages/4/8/8/8/7/1/1/0/iPhone_13_mini_Pink_PDP_Image_Position-1A__WWEN.jpg_sea.jpeg",
+    "iPhone 13 Pro": "https://media.tatacroma.com/Croma%20Assets/Communication/Mobiles/Images/243511_0_o8kuhr.png",
+    "iPhone 13 Pro Max": "https://cdn.mafrservices.com/sys-master-root/hfb/h14/26549481177118/569558_main.jpg",
+    "iPhone 12": "https://bestpricegh.com/cdn/shop/products/711wsjBtWeL_c1d056fb-4dcb-4549-87e5-3ba03e42d5e0.jpg?crop=center&height=2560&v=1603119589&width=2560",
+    "iPhone 14": "https://www.mrfix.ua/storage/631/f47/aaa/product-product-apple-iphone-14-128gb-starlight-13610-1000x1000.jpg",
+    "Samsung Galaxy A54 5G": "https://www.pbtech.co.nz/imgprod/E/X/EXMPHSAMA0054__1.jpg",
+    "Samsung Galaxy A34 5G": "https://sota.store/image/cache/catalog/Samsung-2/samsung-a34-a346-blk-01-1600x1600.webp",
+    "Xiaomi Redmi Note 12": "https://cdn.cimri.io/image/1200x1200/xiaomi-redmi-note-12-4g-128gb-6gb-ram-gri_868163989.jpg"
+  };
+
+  const groups = [
+    ["iPhone","Apple, айфон, iphone",[
+      "6","6 Plus","6s","6s Plus","SE (1st generation)","7","7 Plus","8","8 Plus","X","XR","XS","XS Max",
+      "11","11 Pro","11 Pro Max","SE (2020)","12 mini","12","12 Pro","12 Pro Max",
+      "13 mini","13","13 Pro","13 Pro Max","SE (2022)",
+      "14","14 Plus","14 Pro","14 Pro Max",
+      "15","15 Plus","15 Pro","15 Pro Max",
+      "16","16 Plus","16 Pro","16 Pro Max","16e"
+    ]],
+    ["Samsung Galaxy","Samsung, Самсунг, Galaxy, Галакси",[
+      "A01","A02","A02s","A03","A03s","A04","A04e","A04s","A05","A05s","A06",
+      "A10","A10s","A11","A12","A13","A14","A15","A16","A17",
+      "A20","A20s","A21s","A22","A23","A24","A25","A26",
+      "A30","A30s","A31","A32","A33 5G","A34 5G","A35 5G","A36 5G",
+      "A40","A41","A42 5G","A50","A50s","A51","A52","A52s 5G","A53 5G","A54 5G","A55 5G","A56 5G",
+      "A70","A71","A72","A73 5G","A80","A90 5G",
+      "S20","S20+","S20 Ultra","S20 FE","S21","S21+","S21 Ultra","S21 FE",
+      "S22","S22+","S22 Ultra","S23","S23+","S23 Ultra","S23 FE",
+      "S24","S24+","S24 Ultra","S24 FE","S25","S25+","S25 Ultra","S25 Edge","S25 FE",
+      "S26","S26+","S26 Ultra",
+      "Note 10","Note 10+","Note 10 Lite","Note 20","Note 20 Ultra",
+      "Z Flip3","Z Flip4","Z Flip5","Z Flip6","Z Flip7",
+      "Z Fold3","Z Fold4","Z Fold5","Z Fold6","Z Fold7",
+      "M12","M13","M14","M15","M21","M23","M31","M32","M33","M34","M51","M52","M53","M54","M55",
+      "F12","F13","F14","F15","F23","F34","F54"
+    ]],
+    ["Xiaomi","Xiaomi, Mi, Сяоми, Шаоми",[
+      "Mi 9","Mi 10","Mi 10T","Mi 10T Pro","Mi 11","Mi 11 Lite","Mi 11T","Mi 11T Pro",
+      "12","12 Lite","12 Pro","12T","12T Pro","13","13 Lite","13 Pro","13T","13T Pro",
+      "14","14 Ultra","14T","14T Pro","15","15 Ultra","15T","15T Pro",
+      "Redmi 9","Redmi 9A","Redmi 9C","Redmi 10","Redmi 10A","Redmi 10C","Redmi 12","Redmi 12C",
+      "Redmi 13","Redmi 13C","Redmi 14C","Redmi 15","Redmi 15C",
+      "Redmi Note 8","Redmi Note 8 Pro","Redmi Note 9","Redmi Note 9S","Redmi Note 9 Pro",
+      "Redmi Note 10","Redmi Note 10 Pro","Redmi Note 11","Redmi Note 11S","Redmi Note 11 Pro",
+      "Redmi Note 12","Redmi Note 12 Pro","Redmi Note 12 Pro+","Redmi Note 13","Redmi Note 13 Pro","Redmi Note 13 Pro+",
+      "Redmi Note 14","Redmi Note 14 Pro","Redmi Note 14 Pro+","Redmi Note 15","Redmi Note 15 Pro",
+      "Poco C40","Poco C55","Poco C65","Poco C75","Poco C85",
+      "Poco M3","Poco M4 Pro","Poco M5","Poco M5s","Poco M6","Poco M6 Pro",
+      "Poco X3","Poco X3 Pro","Poco X4 Pro","Poco X5","Poco X5 Pro","Poco X6","Poco X6 Pro","Poco X7","Poco X7 Pro",
+      "Poco F3","Poco F4","Poco F5","Poco F5 Pro","Poco F6","Poco F6 Pro","Poco F7","Poco F7 Pro","Poco F7 Ultra"
+    ]],
+    ["Huawei","Huawei, Хуавей, Хуавэй",[
+      "P20","P20 Pro","P30","P30 Lite","P30 Pro","P40","P40 Lite","P40 Pro",
+      "P50","P50 Pro","P50 Pocket","P60","P60 Pro","Pura 70","Pura 70 Pro","Pura 80",
+      "Mate 20","Mate 20 Pro","Mate 30","Mate 30 Pro","Mate 40 Pro","Mate 50 Pro","Mate 60 Pro","Mate X3",
+      "Nova 5T","Nova 7i","Nova 8i","Nova 9","Nova 10","Nova 11","Nova 12","Nova 13","Nova Y70","Nova Y90",
+      "Y5p","Y6p","Y7p","Y8p","Y9 Prime"
+    ]],
+    ["Honor","Honor, Хонор",[
+      "8X","9X","10 Lite","20","20 Pro","30i","50","50 Lite","70","70 Lite","80","90","90 Lite",
+      "X5","X6","X7","X7a","X8","X8a","X9a","X9b","X9c","X10","X20","X30",
+      "Magic4 Pro","Magic5 Pro","Magic6 Pro","Magic7 Pro","Magic V2","Magic V3"
+    ]],
+    ["Google Pixel","Google, Pixel, Пиксель",[
+      "3","3 XL","3a","4","4 XL","4a","4a 5G","5","5a","6","6 Pro","6a",
+      "7","7 Pro","7a","8","8 Pro","8a","9","9 Pro","9 Pro XL","9a",
+      "10","10 Pro","10 Pro XL","10 Pro Fold"
+    ]],
+    ["OPPO","Oppo, Оппо",[
+      "A15","A16","A17","A18","A38","A54","A57","A58","A60","A74","A76","A78","A79","A96","A98",
+      "Reno 5","Reno 6","Reno 7","Reno 8","Reno 8T","Reno 10","Reno 11","Reno 12","Reno 13","Reno 14",
+      "Find X3 Pro","Find X5 Pro","Find X6 Pro","Find X7 Ultra","Find X8 Pro"
+    ]],
+    ["vivo","Vivo, Виво",[
+      "Y12","Y15","Y16","Y17","Y19","Y20","Y21","Y22","Y27","Y28","Y30","Y31","Y33s","Y35","Y36",
+      "Y50","Y51","Y53s","Y55","Y serіes","V20","V21","V23","V25","V27","V29","V30","V40","V50",
+      "X60 Pro","X70 Pro","X80 Pro","X90 Pro","X100 Pro","X200 Pro"
+    ]],
+    ["realme","Realme, Рилми, Рилме",[
+      "C11","C12","C15","C21","C25","C30","C31","C33","C35","C51","C53","C55","C61","C63","C65","C67","C75",
+      "5","6","7","8","9","9 Pro","10","10 Pro","11","11 Pro","12","12 Pro","12 Pro+","13","13 Pro+","14","14 Pro+",
+      "GT Neo 2","GT Neo 3","GT Neo 5","GT 2 Pro","GT 6","GT 7 Pro","Note 50"
+    ]],
+    ["TECNO","Tecno, Текно",[
+      "Spark 6","Spark 7","Spark 8","Spark 9","Spark 10","Spark 20","Spark 20 Pro","Spark 30","Spark 40",
+      "Camon 17","Camon 18","Camon 19","Camon 20","Camon 20 Pro","Camon 30","Camon 30 Pro","Camon 40","Camon 40 Pro",
+      "Pova 2","Pova 3","Pova 4","Pova 5","Pova 6","Pova 6 Neo","Pova 7","Pop 7","Pop 8","Pop 9"
+    ]],
+    ["Infinix","Infinix, Инфиникс",[
+      "Hot 10","Hot 11","Hot 12","Hot 20","Hot 30","Hot 30i","Hot 40","Hot 40 Pro","Hot 50","Hot 50 Pro",
+      "Note 10","Note 11","Note 12","Note 30","Note 30 Pro","Note 40","Note 40 Pro","Note 50","Note 50 Pro",
+      "Zero 20","Zero 30","Zero 40","Smart 6","Smart 7","Smart 8","Smart 9"
+    ]],
+    ["OnePlus","OnePlus, Ванплас",[
+      "6","6T","7","7 Pro","7T","8","8 Pro","8T","9","9 Pro","9R","10 Pro","10T",
+      "11","11R","12","12R","13","13R","Nord","Nord CE 2","Nord CE 3","Nord CE 4","Nord 3","Nord 4","Nord 5"
+    ]],
+    ["Motorola","Motorola, Моторола",[
+      "Moto G8","Moto G9","Moto G10","Moto G20","Moto G22","Moto G30","Moto G31","Moto G32","Moto G40",
+      "Moto G50","Moto G52","Moto G54","Moto G60","Moto G62","Moto G72","Moto G84","Edge 20","Edge 30",
+      "Edge 40","Edge 50","Edge 60","Razr 40","Razr 50"
+    ]],
+    ["Nokia","Nokia, Нокиа",[
+      "2.4","3.4","5.3","5.4","G10","G11","G20","G21","G22","G42","G50","G60","G серия",
+      "X10","X20","X30","C10","C20","C21","C30","C31","C32"
+    ]],
+    ["Sony Xperia","Sony, Sony Xperia, Сони",[
+      "1 II","1 III","1 IV","1 V","1 VI","5 II","5 III","5 IV","5 V","10 II","10 III","10 IV","10 V","10 VI","L4","L5"
+    ]],
+    ["ASUS","Asus, Асус, Zenfone, ROG Phone",[
+      "Zenfone 7","Zenfone 8","Zenfone 9","Zenfone 10","Zenfone 11 Ultra","ROG Phone 5","ROG Phone 6","ROG Phone 7","ROG Phone 8","ROG Phone 9"
+    ]],
+    ["Nothing Phone","Nothing, Нотинг",[
+      "Phone (1)","Phone (2)","Phone (2a)","Phone (2a) Plus","Phone (3)","Phone (3a)","Phone (3a) Pro"
+    ]],
+    ["ZTE","ZTE, ЗТЕ",[
+      "Blade A31","Blade A51","Blade A71","Blade V40","Blade V50","Nubia Z50","Nubia Z60 Ultra","Nubia Flip"
+    ]],
+    ["Meizu","Meizu, Мейзу",[
+      "16th","17","18","20","21","Note 8","Note 9","M6","M8","M10"
+    ]]
   ];
 
   const normalize = value => String(value || "").toLocaleLowerCase("kk").replace(/\s+/g," ").trim();
-  let activeIndex = -1;
+  const models = groups.flatMap(([brand, brandAliases, names]) =>
+    names.map(model => {
+      const name = brand === "iPhone" ? "iPhone " + model :
+        brand === "Samsung Galaxy" ? "Samsung Galaxy " + model :
+        brand === "Xiaomi" ? (model.startsWith("Poco ") ? model : "Xiaomi " + model) :
+        brand + " " + model;
+      const aliases = [brandAliases, name, name.replace(/\s+/g,""), model].join(" ");
+      return {name, aliases, image: photoByModel[name] || ""};
+    })
+  );
 
+  let activeIndex = -1;
   function showPreview(model) {
     previewName.textContent = model.name;
-    previewImage.classList.remove("image-failed");
-    previewImage.alt = model.name + " телефонының суреті";
-    previewImage.src = model.image;
-    previewImage.onerror = () => previewImage.classList.add("image-failed");
+    if (model.image) {
+      preview.classList.remove("name-only");
+      previewImage.style.display = "";
+      previewImage.classList.remove("image-failed");
+      previewImage.alt = model.name + " телефонының суреті";
+      previewImage.src = model.image;
+      previewImage.onerror = () => {
+        preview.classList.add("name-only");
+        previewImage.style.display = "none";
+      };
+    } else {
+      preview.classList.add("name-only");
+      previewImage.removeAttribute("src");
+      previewImage.style.display = "none";
+    }
     preview.hidden = false;
   }
   function hideList() {
@@ -842,38 +976,49 @@ document.getElementById("year").textContent = new Date().getFullYear();
     input.setAttribute("aria-activedescendant","");
     input.dispatchEvent(new Event("change",{bubbles:true}));
   }
+  function makeOption(model, detailText) {
+    const option = document.createElement("button");
+    option.type = "button";
+    option.className = "phone-model-option";
+    option.setAttribute("role","option");
+    option.setAttribute("aria-label",model.name);
+    if (model.image) {
+      const image = document.createElement("img");
+      image.src = model.image;
+      image.alt = "";
+      image.loading = "lazy";
+      image.onerror = () => image.remove();
+      option.append(image);
+    }
+    const label = document.createElement("span");
+    const name = document.createElement("strong");
+    name.textContent = model.name;
+    const detail = document.createElement("small");
+    detail.textContent = detailText || (model.image ? "Фото бар · Модельді таңдау" : "Атауы бойынша таңдау");
+    label.append(name,detail);
+    option.append(label);
+    option.addEventListener("click",() => choose(model));
+    return option;
+  }
   function drawList() {
     const query = normalize(input.value);
-    const matches = models.filter(model => normalize(model.name + " " + model.aliases).includes(query)).slice(0,8);
+    const matches = (query
+      ? models.filter(model => normalize(model.name + " " + model.aliases).includes(query))
+      : models.slice(0,8)
+    ).slice(0,10);
     list.replaceChildren();
     activeIndex = -1;
-    if (!matches.length) {
+
+    matches.forEach(model => list.append(makeOption(model)));
+
+    const exactMatch = models.find(model => normalize(model.name) === query);
+    if (query.length >= 2 && !exactMatch) {
+      list.append(makeOption({name:input.value.trim(),image:""}, "Модель табылмаса — тек атауын сақтау"));
+    } else if (!matches.length && query.length < 2) {
       const empty = document.createElement("div");
       empty.className = "phone-model-empty";
-      empty.textContent = "Бұл модель дайын тізімде жоқ. Атауын толық жазып жалғастыра аласыз.";
+      empty.textContent = "Телефон маркасын немесе моделін жазыңыз.";
       list.append(empty);
-    } else {
-      matches.forEach(model => {
-        const option = document.createElement("button");
-        option.type = "button";
-        option.className = "phone-model-option";
-        option.setAttribute("role","option");
-        option.setAttribute("aria-label",model.name);
-        const image = document.createElement("img");
-        image.src = model.image;
-        image.alt = "";
-        image.loading = "lazy";
-        image.onerror = () => image.classList.add("image-failed");
-        const label = document.createElement("span");
-        const name = document.createElement("strong");
-        name.textContent = model.name;
-        const detail = document.createElement("small");
-        detail.textContent = "Модельді таңдау";
-        label.append(name,detail);
-        option.append(image,label);
-        option.addEventListener("click",() => choose(model));
-        list.append(option);
-      });
     }
     list.hidden = false;
     input.setAttribute("aria-expanded","true");
@@ -882,35 +1027,48 @@ document.getElementById("year").textContent = new Date().getFullYear();
   input.addEventListener("input",() => {
     const exact = models.find(model => normalize(model.name) === normalize(input.value));
     if (exact) showPreview(exact);
+    else if (input.value.trim()) showPreview({name:input.value.trim(),image:""});
     else preview.hidden = true;
     drawList();
   });
   input.addEventListener("focus",() => drawList());
-  input.addEventListener("keydown",event => {
-    const options = Array.from(list.querySelectorAll(".phone-model-option"));
-    if (event.key === "Escape") { hideList(); return; }
-    if (!options.length) return;
-    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-      event.preventDefault();
-      activeIndex = (activeIndex + (event.key === "ArrowDown" ? 1 : options.length - 1)) % options.length;
-      options[activeIndex].focus();
+  input.addEventListener("blur",() => {
+    if (input.value.trim()) {
+      const exact=models.find(model=>normalize(model.name)===normalize(input.value));
+      showPreview(exact || {name:input.value.trim(),image:""});
     }
   });
-  document.addEventListener("click",event => {
-    if (!event.target.closest(".phone-picker")) hideList();
+  input.addEventListener("keydown",event => {
+    if (event.key === "Escape") { hideList(); return; }
+    const options=Array.from(list.querySelectorAll(".phone-model-option"));
+    if (!options.length) return;
+    if (event.key==="ArrowDown"||event.key==="ArrowUp") {
+      event.preventDefault();
+      activeIndex=(activeIndex+(event.key==="ArrowDown"?1:options.length-1))%options.length;
+      options[activeIndex].focus();
+    }
+    if(event.key==="Enter"&&list.contains(document.activeElement)){
+      event.preventDefault();
+      document.activeElement.click();
+    }
   });
-  clear.addEventListener("click",() => {
-    input.value = "";
-    preview.hidden = true;
+  document.addEventListener("click",event=>{
+    if(!event.target.closest(".phone-picker"))hideList();
+  });
+  clear.addEventListener("click",()=>{
+    input.value="";
+    preview.hidden=true;
     input.focus();
     drawList();
   });
-  form.addEventListener("reset",() => {
-    preview.hidden = true;
+  form.addEventListener("reset",()=>{
+    preview.hidden=true;
+    preview.classList.remove("name-only");
+    previewImage.style.display="";
     hideList();
   });
+  input.dataset.modelCatalogCount=String(models.length);
 })();
-
 
 function updateMapPoint(lat, lng) {
   const point = {lat: Number(lat.toFixed(6)), lng: Number(lng.toFixed(6))};
