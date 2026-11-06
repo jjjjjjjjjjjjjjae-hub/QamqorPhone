@@ -542,6 +542,24 @@ footer{border-top:1px solid #1d2c40;padding-top:20px}
  .premium-art,.hero>div:first-child{animation:none!important}
 }
 
+
+/* Messenger verification buttons */
+.verify-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.verify-provider{width:100%;min-height:52px;display:flex;align-items:center;justify-content:center;gap:10px}
+.provider-symbol{font-size:18px;line-height:1}
+.whatsapp-submit{
+ min-height:52px;padding:15px 20px;border:1px solid #2d9e70;border-radius:14px;
+ color:#fff;background:linear-gradient(105deg,#128b5b,#20b978);
+ box-shadow:0 10px 25px #10a66c28,inset 0 1px 0 #ffffff35;
+ font-size:13px;font-weight:800;cursor:pointer;
+ transition:transform .2s ease,filter .2s ease,box-shadow .2s ease
+}
+.whatsapp-submit:hover{transform:translateY(-2px);filter:brightness(1.08);box-shadow:0 14px 30px #10a66c38}
+.whatsapp-submit:active{transform:scale(.98)}
+.whatsapp-submit:disabled{opacity:.6;cursor:wait}
+.verify-provider:disabled{opacity:.6;cursor:wait}
+@media(max-width:560px){.verify-actions{grid-template-columns:1fr;gap:10px}}
+
 </style>
 </head>
 <body>
@@ -583,8 +601,11 @@ footer{border-top:1px solid #1d2c40;padding-top:20px}
 
 <div class="field full" id="telegramVerifyBox">
   <label>Нөмірді растау</label>
-  <button class="submit" id="telegramVerifyButton" type="button">✈ Telegram арқылы кіру және нөмірді растау</button>
-  <p class="sub" id="telegramVerifyStatus" style="margin-top:10px">Telegram терезесінде профиль мен телефон нөмірін бөлісуге келісім беріңіз. Сайт нөмірді қолмен сұрамайды.</p>
+  <div class="verify-actions">
+    <button class="submit verify-provider" id="telegramVerifyButton" type="button"><span class="provider-symbol">➤</span> Telegram арқылы растау</button>
+    <button class="whatsapp-submit verify-provider" id="whatsappVerifyButton" type="button"><span class="provider-symbol">◉</span> WhatsApp арқылы растау</button>
+  </div>
+  <p class="sub" id="telegramVerifyStatus" style="margin-top:12px" role="status" aria-live="polite">Telegram немесе WhatsApp арқылы нөміріңізді растаңыз. WhatsApp-та дайын хабарламаны өзіңіз жібересіз.</p>
 </div>
 
 <div class="action"><div class="fine">Мәліметтерді толтырып, Telegram арқылы растаңыз. Өтініш растаудан кейін автоматты түрде менеджерге жіберіледі.</div></div>
@@ -639,6 +660,7 @@ const form = document.getElementById("repairForm");
 const notice = document.getElementById("notice");
 const API = "https://qamqorphone-auth.jjjjjjjjjjjjjjae.workers.dev";
 const verifyButton = document.getElementById("telegramVerifyButton");
+const whatsappVerifyButton = document.getElementById("whatsappVerifyButton");
 const verifyStatus = document.getElementById("telegramVerifyStatus");
 const mapStatus = document.getElementById("mapStatus");
 const locateButton = document.getElementById("locateButton");
@@ -816,8 +838,9 @@ function validPayload(payload) {
 }
 
 async function sendRequest(payload, sessionId) {
-  if (!sessionId) throw new Error("Telegram растауы қажет.");
+  if (!sessionId) throw new Error("Нөмірді растау қажет.");
   verifyButton.disabled = true;
+  whatsappVerifyButton.disabled = true;
   setVerifyStatus("Өтініш менеджерге автоматты түрде жіберілуде…");
   try {
     const response = await fetch(API + "/request", {
@@ -848,6 +871,59 @@ async function sendRequest(payload, sessionId) {
     setVerifyStatus("Өтініш жіберілмеді. Қайта тексеріңіз.", "failed");
   } finally {
     verifyButton.disabled = false;
+    whatsappVerifyButton.disabled = false;
+  }
+}
+
+let whatsappPolling = false;
+
+async function pollWhatsAppVerification(sessionId) {
+  if (!sessionId || whatsappPolling) return;
+  whatsappPolling = true;
+  const deadline = Date.now() + 10 * 60 * 1000;
+
+  try {
+    while (Date.now() < deadline &&
+           sessionStorage.getItem("qamqorWhatsAppSession") === sessionId) {
+      try {
+        const response = await fetch(API + "/whatsapp/status", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({session_id: sessionId})
+        });
+        const result = await response.json().catch(() => ({}));
+
+        if (response.ok && result.ok && result.verified) {
+          sessionStorage.setItem("qamqorAuthSession", sessionId);
+          sessionStorage.setItem("qamqorAuthMethod", "whatsapp");
+          sessionStorage.removeItem("qamqorWhatsAppSession");
+          setVerifyStatus("✓ WhatsApp нөміріңіз расталды. Өтінім жіберілуде…", "verified");
+
+          const pending = sessionStorage.getItem("qamqorPendingRequest");
+          if (pending && sessionStorage.getItem("qamqorAutoSend") === "yes") {
+            try {
+              await sendRequest(JSON.parse(pending), sessionId);
+            } catch {
+              setVerifyStatus("Нөмір расталды. Өтінімді жіберу үшін батырманы қайта басыңыз.", "verified");
+            }
+          }
+          return;
+        }
+      } catch {
+        // Keep polling while the phone returns from WhatsApp or reconnects.
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 2500));
+    }
+
+    if (sessionStorage.getItem("qamqorWhatsAppSession") === sessionId) {
+      sessionStorage.removeItem("qamqorWhatsAppSession");
+      sessionStorage.removeItem("qamqorAutoSend");
+      sessionStorage.removeItem("qamqorPendingRequest");
+      setVerifyStatus("Растау уақыты өтті. WhatsApp арқылы қайта бастаңыз.", "failed");
+    }
+  } finally {
+    whatsappPolling = false;
   }
 }
 
@@ -862,6 +938,13 @@ if (authResult) {
   sessionStorage.removeItem("qamqorAuthResult");
 }
 
+// WhatsApp ашылып, клиент хабарламаны жібергеннен кейін тексеруді жалғастырамыз.
+const whatsappPendingSession = sessionStorage.getItem("qamqorWhatsAppSession");
+if (whatsappPendingSession) {
+  setVerifyStatus("WhatsApp-та дайын хабарламаны жіберіп, осы бетке қайта оралыңыз. Растау автоматты тексеріледі.");
+  pollWhatsAppVerification(whatsappPendingSession);
+}
+
 // Telegram-нан сайтқа қайтқан соң, алдын ала сақталған өтініш автоматты жіберіледі.
 const pendingRaw = sessionStorage.getItem("qamqorPendingRequest");
 if (getAuthSession() && pendingRaw && sessionStorage.getItem("qamqorAutoSend") === "yes") {
@@ -874,6 +957,52 @@ if (getAuthSession() && pendingRaw && sessionStorage.getItem("qamqorAutoSend") =
     showNotice("Сақталған өтінішті оқу мүмкін болмады. Мәліметтерді қайта толтырыңыз.");
   }
 }
+
+whatsappVerifyButton.addEventListener("click", async () => {
+  notice.style.display = "none";
+  const payload = collectPayload();
+  if (!validPayload(payload)) return;
+
+  whatsappVerifyButton.disabled = true;
+  verifyButton.disabled = true;
+  setVerifyStatus("WhatsApp растауы дайындалып жатыр…");
+
+  // Open a tab synchronously in the click event to avoid mobile popup blocking.
+  const waWindow = window.open("about:blank", "_blank");
+
+  try {
+    const response = await fetch(API + "/whatsapp/start", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: "{}"
+    });
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok || !result.ok || !result.url || !result.session_id) {
+      throw new Error(result.error === "whatsapp_not_configured"
+        ? "WhatsApp сервері әлі бапталмаған. Meta Business webhook деректері қажет."
+        : (result.error || "WhatsApp растауын бастау мүмкін болмады."));
+    }
+
+    sessionStorage.setItem("qamqorPendingRequest", JSON.stringify(payload));
+    sessionStorage.setItem("qamqorAutoSend", "yes");
+    sessionStorage.setItem("qamqorWhatsAppSession", result.session_id);
+
+    if (waWindow && !waWindow.closed) {
+      waWindow.location.replace(result.url);
+    } else {
+      window.location.assign(result.url);
+    }
+
+    setVerifyStatus("WhatsApp ашылды. Дайын QAMQOR кодын жіберіңіз, содан кейін осы бетке қайтыңыз.");
+    pollWhatsAppVerification(result.session_id);
+  } catch (error) {
+    if (waWindow && !waWindow.closed) waWindow.close();
+    whatsappVerifyButton.disabled = false;
+    verifyButton.disabled = false;
+    setVerifyStatus(error.message || "WhatsApp растауын бастау мүмкін болмады.", "failed");
+  }
+});
 
 verifyButton.addEventListener("click", async () => {
   notice.style.display = "none";
