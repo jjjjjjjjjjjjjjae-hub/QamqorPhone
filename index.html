@@ -1,1 +1,90 @@
-
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f7f9fc">
+<title>QAMQOR PHONE — Телефон жөндеу</title>
+<style>
+:root{--ink:#13233d;--muted:#66758b;--blue:#2878e8;--blue2:#5ba7ff;--line:#e4eaf2;--bg:#f7f9fc;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{width:min(1080px,calc(100% - 36px));margin:auto}
+header{height:78px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:850;letter-spacing:.5px}.mark{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#15355f,#2878e8);display:grid;place-items:center;color:#fff;font-size:25px;font-weight:900;box-shadow:0 7px 18px #2878e833}.brand small{display:block;font-size:10px;letter-spacing:2px;color:var(--muted);font-weight:700;margin-top:2px}
+.topnote{font-size:13px;color:var(--muted)}
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center;padding:65px 0 38px}
+.tag{font-size:11px;font-weight:850;letter-spacing:2px;color:var(--blue);text-transform:uppercase}
+h1{font-size:clamp(36px,5vw,58px);line-height:1.05;letter-spacing:-2.3px;margin:14px 0;color:#142744}h1 span{color:var(--blue)}
+.lead{font-size:16px;line-height:1.75;color:var(--muted);max-width:530px;margin:0}
+.points{display:flex;flex-wrap:wrap;gap:9px;margin-top:23px}.point{background:#fff;border:1px solid var(--line);padding:9px 12px;border-radius:30px;font-size:12px;color:#43536a}
+.art{min-height:260px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(145deg,#fff,#eef5ff);display:grid;place-items:center;position:relative;overflow:hidden}
+.art:before,.art:after{content:"";position:absolute;border-radius:50%;background:#dcecff;filter:blur(1px)}.art:before{width:220px;height:220px;right:-60px;top:-100px}.art:after{width:160px;height:160px;left:-65px;bottom:-75px;background:#e5f6f3}
+.device{z-index:1;width:126px;height:210px;border:7px solid #183658;border-radius:25px;background:linear-gradient(160deg,#d9ecff,#fff);box-shadow:0 20px 45px #1836582b;display:flex;align-items:center;justify-content:center;position:relative}
+.device:before{content:"";position:absolute;top:5px;width:37px;height:5px;border-radius:5px;background:#183658}
+.device b{font-size:62px;color:var(--blue);font-weight:850;letter-spacing:-7px}
+.tool{position:absolute;right:calc(50% - 95px);bottom:48px;width:61px;height:61px;border-radius:20px;background:#fff;box-shadow:0 12px 30px #16375b22;display:grid;place-items:center;color:var(--blue);font-size:30px;z-index:2}
+.card{background:#fff;border:1px solid var(--line);border-radius:26px;padding:clamp(22px,4vw,36px);box-shadow:0 18px 60px #13233d0a;margin:10px 0 58px}
+.cardhead{display:flex;justify-content:space-between;gap:16px;align-items:start;margin-bottom:25px}
+h2{font-size:25px;letter-spacing:-.7px;margin:8px 0}.sub{font-size:13px;color:var(--muted);line-height:1.6;margin:0}
+.step{white-space:nowrap;padding:8px 11px;border-radius:20px;background:#edf5ff;color:var(--blue);font-size:11px;font-weight:800}
+form{display:grid;grid-template-columns:1fr 1fr;gap:17px}.field{min-width:0}.full{grid-column:1/-1}
+label{display:block;font-size:13px;font-weight:750;margin:0 0 8px;color:#30435d}.optional{font-size:11px;color:#8694a7;font-weight:500}
+input,select,textarea{font:inherit;width:100%;border:1px solid #dfe6ef;background:#fbfcfe;border-radius:12px;padding:13px 14px;color:var(--ink);outline:0;transition:.18s}
+input:focus,select:focus,textarea:focus{border-color:#75aaf0;box-shadow:0 0 0 3px #2878e817}input::placeholder,textarea::placeholder{color:#9aa7b7}
+textarea{min-height:90px;resize:vertical}
+.phone{display:flex}.prefix{padding:0 13px;display:grid;place-items:center;background:#eef4fb;border:1px solid #dfe6ef;border-right:0;border-radius:12px 0 0 12px;color:#40536e;font-size:13px}.phone input{border-radius:0 12px 12px 0}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice{border:1px solid var(--line);border-radius:13px;background:#fff;padding:13px;display:flex;align-items:center;gap:10px;cursor:pointer;text-align:left;color:var(--ink);font:inherit}
+.choice.active{border-color:#77a9eb;background:#f1f7ff;box-shadow:inset 0 0 0 1px #77a9eb}
+.choice .ico{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-weight:900;font-size:17px;color:#fff;background:#20b96b}.choice.tg .ico{background:#269bd7}.choice span:last-child{font-size:13px;font-weight:750}
+.action{grid-column:1/-1;display:flex;align-items:center;gap:16px;margin-top:4px}
+.submit{border:0;background:var(--blue);color:#fff;padding:15px 21px;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 9px 22px #2878e82b}.submit:hover{background:#1767d2}.fine{font-size:11px;color:var(--muted);line-height:1.5;max-width:300px}
+.notice{display:none;margin-top:17px;border-radius:12px;padding:14px;background:#edf7ff;color:#234b7a;font-size:13px;line-height:1.6}
+footer{display:flex;justify-content:space-between;gap:12px;padding:0 0 26px;color:#8996a8;font-size:12px}footer strong{color:#42546e}
+@media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:42px;gap:23px}.art{min-height:220px}.topnote{display:none}}
+@media(max-width:560px){.wrap{width:calc(100% - 24px)}header{height:68px}.hero{padding-top:34px}h1{letter-spacing:-1.5px}.card{border-radius:20px;margin-bottom:38px}.cardhead{flex-direction:column}form{grid-template-columns:1fr;gap:14px}.full,.action{grid-column:1}.action{align-items:stretch;flex-direction:column}.submit{width:100%}footer{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="brand"><div class="mark">Q</div><div>QAMQOR PHONE<small>PHONE REPAIR SERVICE</small></div></div><div class="topnote">Телефоныңызға ұқыпты күтім</div></header>
+<main>
+<section class="hero">
+<div><div class="tag">Жөндеу • Қолдау • Сенім</div><h1>Телефоныңызға<br><span>көмек керек пе?</span></h1><p class="lead">Өтініш қалдырыңыз. Телефон моделін, ақауын және мекенжайыңызды көрсетіңіз. Біз сіз таңдаған мессенджер арқылы байланысамыз.</p><div class="points"><span class="point">✓ Экран және дисплей</span><span class="point">✓ Батарея</span><span class="point">✓ Зарядтау ұясы</span></div></div>
+<div class="art" aria-label="QAMQOR PHONE телефон белгісі"><div class="device"><b>Q</b></div><div class="tool">⌁</div></div>
+</section>
+<section class="card">
+<div class="cardhead"><div><div class="tag">Онлайн өтінім</div><h2>Жөндеуге өтініш қалдыру</h2><p class="sub">Жұлдызшамен белгіленген жолдарды толтырыңыз.</p></div><div class="step">ӨТІНІМ · 1/1</div></div>
+<form id="repairForm">
+<div class="field"><label for="brand">Телефон маркасы мен моделі *</label><input id="brand" name="brand" required maxlength="90" placeholder="Мысалы: iPhone 13, Samsung A54"></div>
+<div class="field"><label for="problem">Қандай жөндеу керек? *</label><select id="problem" name="problem" required><option value="" selected disabled>Жөндеу түрін таңдаңыз</option><option>Экран / дисплей ауыстыру</option><option>Батарея ауыстыру</option><option>Зарядтау ұясын жөндеу</option><option>Камераны жөндеу</option><option>Динамик / микрофон</option><option>Артқы қақпақты ауыстыру</option><option>Телефон қосылмайды</option><option>Басқа мәселе</option></select></div>
+<div class="field full"><label for="details">Қосымша ақпарат <span class="optional">(міндетті емес)</span></label><textarea id="details" name="details" maxlength="500" placeholder="Ақауды қысқаша сипаттаңыз..."></textarea></div>
+<div class="field full"><label for="address">Мекенжайыңыз *</label><input id="address" name="address" required maxlength="180" placeholder="Мысалы: Қаскелең, Абылай хан көшесі..."></div>
+<div class="field"><label for="clientPhone">Телефон нөміріңіз *</label><div class="phone"><span class="prefix">+7</span><input id="clientPhone" name="clientPhone" type="tel" inputmode="numeric" required maxlength="10" placeholder="700 123 45 67"></div></div>
+<div class="field"><label>Қай мессенджермен байланысамыз? *</label><div class="choices"><button class="choice active" type="button" data-method="WhatsApp"><span class="ico">◉</span><span>WhatsApp</span></button><button class="choice tg" type="button" data-method="Telegram"><span class="ico">➤</span><span>Telegram</span></button></div><input type="hidden" id="messenger" name="messenger" value="WhatsApp"></div>
+<div class="action"><button class="submit" type="submit">Өтінішті дайындау&nbsp; →</button><div class="fine">Өтініш жіберілгенге дейін мәліметтеріңіз осы бетте ғана тұрады. Мессенджерге өткенде хабарламаны өзіңіз жібересіз.</div></div>
+</form>
+<div class="notice" id="notice" role="status" aria-live="polite"></div>
+</section>
+</main>
+<footer><div><strong>QAMQOR PHONE</strong> · Телефон жөндеу қызметі</div><div>© <span id="year"></span> Барлық құқық қорғалған</div></footer>
+</div>
+<script>
+const BOT_URL="https://t.me/QamqorPhone_bot";
+const form=document.getElementById("repairForm"),notice=document.getElementById("notice");
+document.getElementById("year").textContent=new Date().getFullYear();
+document.querySelectorAll(".choice").forEach(btn=>btn.addEventListener("click",()=>{
+ document.querySelectorAll(".choice").forEach(x=>x.classList.remove("active"));
+ btn.classList.add("active");document.getElementById("messenger").value=btn.dataset.method;
+}));
+document.getElementById("clientPhone").addEventListener("input",e=>e.target.value=e.target.value.replace(/\D/g,"").slice(0,10));
+form.addEventListener("submit",async e=>{
+ e.preventDefault();const d=new FormData(form),phone=String(d.get("clientPhone")||"").replace(/\D/g,"");
+ if(phone.length!==10){notice.style.display="block";notice.textContent="Нөмірді +7-ден кейінгі 10 цифрмен енгізіңіз.";document.getElementById("clientPhone").focus();return;}
+ const msg="📱 QAMQOR PHONE — ЖАҢА ӨТІНІМ\n\nТелефон: "+d.get("brand")+"\nЖөндеу түрі: "+d.get("problem")+"\nҚосымша: "+(d.get("details")||"Көрсетілмеген")+"\nМекенжай: "+d.get("address")+"\nКлиент нөмірі: +7"+phone+"\nБайланыс: "+d.get("messenger");
+ try{await navigator.clipboard.writeText(msg);notice.style.display="block";notice.textContent="Өтініш мәтіні көшірілді. Telegram ботын ашып, хабарлама өрісіне қойып, өзіңіз жіберіңіз. Бұл нөмірдің иесін әлі растамайды.";window.open(BOT_URL,"_blank","noopener,noreferrer");}
+ catch(err){notice.style.display="block";notice.textContent="Өтініш мәтінін көшіру мүмкін болмады. Қайта көріңіз немесе браузердің көшіруге рұқсатын беріңіз.";}
+});
+</script>
+</body>
+</html>
