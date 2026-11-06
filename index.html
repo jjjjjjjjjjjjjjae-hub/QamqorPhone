@@ -70,20 +70,39 @@ footer{display:flex;justify-content:space-between;gap:12px;padding:0 0 26px;colo
 <footer><div><strong>QAMQOR PHONE</strong> · Телефон жөндеу қызметі</div><div>© <span id="year"></span> Барлық құқық қорғалған</div></footer>
 </div>
 <script>
-const BOT_URL="https://t.me/QamqorPhone_bot";
-const form=document.getElementById("repairForm"),notice=document.getElementById("notice");
+const form=document.getElementById("repairForm");
+const notice=document.getElementById("notice");
 document.getElementById("year").textContent=new Date().getFullYear();
-document.querySelectorAll(".choice").forEach(btn=>btn.addEventListener("click",()=>{
- document.querySelectorAll(".choice").forEach(x=>x.classList.remove("active"));
- btn.classList.add("active");document.getElementById("messenger").value=btn.dataset.method;
+document.querySelectorAll(".choice").forEach(button=>button.addEventListener("click",()=>{
+  document.querySelectorAll(".choice").forEach(item=>item.classList.remove("active"));
+  button.classList.add("active");
+  document.getElementById("messenger").value=button.dataset.method;
 }));
-document.getElementById("clientPhone").addEventListener("input",e=>e.target.value=e.target.value.replace(/\D/g,"").slice(0,10));
-form.addEventListener("submit",async e=>{
- e.preventDefault();const d=new FormData(form),phone=String(d.get("clientPhone")||"").replace(/\D/g,"");
- if(phone.length!==10){notice.style.display="block";notice.textContent="Нөмірді +7-ден кейінгі 10 цифрмен енгізіңіз.";document.getElementById("clientPhone").focus();return;}
- const msg="📱 QAMQOR PHONE — ЖАҢА ӨТІНІМ\n\nТелефон: "+d.get("brand")+"\nЖөндеу түрі: "+d.get("problem")+"\nҚосымша: "+(d.get("details")||"Көрсетілмеген")+"\nМекенжай: "+d.get("address")+"\nКлиент нөмірі: +7"+phone+"\nБайланыс: "+d.get("messenger");
- try{await navigator.clipboard.writeText(msg);notice.style.display="block";notice.textContent="Өтініш мәтіні көшірілді. Telegram ботын ашып, хабарлама өрісіне қойып, өзіңіз жіберіңіз. Бұл нөмірдің иесін әлі растамайды.";window.open(BOT_URL,"_blank","noopener,noreferrer");}
- catch(err){notice.style.display="block";notice.textContent="Өтініш мәтінін көшіру мүмкін болмады. Қайта көріңіз немесе браузердің көшіруге рұқсатын беріңіз.";}
+document.getElementById("clientPhone").addEventListener("input",event=>{
+  event.target.value=event.target.value.replace(/\\D/g,"").slice(0,10);
+});
+form.addEventListener("submit",event=>{
+  event.preventDefault();
+  const data=new FormData(form);
+  const phone=String(data.get("clientPhone")||"").replace(/\\D/g,"");
+  if(phone.length!==10){
+    notice.style.display="block";
+    notice.textContent="Нөмірді +7-ден кейінгі 10 цифрмен енгізіңіз.";
+    document.getElementById("clientPhone").focus();
+    return;
+  }
+  const message="📱 QAMQOR PHONE — ЖАҢА ӨТІНІМ\\n\\nТелефон: "+data.get("brand")+
+    "\\nЖөндеу түрі: "+data.get("problem")+
+    "\\nҚосымша: "+(data.get("details")||"Көрсетілмеген")+
+    "\\nМекенжай: "+data.get("address")+
+    "\\nКлиент нөмірі: +7"+phone+
+    "\\nБайланыс: "+data.get("messenger");
+  const target=data.get("messenger")==="WhatsApp"
+    ? "https://wa.me/?text="+encodeURIComponent(message)
+    : "https://t.me/share/url?url=&text="+encodeURIComponent(message);
+  window.open(target,"_blank","noopener,noreferrer");
+  notice.style.display="block";
+  notice.textContent="Мессенджер ашылды. Қажетті қабылдаушыны таңдаңыз да, хабарламаны өзіңіз жіберіңіз. Бұл әрекет нөмір иесін растамайды.";
 });
 </script>
 </body>
