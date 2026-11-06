@@ -43,6 +43,37 @@ textarea{min-height:90px;resize:vertical}
 footer{display:flex;justify-content:space-between;gap:12px;padding:0 0 26px;color:#8996a8;font-size:12px}footer strong{color:#42546e}
 @media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:42px;gap:23px}.art{min-height:220px}.topnote{display:none}}
 @media(max-width:560px){.wrap{width:calc(100% - 24px)}header{height:68px}.hero{padding-top:34px}h1{letter-spacing:-1.5px}.card{border-radius:20px;margin-bottom:38px}.cardhead{flex-direction:column}form{grid-template-columns:1fr;gap:14px}.full,.action{grid-column:1}.action{align-items:stretch;flex-direction:column}.submit{width:100%}footer{flex-direction:column}}
+
+/* QAMQOR PHONE — default dark theme */
+:root{
+ --ink:#f0f5ff;--muted:#a0aec2;--blue:#55a0ff;--blue2:#72b5ff;
+ --line:#273750;--bg:#080f1b;--white:#111d2e;
+}
+body{background:#080f1b;color:var(--ink)}
+header{border-bottom-color:#26354a}
+.brand small,.topnote,.lead,.sub,.fine,footer{color:#a0aec2}
+h1{color:#f1f5fb}
+.point{background:#111e30;border-color:#2a3b54;color:#d6e2f3}
+.art{border-color:#2b3b53;background:linear-gradient(145deg,#142943,#0d1728)}
+.art:before{background:#163b68}.art:after{background:#123b43}
+.device{border-color:#8ea9c9;background:linear-gradient(160deg,#1b3555,#0c1728);box-shadow:0 20px 45px #0008}
+.device:before{background:#8ba8ca}
+.tool{background:#172943;color:#72b5ff;box-shadow:0 12px 30px #0006}
+.card{background:#101b2b;border-color:#293b54;box-shadow:0 18px 60px #0004}
+label{color:#dbe7f7}
+input,select,textarea{background:#0a1423;border-color:#31445f;color:#f1f5fb}
+input::placeholder,textarea::placeholder{color:#71839b}
+input:focus,select:focus,textarea:focus{border-color:#65a9ff;box-shadow:0 0 0 3px #2878e82a}
+.prefix{background:#17263b;border-color:#31445f;color:#d6e4f5}
+.choice{background:#0d192a;border-color:#2c405c;color:#f0f5ff}
+.choice.active{border-color:#62a5fa;background:#142b47;box-shadow:inset 0 0 0 1px #62a5fa}
+.step{background:#142a45;color:#75b5ff}
+.notice{background:#142b43;color:#d9eaff;border:1px solid #2f5b84}
+footer strong{color:#e5edfa}
+@media(prefers-color-scheme:light){
+ body{background:#080f1b;color:var(--ink)}
+}
+
 </style>
 </head>
 <body>
