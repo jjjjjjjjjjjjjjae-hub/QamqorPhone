@@ -1,62 +1,70 @@
 <!doctype html>
 <html lang="kk">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#080f1b">
-  <meta name="robots" content="noindex,nofollow">
-  <title>Telegram авторизациясы — QAMQOR PHONE</title>
-  <style>
-    :root{color-scheme:dark;--bg:#080f1b;--card:#101b2b;--line:#293b54;--text:#f0f5ff;--muted:#a0aec2;--blue:#55a0ff}
-    *{box-sizing:border-box}
-    body{margin:0;min-height:100vh;padding:24px;display:grid;place-items:center;background:radial-gradient(700px 420px at 50% -15%,#17345b 0,transparent 65%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
-    main{width:min(100%,520px);padding:30px;border:1px solid var(--line);border-radius:24px;background:var(--card);box-shadow:0 24px 80px #0006;text-align:center}
-    .mark{width:58px;height:58px;margin:0 auto 18px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(145deg,#163b68,#2878e8);font-size:32px;font-weight:900}
-    h1{font-size:23px;margin:0 0 10px;letter-spacing:-.5px}
-    p{color:var(--muted);font-size:14px;line-height:1.7;margin:0}
-    .status{margin:22px 0;padding:14px;border:1px solid #42618a;border-radius:14px;background:#142943;color:#dcecff;font-size:13px;line-height:1.6}
-    a{display:inline-block;margin-top:20px;color:#83bdff;text-decoration:none;font-weight:700}
-    a:hover{text-decoration:underline}
-    .small{font-size:11px;margin-top:18px;color:#7e8da3}
-  </style>
-</head>
-<body>
-  <main>
-    <div class="mark" aria-hidden="true">Q</div>
-    <h1>QAMQOR PHONE</h1>
-    <p>Telegram арқылы авторизация беті</p>
-    <div class="status" id="status" role="status" aria-live="polite">
-      Авторизация нәтижесі тексерілуде…
-    </div>
-    <p id="detail">Бұл бет Telegram-нан қайтатын мекенжай ретінде дайындалған.</p>
-    <a href="/QamqorPhone/">Сайтқа қайту</a>
-    <p class="small">Қауіпсіздік үшін авторизация коды немесе құпия кілт бұл бетте көрсетілмейді.</p>
-  </main>
-  <script>
-    (() => {
-      const params = new URLSearchParams(window.location.search);
-      const hasCode = params.has("code");
-      const hasError = params.has("error");
-      const status = document.getElementById("status");
-      const detail = document.getElementById("detail");
-
-      // Remove one-time OAuth parameters from the address bar.
-      // Token exchange and ID-token verification must happen on a secure server.
-      if (window.location.search || window.location.hash) {
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
-
-      if (hasError) {
-        status.textContent = "Telegram авторизацияны аяқтамады.";
-        detail.textContent = "Қайтадан сайтқа өтіп, келісім беру әрекетін қайталауға болады.";
-      } else if (hasCode) {
-        status.textContent = "Telegram жауабы келді, бірақ нөмір әлі расталған жоқ.";
-        detail.textContent = "Қауіпсіз сервер әлі қосылмаған. Сервер қосылғанша бұл бет тек callback мекенжайы ретінде жұмыс істейді.";
-      } else {
-        status.textContent = "Callback беті дайын.";
-        detail.textContent = "Telegram авторизациясын толық іске қосу үшін серверлік токен алмасу және ID token тексеруі қажет.";
-      }
-    })();
-  </script>
-</body>
-</html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080f1b"><meta name="robots" content="noindex,nofollow">
+<title>Telegram растауы — QAMQOR PHONE</title>
+<style>
+:root{color-scheme:dark;--bg:#080f1b;--card:#101b2b;--line:#293b54;--text:#f0f5ff;--muted:#a0aec2;--blue:#55a0ff}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;padding:24px;display:grid;place-items:center;background:radial-gradient(700px 420px at 50% -15%,#17345b 0,transparent 65%),var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}
+main{width:min(100%,520px);padding:30px;border:1px solid var(--line);border-radius:24px;background:var(--card);text-align:center;box-shadow:0 24px 80px #0006}
+.mark{width:58px;height:58px;margin:0 auto 18px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(145deg,#163b68,#2878e8);font-size:32px;font-weight:900}
+h1{font-size:23px;margin:0 0 10px}p{color:var(--muted);font-size:14px;line-height:1.7}
+.status{margin:22px 0;padding:14px;border:1px solid #42618a;border-radius:14px;background:#142943;color:#dcecff;font-size:13px;line-height:1.6}
+a{display:inline-block;margin-top:18px;color:#83bdff;text-decoration:none;font-weight:700}
+</style></head>
+<body><main>
+<div class="mark">Q</div><h1>QAMQOR PHONE</h1><p>Telegram нөмірін тексеру</p>
+<div class="status" id="status" role="status" aria-live="polite">Telegram жауабы тексерілуде…</div>
+<p>Қауіпсіз растау аяқталған соң өтініш бетіне қайтасыз.</p>
+<a href="/QamqorPhone/">Сайтқа қайту</a>
+</main>
+<script>
+(async()=>{
+ const API="https://qamqorphone-auth.jjjjjjjjjjjjjjae.workers.dev";
+ const HOME="https://jjjjjjjjjjjjjjae-hub.github.io/QamqorPhone/";
+ const status=document.getElementById("status");
+ const params=new URLSearchParams(location.search);
+ const code=params.get("code");
+ const state=params.get("state");
+ const error=params.get("error");
+ const expectedState=sessionStorage.getItem("qamqorOidcState");
+ const verifier=sessionStorage.getItem("qamqorOidcVerifier");
+ const nonce=sessionStorage.getItem("qamqorOidcNonce");
+ const pendingPhone=sessionStorage.getItem("qamqorPendingPhone");
+ const fail=message=>{
+   sessionStorage.removeItem("qamqorVerifiedPhone");
+   sessionStorage.setItem("qamqorAuthResult",message);
+   status.textContent=message;
+   setTimeout(()=>location.replace(HOME),1800);
+ };
+ history.replaceState({},document.title,location.pathname);
+ if(error){fail("Telegram авторизациядан бас тартылды немесе қате қайтарды.");return;}
+ if(!code || !state || state!==expectedState || !verifier || !nonce || !pendingPhone){
+   fail("Авторизация деректері сәйкес келмеді. Қайтадан көріңіз.");return;
+ }
+ try{
+   const response=await fetch(API+"/auth/exchange",{
+     method:"POST",headers:{"Content-Type":"application/json"},
+     body:JSON.stringify({code,verifier,nonce})
+   });
+   const result=await response.json();
+   if(!response.ok || !result.ok || result.phone_number_verified!==true){
+     throw new Error(result.error||"Telegram нөмірді растамады");
+   }
+   const telegramDigits=String(result.phone_number).replace(/\D/g,"");
+   if(telegramDigits!=="7"+pendingPhone){
+     fail("Telegram аккаунтындағы нөмір енгізілген нөмірмен сәйкес келмейді.");return;
+   }
+   sessionStorage.setItem("qamqorVerifiedPhone",telegramDigits);
+   sessionStorage.setItem("qamqorAuthResult","✓ Telegram нөмірі сәтті расталды.");
+   sessionStorage.removeItem("qamqorOidcVerifier");
+   sessionStorage.removeItem("qamqorOidcState");
+   sessionStorage.removeItem("qamqorOidcNonce");
+   status.textContent="✓ Нөмір расталды. Сайтқа қайтып жатырсыз…";
+   setTimeout(()=>location.replace(HOME),1000);
+ }catch(e){
+   fail("Растау қатесі: "+(e.message||"Қайтадан көріңіз"));
+ }
+})();
+</script></body></html>
