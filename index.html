@@ -196,17 +196,33 @@ footer strong{color:#dceaff;letter-spacing:1px}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
+
+/* UI refinement — clearer actions and responsive polish */
+.header-right{display:flex;align-items:center;gap:14px}
+.header-cta,.hero-cta{display:inline-flex;align-items:center;justify-content:center;gap:14px;text-decoration:none;font-weight:800;border-radius:13px;transition:transform .2s,filter .2s,box-shadow .2s}
+.header-cta{padding:11px 16px;color:#f4f8ff;background:linear-gradient(100deg,#2878e8,#4ba8ff);font-size:12px;box-shadow:0 8px 22px #2878e82b}
+.header-cta span,.hero-cta span{font-size:18px;line-height:1}
+.header-cta:hover,.hero-cta:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.hero-actions{display:flex;align-items:center;gap:17px;flex-wrap:wrap;margin-top:25px}
+.hero-cta{padding:15px 21px;color:#fff;background:linear-gradient(100deg,#2878e8,#4ba8ff);box-shadow:0 12px 28px #2878e83d;font-size:13px}
+.hero-note{display:inline-flex;align-items:center;gap:8px;color:#9eb2cb;font-size:11px}
+.hero-note i{width:8px;height:8px;border-radius:50%;background:#54d6a0;box-shadow:0 0 0 4px #54d6a01c}
+#repair{scroll-margin-top:22px}
+.header-cta:focus-visible,.hero-cta:focus-visible{outline:3px solid #9bcfff;outline-offset:4px}
+@media(max-width:760px){.header-right{gap:0}.header-right .topnote{display:none}.header-cta{padding:10px 13px;font-size:11px}}
+@media(max-width:560px){.hero-actions{gap:12px;margin-top:21px}.hero-cta{width:100%;min-height:51px}.hero-note{font-size:10px}.header-cta{padding:9px 11px}.header-cta span{display:none}}
+
 </style>
 </head>
 <body>
 <div class="wrap">
-<header><div class="brand"><div class="mark">Q</div><div>QAMQOR PHONE<small>PHONE REPAIR SERVICE</small></div></div><div class="topnote">Телефоныңызға ұқыпты күтім</div></header>
+<header><div class="brand"><div class="mark">Q</div><div>QAMQOR PHONE<small>PHONE REPAIR SERVICE</small></div></div><div class="header-right"><div class="topnote">Телефоныңызға ұқыпты күтім</div><a class="header-cta" href="#repair">Өтінім қалдыру <span>↗</span></a></div></header>
 <main>
 <section class="hero">
-<div><div class="tag">Жөндеу • Қолдау • Сенім</div><h1>Телефоныңызға<br><span>көмек керек пе?</span></h1><p class="lead">Өтініш қалдырыңыз. Телефон моделін, ақауын және мекенжайыңызды көрсетіңіз. Менеджер өтінімді қарап, жөндеу бағасын есептеп, сізбен өзі байланысады.</p><div class="points"><span class="point">✓ Экран және дисплей</span><span class="point">✓ Батарея</span><span class="point">✓ Зарядтау ұясы</span></div></div>
+<div><div class="tag">Жөндеу • Қолдау • Сенім</div><h1>Телефоныңызға<br><span>көмек керек пе?</span></h1><p class="lead">Телефоныңызды жөндету енді оңай. Өтінім қалдырыңыз — маман сізбен байланысып, жөндеу жолын келіседі.</p><div class="hero-actions"><a class="hero-cta" href="#repair">Маман шақыру <span>→</span></a><span class="hero-note"><i></i> Онлайн өтінім қабылдаймыз</span></div><div class="points"><span class="point">✓ Экран және дисплей</span><span class="point">✓ Батарея</span><span class="point">✓ Зарядтау ұясы</span></div></div>
 <div class="art" aria-label="QAMQOR PHONE телефон белгісі"><div class="device"><b>Q</b></div><div class="tool">⌁</div></div>
 </section>
-<section class="card">
+<section class="card" id="repair">
 <div class="cardhead"><div><div class="tag">Онлайн өтінім</div><h2>Жөндеуге өтініш қалдыру</h2><p class="sub">Жұлдызшамен белгіленген жолдарды толтырыңыз.</p></div><div class="step">ӨТІНІМ · 1/1</div></div>
 <form id="repairForm">
 <div class="field"><label for="brand">Телефон маркасы мен моделі *</label><input id="brand" name="brand" required maxlength="90" placeholder="Мысалы: iPhone 13, Samsung A54"></div>
