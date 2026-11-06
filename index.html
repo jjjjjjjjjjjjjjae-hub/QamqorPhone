@@ -79,24 +79,24 @@ document.querySelectorAll(".choice").forEach(button=>button.addEventListener("cl
   document.getElementById("messenger").value=button.dataset.method;
 }));
 document.getElementById("clientPhone").addEventListener("input",event=>{
-  event.target.value=event.target.value.replace(/\\D/g,"").slice(0,10);
+  event.target.value=event.target.value.replace(/\D/g,"").slice(0,10);
 });
 form.addEventListener("submit",event=>{
   event.preventDefault();
   const data=new FormData(form);
-  const phone=String(data.get("clientPhone")||"").replace(/\\D/g,"");
+  const phone=String(data.get("clientPhone")||"").replace(/\D/g,"");
   if(phone.length!==10){
     notice.style.display="block";
     notice.textContent="Нөмірді +7-ден кейінгі 10 цифрмен енгізіңіз.";
     document.getElementById("clientPhone").focus();
     return;
   }
-  const message="📱 QAMQOR PHONE — ЖАҢА ӨТІНІМ\\n\\nТелефон: "+data.get("brand")+
-    "\\nЖөндеу түрі: "+data.get("problem")+
-    "\\nҚосымша: "+(data.get("details")||"Көрсетілмеген")+
-    "\\nМекенжай: "+data.get("address")+
-    "\\nКлиент нөмірі: +7"+phone+
-    "\\nБайланыс: "+data.get("messenger");
+  const message="📱 QAMQOR PHONE — ЖАҢА ӨТІНІМ\n\nТелефон: "+data.get("brand")+
+    "\nЖөндеу түрі: "+data.get("problem")+
+    "\nҚосымша: "+(data.get("details")||"Көрсетілмеген")+
+    "\nМекенжай: "+data.get("address")+
+    "\nКлиент нөмірі: +7"+phone+
+    "\nБайланыс: "+data.get("messenger");
   const target=data.get("messenger")==="WhatsApp"
     ? "https://wa.me/?text="+encodeURIComponent(message)
     : "https://t.me/share/url?url=&text="+encodeURIComponent(message);
