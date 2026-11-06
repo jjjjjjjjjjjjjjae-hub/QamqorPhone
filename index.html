@@ -599,6 +599,27 @@ footer{border-top:1px solid #1d2c40;padding-top:20px}
 .wizard-next,.wizard-back{padding:11px 13px;font-size:12px}
 }
 
+ 
+/* SEARCHABLE PHONE MODELS WITH PRODUCT PHOTOS */
+.phone-picker{position:relative;width:100%}
+.phone-model-suggestions{position:absolute;z-index:1200;top:calc(100% + 8px);left:0;right:0;max-height:340px;overflow:auto;padding:7px;border:1px solid #35506d;border-radius:15px;background:#0d1929;box-shadow:0 18px 48px #0009}
+.phone-model-suggestions[hidden],.phone-model-preview[hidden]{display:none!important}
+.phone-model-option{width:100%;display:flex;align-items:center;gap:12px;padding:9px;border:1px solid transparent;border-radius:11px;background:transparent;color:#eff6ff;text-align:left;cursor:pointer;font:inherit}
+.phone-model-option:hover,.phone-model-option:focus{outline:0;border-color:#3e6e9d;background:#142b45}
+.phone-model-option img{width:56px;height:66px;flex:0 0 56px;object-fit:contain;border-radius:9px;background:#fff}
+.phone-model-option span{display:grid;gap:4px;min-width:0}
+.phone-model-option strong{font-size:13px;font-weight:800}
+.phone-model-option small{font-size:11px;color:#9eb2cb}
+.phone-model-empty{padding:13px;color:#a8b9ce;font-size:12px;line-height:1.5}
+.phone-model-preview{display:flex;align-items:center;gap:13px;padding:12px;border:1px solid #35506d;border-radius:14px;background:#10243a}
+.phone-model-preview img{width:72px;height:82px;object-fit:contain;flex:0 0 72px;border-radius:10px;background:#fff}
+.phone-model-preview div{display:grid;gap:5px;min-width:0}
+.phone-model-preview strong{color:#f0f6ff;font-size:13px}
+.phone-model-preview span{color:#8fa8c4;font-size:11px}
+.phone-model-preview button{margin-left:auto;width:34px;height:34px;border:1px solid #3a5473;border-radius:10px;background:#142b45;color:#e4f1ff;font-size:22px;cursor:pointer}
+.phone-model-option img.image-failed,.phone-model-preview img.image-failed{display:none}
+@media(max-width:560px){.phone-model-suggestions{max-height:300px}.phone-model-option img{width:50px;height:60px;flex-basis:50px}.phone-model-preview img{width:64px;height:74px;flex-basis:64px}}
+
 </style>
 </head>
 <body>
@@ -626,7 +647,15 @@ footer{border-top:1px solid #1d2c40;padding-top:20px}
 <div class="wizard-progress-track"><span id="wizardProgressBar"></span></div></div>
 <section class="wizard-step" data-wizard-step="0" aria-label="1-қадам: Телефон маркасы мен моделі">
 <div class="wizard-step-heading"><span class="wizard-step-number">01</span><div><h3>Телефон маркасы мен моделі</h3><p>Қандай телефон жөндеткіңіз келеді?</p></div></div>
-<div class="field"><label for="brand">Телефон маркасы мен моделі *</label><input id="brand" name="brand" required minlength="2" maxlength="90" placeholder="Мысалы: iPhone 13, Samsung A54"></div>
+<div class="field"><label for="brand">Телефон маркасы мен моделі *</label><div class="phone-picker">
+  <input id="brand" name="brand" required minlength="2" maxlength="90" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="phoneModelSuggestions" aria-expanded="false" placeholder="Модельді іздеңіз: iPhone 13, Samsung A54">
+  <div id="phoneModelSuggestions" class="phone-model-suggestions" role="listbox" hidden></div>
+</div>
+<div id="phoneModelPreview" class="phone-model-preview" aria-live="polite" hidden>
+  <img id="phoneModelPreviewImage" alt="Таңдалған телефон моделі">
+  <div><strong id="phoneModelPreviewName"></strong><span>Таңдалған модель</span></div>
+  <button id="phoneModelClear" type="button" aria-label="Таңдалған модельді өшіру">×</button>
+</div></div>
 <div class="wizard-nav">
 <span class="wizard-first-note">Барлық өрісті ретімен толтырыңыз.</span>
 <button class="wizard-next" type="button" data-wizard-next>Келесі қадам <span>→</span></button>
@@ -768,6 +797,121 @@ let selectedPoint = null;
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
+/* Phone model search: show a model-specific photo while the user searches. */
+(() => {
+  const input = document.getElementById("brand");
+  const list = document.getElementById("phoneModelSuggestions");
+  const preview = document.getElementById("phoneModelPreview");
+  const previewImage = document.getElementById("phoneModelPreviewImage");
+  const previewName = document.getElementById("phoneModelPreviewName");
+  const clear = document.getElementById("phoneModelClear");
+  if (!input || !list || !preview || !previewImage || !previewName || !clear) return;
+
+  const models = [
+    {name:"iPhone 13", aliases:"apple iphone 13 айфон 13", image:"https://www.apple.com/newsroom/images/product/iphone/geo/Apple_iphone13_hero_geo_09142021_inline.jpg.large.jpg"},
+    {name:"iPhone 13 mini", aliases:"apple iphone 13 mini айфон 13 мини", image:"https://static01.galaxus.com/productimages/4/8/8/8/7/1/1/0/iPhone_13_mini_Pink_PDP_Image_Position-1A__WWEN.jpg_sea.jpeg"},
+    {name:"iPhone 13 Pro", aliases:"apple iphone 13 pro айфон 13 про", image:"https://media.tatacroma.com/Croma%20Assets/Communication/Mobiles/Images/243511_0_o8kuhr.png"},
+    {name:"iPhone 13 Pro Max", aliases:"apple iphone 13 pro max айфон 13 про макс", image:"https://cdn.mafrservices.com/sys-master-root/hfb/h14/26549481177118/569558_main.jpg"},
+    {name:"iPhone 12", aliases:"apple iphone 12 айфон 12", image:"https://bestpricegh.com/cdn/shop/products/711wsjBtWeL_c1d056fb-4dcb-4549-87e5-3ba03e42d5e0.jpg?crop=center&height=2560&v=1603119589&width=2560"},
+    {name:"iPhone 14", aliases:"apple iphone 14 айфон 14", image:"https://www.mrfix.ua/storage/631/f47/aaa/product-product-apple-iphone-14-128gb-starlight-13610-1000x1000.jpg"},
+    {name:"Samsung Galaxy A54 5G", aliases:"samsung galaxy a54 a54 5g самсунг а54", image:"https://www.pbtech.co.nz/imgprod/E/X/EXMPHSAMA0054__1.jpg"},
+    {name:"Samsung Galaxy A34 5G", aliases:"samsung galaxy a34 a34 5g самсунг а34", image:"https://sota.store/image/cache/catalog/Samsung-2/samsung-a34-a346-blk-01-1600x1600.webp"},
+    {name:"Xiaomi Redmi Note 12", aliases:"xiaomi redmi note 12 редми ноут 12", image:"https://cdn.cimri.io/image/1200x1200/xiaomi-redmi-note-12-4g-128gb-6gb-ram-gri_868163989.jpg"}
+  ];
+
+  const normalize = value => String(value || "").toLocaleLowerCase("kk").replace(/\s+/g," ").trim();
+  let activeIndex = -1;
+
+  function showPreview(model) {
+    previewName.textContent = model.name;
+    previewImage.classList.remove("image-failed");
+    previewImage.alt = model.name + " телефонының суреті";
+    previewImage.src = model.image;
+    previewImage.onerror = () => previewImage.classList.add("image-failed");
+    preview.hidden = false;
+  }
+  function hideList() {
+    list.hidden = true;
+    input.setAttribute("aria-expanded","false");
+    activeIndex = -1;
+  }
+  function choose(model) {
+    input.value = model.name;
+    showPreview(model);
+    hideList();
+    input.setAttribute("aria-activedescendant","");
+    input.dispatchEvent(new Event("change",{bubbles:true}));
+  }
+  function drawList() {
+    const query = normalize(input.value);
+    const matches = models.filter(model => normalize(model.name + " " + model.aliases).includes(query)).slice(0,8);
+    list.replaceChildren();
+    activeIndex = -1;
+    if (!matches.length) {
+      const empty = document.createElement("div");
+      empty.className = "phone-model-empty";
+      empty.textContent = "Бұл модель дайын тізімде жоқ. Атауын толық жазып жалғастыра аласыз.";
+      list.append(empty);
+    } else {
+      matches.forEach(model => {
+        const option = document.createElement("button");
+        option.type = "button";
+        option.className = "phone-model-option";
+        option.setAttribute("role","option");
+        option.setAttribute("aria-label",model.name);
+        const image = document.createElement("img");
+        image.src = model.image;
+        image.alt = "";
+        image.loading = "lazy";
+        image.onerror = () => image.classList.add("image-failed");
+        const label = document.createElement("span");
+        const name = document.createElement("strong");
+        name.textContent = model.name;
+        const detail = document.createElement("small");
+        detail.textContent = "Модельді таңдау";
+        label.append(name,detail);
+        option.append(image,label);
+        option.addEventListener("click",() => choose(model));
+        list.append(option);
+      });
+    }
+    list.hidden = false;
+    input.setAttribute("aria-expanded","true");
+  }
+
+  input.addEventListener("input",() => {
+    const exact = models.find(model => normalize(model.name) === normalize(input.value));
+    if (exact) showPreview(exact);
+    else preview.hidden = true;
+    drawList();
+  });
+  input.addEventListener("focus",() => drawList());
+  input.addEventListener("keydown",event => {
+    const options = Array.from(list.querySelectorAll(".phone-model-option"));
+    if (event.key === "Escape") { hideList(); return; }
+    if (!options.length) return;
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      activeIndex = (activeIndex + (event.key === "ArrowDown" ? 1 : options.length - 1)) % options.length;
+      options[activeIndex].focus();
+    }
+  });
+  document.addEventListener("click",event => {
+    if (!event.target.closest(".phone-picker")) hideList();
+  });
+  clear.addEventListener("click",() => {
+    input.value = "";
+    preview.hidden = true;
+    input.focus();
+    drawList();
+  });
+  form.addEventListener("reset",() => {
+    preview.hidden = true;
+    hideList();
+  });
+})();
+
+
 function updateMapPoint(lat, lng) {
   const point = {lat: Number(lat.toFixed(6)), lng: Number(lng.toFixed(6))};
   selectedPoint = point;
@@ -802,6 +946,7 @@ function clearMapPoint() {
 }
 
 function initServiceMap() {
+  if (serviceMap) return;
   if (!window.L) {
     mapStatus.textContent = "Карта жүктелмеді. Интернетті тексеріп, бетті қайта ашыңыз.";
     mapStatus.classList.add("error");
@@ -816,7 +961,8 @@ function initServiceMap() {
   }).addTo(serviceMap);
 
   serviceMap.on("click", event => updateMapPoint(event.latlng.lat, event.latlng.lng));
-  setTimeout(() => serviceMap.invalidateSize(), 150);
+  locateButton.disabled = false;
+  setTimeout(() => serviceMap && serviceMap.invalidateSize(true), 150);
 }
 
 function getBrowserPosition(options) {
@@ -971,6 +1117,17 @@ function validPayload(payload) {
     progressText.textContent = (current + 1) + " / " + steps.length + " қадам";
     progressName.textContent = names[current] || "";
     progressBar.style.width = ((current + 1) / steps.length * 100) + "%";
+    if (current === 4) {
+      const refreshMap = () => {
+        if (!serviceMap && window.L) initServiceMap();
+        if (serviceMap) serviceMap.invalidateSize(true);
+      };
+      requestAnimationFrame(() => {
+        refreshMap();
+        setTimeout(refreshMap, 180);
+        setTimeout(refreshMap, 550);
+      });
+    }
     if (scroll) {
       const top = form.getBoundingClientRect().top + window.scrollY - 18;
       window.scrollTo({top, behavior:"smooth"});
