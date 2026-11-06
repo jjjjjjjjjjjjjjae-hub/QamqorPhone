@@ -564,6 +564,41 @@ footer{border-top:1px solid #1d2c40;padding-top:20px}
 @media(max-width:560px){.verify-actions{grid-template-columns:1fr;gap:10px}}
 
 
+
+/* STEP-BY-STEP REPAIR FORM */
+.wizard-progress{grid-column:1/-1;margin:0 0 8px;padding:16px 18px;border:1px solid #2a405c;border-radius:16px;background:#0c192a}
+.wizard-progress-line{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#dceaff;font-size:12px}
+.wizard-progress-line strong{color:#8fc8ff;font-weight:850}
+.wizard-progress-line span{color:#9eb0c7}
+.wizard-progress-track{height:6px;margin-top:12px;border-radius:20px;background:#263a54;overflow:hidden}
+.wizard-progress-track span{display:block;width:14.2857%;height:100%;border-radius:20px;background:linear-gradient(90deg,#2878e8,#70bdff);transition:width .25s ease}
+.wizard-step{grid-column:1/-1;min-width:0;display:grid;gap:17px;padding:22px;border:1px solid #2a405c;border-radius:19px;background:linear-gradient(145deg,#101f33,#0b1727)}
+.wizard-step[hidden]{display:none!important}
+.wizard-step-heading{display:flex;align-items:center;gap:13px;padding-bottom:15px;border-bottom:1px solid #273c57}
+.wizard-step-number{width:42px;height:42px;flex:0 0 42px;border-radius:13px;display:grid;place-items:center;background:#17375a;color:#91cbff;font-size:14px;font-weight:900}
+.wizard-step-heading h3{margin:0;color:#f2f7ff;font-size:18px;letter-spacing:-.4px}
+.wizard-step-heading p{margin:4px 0 0;color:#9eb0c7;font-size:12px;line-height:1.5}
+.wizard-step>.field,.wizard-step>.field.full{grid-column:1/-1;min-width:0}
+.wizard-step .map-field{margin:0}
+.wizard-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:4px}
+.wizard-next,.wizard-back{min-height:46px;padding:12px 17px;border-radius:12px;font:800 13px system-ui,sans-serif;cursor:pointer;transition:transform .2s,filter .2s}
+.wizard-next{border:0;background:linear-gradient(100deg,#2878e8,#4ba8ff);color:#fff;box-shadow:0 9px 24px #2878e833}
+.wizard-back{border:1px solid #354c68;background:#14243a;color:#d9e7f8}
+.wizard-next:hover,.wizard-back:hover{transform:translateY(-1px);filter:brightness(1.1)}
+.wizard-next:active,.wizard-back:active{transform:scale(.98)}
+.wizard-next span{margin-left:12px}
+.wizard-first-note{color:#8298b3;font-size:11px}
+.wizard-step[data-wizard-step="6"] #telegramVerifyBox{margin:0}
+.wizard-step[data-wizard-step="6"] .action{margin:0}
+.wizard-step[data-wizard-step="6"] .wizard-nav{justify-content:flex-start}
+@media(max-width:560px){
+.wizard-progress{padding:13px}
+.wizard-step{padding:16px 13px;gap:15px;border-radius:16px}
+.wizard-step-heading h3{font-size:16px}
+.wizard-nav{gap:8px}
+.wizard-next,.wizard-back{padding:11px 13px;font-size:12px}
+}
+
 </style>
 </head>
 <body>
@@ -586,11 +621,39 @@ footer{border-top:1px solid #1d2c40;padding-top:20px}
 <section class="card" id="repair">
 <div class="cardhead"><div><div class="tag">Онлайн өтінім</div><h2>Жөндеуге өтініш қалдыру</h2><p class="sub">Жұлдызшамен белгіленген жолдарды толтырыңыз.</p></div><div class="step">ӨТІНІМ · 1/1</div></div>
 <form id="repairForm">
-<div class="field"><label for="brand">Телефон маркасы мен моделі *</label><input id="brand" name="brand" required maxlength="90" placeholder="Мысалы: iPhone 13, Samsung A54"></div>
+<div class="wizard-progress" aria-live="polite">
+<div class="wizard-progress-line"><strong id="wizardProgressText">1 / 7 қадам</strong><span id="wizardProgressName">Телефон</span></div>
+<div class="wizard-progress-track"><span id="wizardProgressBar"></span></div></div>
+<section class="wizard-step" data-wizard-step="0" aria-label="1-қадам: Телефон маркасы мен моделі">
+<div class="wizard-step-heading"><span class="wizard-step-number">01</span><div><h3>Телефон маркасы мен моделі</h3><p>Қандай телефон жөндеткіңіз келеді?</p></div></div>
+<div class="field"><label for="brand">Телефон маркасы мен моделі *</label><input id="brand" name="brand" required minlength="2" maxlength="90" placeholder="Мысалы: iPhone 13, Samsung A54"></div>
+<div class="wizard-nav">
+<span class="wizard-first-note">Барлық өрісті ретімен толтырыңыз.</span>
+<button class="wizard-next" type="button" data-wizard-next>Келесі қадам <span>→</span></button>
+</div></section>
+<section class="wizard-step" data-wizard-step="1" hidden aria-label="2-қадам: Жөндеу түрі">
+<div class="wizard-step-heading"><span class="wizard-step-number">02</span><div><h3>Жөндеу түрі</h3><p>Телефоныңызда қандай ақау бар?</p></div></div>
 <div class="field"><label for="problem">Қандай жөндеу керек? *</label><select id="problem" name="problem" required><option value="" selected disabled>Жөндеу түрін таңдаңыз</option><option>Экран / дисплей ауыстыру</option><option>Батарея ауыстыру</option><option>Зарядтау ұясын жөндеу</option><option>Камераны жөндеу</option><option>Динамик / микрофон</option><option>Артқы қақпақты ауыстыру</option><option>Телефон қосылмайды</option><option>Басқа мәселе</option></select></div>
-<div class="field full"><label for="details">Қосымша ақпарат <span class="optional">(міндетті емес)</span></label><textarea id="details" name="details" maxlength="300" placeholder="Ақауды қысқаша сипаттаңыз..."></textarea></div>
-<div class="field full"><label for="address">Мекенжайыңыз *</label><input id="address" name="address" required maxlength="180" autocomplete="street-address" placeholder="Мысалы: Қаскелең, Абылай хан көшесі, 10-үй"></div>
-
+<div class="wizard-nav">
+<button class="wizard-back" type="button" data-wizard-back>← Артқа</button>
+<button class="wizard-next" type="button" data-wizard-next>Келесі қадам <span>→</span></button>
+</div></section>
+<section class="wizard-step" data-wizard-step="2" hidden aria-label="3-қадам: Ақауды сипаттау">
+<div class="wizard-step-heading"><span class="wizard-step-number">03</span><div><h3>Ақауды сипаттау</h3><p>Мәселені қысқаша, толық жазыңыз.</p></div></div>
+<div class="field full"><label for="details">Ақауды толық сипаттаңыз *</label><textarea id="details" name="details" required minlength="5" maxlength="300" placeholder="Мысалы: экран сынған, телефон қосылады, бірақ сурет шықпайды..."></textarea></div>
+<div class="wizard-nav">
+<button class="wizard-back" type="button" data-wizard-back>← Артқа</button>
+<button class="wizard-next" type="button" data-wizard-next>Келесі қадам <span>→</span></button>
+</div></section>
+<section class="wizard-step" data-wizard-step="3" hidden aria-label="4-қадам: Мекенжай">
+<div class="wizard-step-heading"><span class="wizard-step-number">04</span><div><h3>Мекенжай</h3><p>Маман қай мекенжайға баруы керек?</p></div></div>
+<div class="field full"><label for="address">Мекенжайыңыз *</label><input id="address" name="address" required minlength="5" maxlength="180" autocomplete="street-address" placeholder="Мысалы: Қаскелең, Абылай хан көшесі, 10-үй"></div>
+<div class="wizard-nav">
+<button class="wizard-back" type="button" data-wizard-back>← Артқа</button>
+<button class="wizard-next" type="button" data-wizard-next>Келесі қадам <span>→</span></button>
+</div></section>
+<section class="wizard-step" data-wizard-step="4" hidden aria-label="5-қадам: Картадағы орын">
+<div class="wizard-step-heading"><span class="wizard-step-number">05</span><div><h3>Картадағы орын</h3><p>Картадан жөндеу жасалатын нақты орынды белгілеңіз.</p></div></div>
 <div class="field full map-field">
   <label>Клиенттің орналасқан жері *</label>
   <div class="map-actions">
@@ -602,7 +665,12 @@ footer{border-top:1px solid #1d2c40;padding-top:20px}
   <p class="map-status" id="mapStatus" role="status" aria-live="polite">Картадан үйіңізді немесе жөндеу жасалатын орынды түртіңіз. Белгіні саусақпен жылжытуға болады.</p>
   <p class="map-help">GPS батырмасы браузердің орналасқан жерді анықтау рұқсатын сұрайды. Көше мен үй нөмірін мекенжай өрісіне де жазыңыз.</p>
 </div>
-
+<div class="wizard-nav">
+<button class="wizard-back" type="button" data-wizard-back>← Артқа</button>
+<button class="wizard-next" type="button" data-wizard-next>Келесі қадам <span>→</span></button>
+</div></section>
+<section class="wizard-step" data-wizard-step="5" hidden aria-label="6-қадам: WhatsApp нөмірі">
+<div class="wizard-step-heading"><span class="wizard-step-number">06</span><div><h3>WhatsApp нөмірі</h3><p>Менеджер сізбен осы нөмір арқылы байланысады.</p></div></div>
 <div class="field full">
   <label for="whatsappNumber"><span class="messenger-label"><svg class="messenger-icon whatsapp-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
   <circle cx="24" cy="24" r="24" fill="#25D366"/>
@@ -612,7 +680,12 @@ footer{border-top:1px solid #1d2c40;padding-top:20px}
   <input id="whatsappNumber" name="whatsapp_number" type="tel" inputmode="tel" autocomplete="tel" required maxlength="24" placeholder="+7 7XX XXX XX XX">
   <p class="map-help">WhatsApp нөміріңізді жазыңыз. Код жіберілмейді және WhatsApp арқылы растау қажет емес — бұл нөмір менеджерге байланысу үшін беріледі.</p>
 </div>
-
+<div class="wizard-nav">
+<button class="wizard-back" type="button" data-wizard-back>← Артқа</button>
+<button class="wizard-next" type="button" data-wizard-next>Келесі қадам <span>→</span></button>
+</div></section>
+<section class="wizard-step" data-wizard-step="6" hidden aria-label="7-қадам: Telegram растауы">
+<div class="wizard-step-heading"><span class="wizard-step-number">07</span><div><h3>Telegram растауы</h3><p>Соңғы қадам: Telegram аккаунтыңызды растаңыз.</p></div></div>
 <div class="field full" id="telegramVerifyBox">
   <label>Telegram аккаунтын растау</label>
   <div class="verify-actions">
@@ -625,6 +698,10 @@ footer{border-top:1px solid #1d2c40;padding-top:20px}
 </div>
 
 <div class="action"><div class="fine">WhatsApp нөмірін енгізіп, Telegram аккаунтын растаңыз. Растаудан кейін өтініш менеджерге автоматты түрде жіберіледі.</div></div>
+<div class="wizard-nav">
+<button class="wizard-back" type="button" data-wizard-back>← Артқа</button>
+
+</div></section>
 </form>
 <div class="notice" id="notice" role="status" aria-live="polite"></div>
 </section>
@@ -856,8 +933,8 @@ function collectPayload() {
 }
 
 function validPayload(payload) {
-  if (!payload.brand || !payload.problem || !payload.address) {
-    showNotice("Телефон моделін, жөндеу түрін және мекенжайды толтырыңыз.");
+  if (!payload.brand || !payload.problem || !String(document.getElementById("details").value || "").trim() || !payload.address) {
+    showNotice("Телефон моделін, жөндеу түрін, ақау сипаттамасын және мекенжайды толтырыңыз.");
     return false;
   }
   const whatsappDigits = String(document.getElementById("whatsappNumber").value || "").replace(/\D/g, "");
@@ -874,6 +951,81 @@ function validPayload(payload) {
   }
   return true;
 }
+
+
+/* Required 7-step repair wizard. Telegram OAuth below remains unchanged. */
+(() => {
+  const steps = Array.from(form.querySelectorAll("[data-wizard-step]"));
+  const progressText = document.getElementById("wizardProgressText");
+  const progressName = document.getElementById("wizardProgressName");
+  const progressBar = document.getElementById("wizardProgressBar");
+  const names = ["Телефон","Жөндеу түрі","Ақау","Мекенжай","Карта","WhatsApp","Telegram"];
+  let current = 0;
+
+  function render(index, scroll = true) {
+    current = Math.max(0, Math.min(steps.length - 1, index));
+    steps.forEach((step, i) => {
+      step.hidden = i !== current;
+      step.setAttribute("aria-hidden", i === current ? "false" : "true");
+    });
+    progressText.textContent = (current + 1) + " / " + steps.length + " қадам";
+    progressName.textContent = names[current] || "";
+    progressBar.style.width = ((current + 1) / steps.length * 100) + "%";
+    if (scroll) {
+      const top = form.getBoundingClientRect().top + window.scrollY - 18;
+      window.scrollTo({top, behavior:"smooth"});
+    }
+  }
+
+  function validate(index) {
+    const fields = {
+      0: document.getElementById("brand"),
+      1: document.getElementById("problem"),
+      2: document.getElementById("details"),
+      3: document.getElementById("address"),
+      5: document.getElementById("whatsappNumber")
+    };
+    if (index === 4) {
+      if (!selectedPoint) {
+        showNotice("Картадан жөндеу жасалатын орынды міндетті түрде белгілеңіз.");
+        mapStatus.classList.add("error");
+        document.getElementById("serviceMap").scrollIntoView({behavior:"smooth",block:"center"});
+        return false;
+      }
+      return true;
+    }
+    const field = fields[index];
+    if (!field) return true;
+    if (!field.checkValidity()) {
+      field.reportValidity();
+      field.focus();
+      return false;
+    }
+    if (index === 5) {
+      const digits = field.value.replace(/\D/g, "");
+      if (digits.length < 10 || digits.length > 15) {
+        showNotice("WhatsApp нөмірін дұрыс енгізіңіз. Мысалы: +7 777 123 45 67.");
+        field.focus();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  form.querySelectorAll("[data-wizard-next]").forEach(button => {
+    button.addEventListener("click", () => {
+      if (!validate(current)) return;
+      render(current + 1);
+    });
+  });
+  form.querySelectorAll("[data-wizard-back]").forEach(button => {
+    button.addEventListener("click", () => render(current - 1));
+  });
+  form.addEventListener("reset", () => {
+    setTimeout(() => render(0, false), 0);
+  });
+  render(0, false);
+})();
 
 async function sendRequest(payload, sessionId) {
   if (!sessionId) throw new Error("Нөмірді растау қажет.");
