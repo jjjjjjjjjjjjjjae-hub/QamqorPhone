@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#080f1b">
 <link rel="icon" type="image/png" href="QamqorPhone.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+<meta name="description" content="QAMQOR PHONE — телефон жөндеу қызметіне онлайн өтінім қалдырыңыз. Жөндеу түрін таңдап, мекенжайды картадан белгілеңіз.">
 <title>QAMQOR PHONE — Телефон жөндеу</title>
 <style>
 
@@ -744,7 +745,19 @@ footer strong{color:#d5e9ff}
   .brand{font-size:11px;gap:8px}
   .mark{width:39px;height:39px;flex-basis:39px}
   .brand small{font-size:6px}
-  .main-nav{display:none}
+  .main-nav{
+    display:flex;position:fixed;z-index:950;left:50%;
+    bottom:calc(env(safe-area-inset-bottom) + 12px);
+    transform:translateX(-50%);gap:4px;width:max-content;
+    max-width:calc(100% - 24px);padding:7px;
+    border:1px solid rgba(164,204,247,.22);border-radius:999px;
+    background:rgba(8,17,29,.86);backdrop-filter:blur(22px) saturate(150%);
+    -webkit-backdrop-filter:blur(22px) saturate(150%);
+    box-shadow:0 16px 42px rgba(0,0,0,.4),inset 0 1px rgba(255,255,255,.08);
+  }
+  .main-nav a{padding:9px 12px;border-radius:999px;font-size:10px;white-space:nowrap}
+  .main-nav a:hover{background:rgba(45,139,239,.18)}
+  body{padding-bottom:82px}
   .header-right{margin-left:auto}
   .header-cta{min-height:39px;padding:10px 13px;font-size:10px}
   .hero{padding:48px 0 45px;gap:27px}
