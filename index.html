@@ -104,7 +104,7 @@ footer strong{color:#e5edfa}
   <p class="sub" id="telegramVerifyStatus" style="margin-top:10px">Telegram терезесінде профиль мен телефон нөмірін бөлісуге келісім беріңіз. Сайт нөмірді қолмен сұрамайды.</p>
 </div>
 
-<div class="action"><button class="submit" type="submit">Өтінішті менеджерге жіберу&nbsp; →</button><div class="fine">Өтініш менеджерге жіберіледі. Менеджер жөндеу бағасын есептеп, сізбен өзі байланысады.</div></div>
+<div class="action"><div class="fine">Мәліметтерді толтырып, Telegram арқылы растаңыз. Өтініш растаудан кейін автоматты түрде менеджерге жіберіледі.</div></div>
 </form>
 <div class="notice" id="notice" role="status" aria-live="polite"></div>
 </section>
@@ -117,7 +117,6 @@ const notice = document.getElementById("notice");
 const API = "https://qamqorphone-auth.jjjjjjjjjjjjjjae.workers.dev";
 const verifyButton = document.getElementById("telegramVerifyButton");
 const verifyStatus = document.getElementById("telegramVerifyStatus");
-const submitButton = form.querySelector('button[type="submit"]');
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -126,12 +125,70 @@ function setVerifyStatus(message, kind = "") {
   verifyStatus.className = "sub " + kind;
 }
 
+function showNotice(message) {
+  notice.style.display = "block";
+  notice.textContent = message;
+}
+
 function getAuthSession() {
   return sessionStorage.getItem("qamqorAuthSession") || "";
 }
 
+function collectPayload() {
+  const data = new FormData(form);
+  return {
+    brand: String(data.get("brand") || "").trim(),
+    problem: String(data.get("problem") || "").trim(),
+    details: String(data.get("details") || "").trim(),
+    address: String(data.get("address") || "").trim()
+  };
+}
+
+function validPayload(payload) {
+  if (!payload.brand || !payload.problem || !payload.address) {
+    showNotice("Телефон моделін, жөндеу түрін және мекенжайды толтырыңыз.");
+    return false;
+  }
+  return true;
+}
+
+async function sendRequest(payload, sessionId) {
+  if (!sessionId) throw new Error("Telegram растауы қажет.");
+  verifyButton.disabled = true;
+  setVerifyStatus("Өтініш менеджерге автоматты түрде жіберілуде…");
+  try {
+    const response = await fetch(API + "/request", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({...payload, session_id: sessionId})
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || !result.ok) {
+      if (result.error === "auth_session_expired") {
+        sessionStorage.removeItem("qamqorAuthSession");
+        sessionStorage.setItem("qamqorPendingRequest", JSON.stringify(payload));
+        setVerifyStatus("Сессия уақыты аяқталды. Telegram арқылы қайта растаңыз.", "failed");
+      }
+      throw new Error(result.error || "Өтініш жіберілмеді");
+    }
+
+    sessionStorage.removeItem("qamqorAuthSession");
+    sessionStorage.removeItem("qamqorPendingRequest");
+    sessionStorage.removeItem("qamqorAutoSend");
+    setVerifyStatus("✓ Өтініш менеджерге жіберілді. Менеджер бағасын есептеп, сізбен өзі байланысады.", "verified");
+    showNotice("Өтініш менеджерге жіберілді. Енді менеджер жөндеу бағасын есептеп, сізбен өзі хабарласады.");
+    form.reset();
+    verifyButton.textContent = "Telegram арқылы жаңа өтініш жіберу";
+  } catch (error) {
+    showNotice("Жіберу қатесі: " + (error.message || "Қайталап көріңіз."));
+    setVerifyStatus("Өтініш жіберілмеді. Қайта тексеріңіз.", "failed");
+  } finally {
+    verifyButton.disabled = false;
+  }
+}
+
 if (getAuthSession()) {
-  setVerifyStatus("✓ Telegram арқылы расталдыңыз. Енді жөндеу өтінімін жібере аласыз.", "verified");
+  setVerifyStatus("✓ Telegram арқылы расталдыңыз.", "verified");
   verifyButton.textContent = "✓ Telegram расталды";
 }
 
@@ -141,9 +198,35 @@ if (authResult) {
   sessionStorage.removeItem("qamqorAuthResult");
 }
 
+// Telegram-нан сайтқа қайтқан соң, алдын ала сақталған өтініш автоматты жіберіледі.
+const pendingRaw = sessionStorage.getItem("qamqorPendingRequest");
+if (getAuthSession() && pendingRaw && sessionStorage.getItem("qamqorAutoSend") === "yes") {
+  try {
+    const pending = JSON.parse(pendingRaw);
+    sendRequest(pending, getAuthSession());
+  } catch {
+    sessionStorage.removeItem("qamqorPendingRequest");
+    sessionStorage.removeItem("qamqorAutoSend");
+    showNotice("Сақталған өтінішті оқу мүмкін болмады. Мәліметтерді қайта толтырыңыз.");
+  }
+}
+
 verifyButton.addEventListener("click", async () => {
+  notice.style.display = "none";
+  const payload = collectPayload();
+  if (!validPayload(payload)) return;
+
+  if (getAuthSession()) {
+    await sendRequest(payload, getAuthSession());
+    return;
+  }
+
+  // Telegram-ға өтер алдында өтінішті осы браузер сессиясында уақытша сақтаймыз.
+  sessionStorage.setItem("qamqorPendingRequest", JSON.stringify(payload));
+  sessionStorage.setItem("qamqorAutoSend", "yes");
   verifyButton.disabled = true;
   setVerifyStatus("Telegram авторизациясы ашылуда…");
+
   try {
     const randomBytes = length => crypto.getRandomValues(new Uint8Array(length));
     const base64url = bytes => btoa(String.fromCharCode(...bytes))
@@ -164,67 +247,9 @@ verifyButton.addEventListener("click", async () => {
     window.location.assign(result.url);
   } catch (error) {
     setVerifyStatus("Авторизация ашылмады: " + (error.message || "Қате"), "failed");
+    sessionStorage.removeItem("qamqorPendingRequest");
+    sessionStorage.removeItem("qamqorAutoSend");
     verifyButton.disabled = false;
-  }
-});
-
-form.addEventListener("submit", async event => {
-  event.preventDefault();
-  notice.style.display = "none";
-
-  const sessionId = getAuthSession();
-  if (!sessionId) {
-    notice.style.display = "block";
-    notice.textContent = "Алдымен Telegram арқылы кіріп, нөміріңізді растаңыз.";
-    document.getElementById("telegramVerifyBox").scrollIntoView({behavior: "smooth", block: "center"});
-    return;
-  }
-
-  const data = new FormData(form);
-  const payload = {
-    session_id: sessionId,
-    brand: String(data.get("brand") || "").trim(),
-    problem: String(data.get("problem") || "").trim(),
-    details: String(data.get("details") || "").trim(),
-    address: String(data.get("address") || "").trim()
-  };
-
-  if (!payload.brand || !payload.problem || !payload.address) {
-    notice.style.display = "block";
-    notice.textContent = "Міндетті жолдарды толтырыңыз.";
-    return;
-  }
-
-  submitButton.disabled = true;
-  submitButton.textContent = "Жіберілуде…";
-
-  try {
-    const response = await fetch(API + "/request", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(payload)
-    });
-    const result = await response.json();
-    if (!response.ok || !result.ok) {
-      if (result.error === "auth_session_expired") {
-        sessionStorage.removeItem("qamqorAuthSession");
-        setVerifyStatus("Сессия уақыты аяқталды. Telegram арқылы қайта растаңыз.", "failed");
-      }
-      throw new Error(result.error || "Өтініш жіберілмеді");
-    }
-
-    sessionStorage.removeItem("qamqorAuthSession");
-    setVerifyStatus("✓ Өтініш қабылданды. Менеджер сізбен өзі байланысады.", "verified");
-    notice.style.display = "block";
-    notice.textContent = "Өтініш менеджерге жіберілді. Менеджер алдымен жөндеу бағасын есептеп, сізбен өзі хабарласады.";
-    form.reset();
-    verifyButton.textContent = "Telegram арқылы қайта кіру";
-  } catch (error) {
-    notice.style.display = "block";
-    notice.textContent = "Жіберу қатесі: " + (error.message || "Қайталап көріңіз.");
-  } finally {
-    submitButton.disabled = false;
-    submitButton.innerHTML = "Өтінішті менеджерге жіберу&nbsp; →";
   }
 });
 </script>
