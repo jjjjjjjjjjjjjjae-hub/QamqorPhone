@@ -2,7 +2,7 @@
 <html lang="kk">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#080f1b">
 <link rel="icon" type="image/png" href="QamqorPhone.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
@@ -414,6 +414,34 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   .art,.premium-art{border-radius:25px}
   .card{border-radius:22px}
 }
+
+
+/* Blue typography + prevent page zoom and text selection */
+:root{
+  --text:#e4f1ff;
+  --muted:#a9c8ed;
+}
+body{color:#cfe3ff}
+h2,.wizard-step-heading h3,label,.topnote,.lead,.sub,.fine,.map-status,.map-help{
+  color:#b9d8ff;
+}
+.brand{color:#e4f1ff}
+.point{color:#c9e2ff}
+html,body{
+  touch-action:pan-x pan-y;
+  -webkit-text-size-adjust:100%;
+}
+body,body *{
+  -webkit-user-select:none !important;
+  user-select:none !important;
+  -webkit-touch-callout:none;
+}
+input,textarea,[contenteditable="true"]{
+  -webkit-user-select:text !important;
+  user-select:text !important;
+  -webkit-touch-callout:default;
+}
+#serviceMap{touch-action:auto}
 
 </style>
 </head>
@@ -1241,6 +1269,24 @@ verifyButton.addEventListener("click", async () => {
 </script>
 
 
+
+
+<script>
+/* Prevent copying and the selection/context menu on page content.
+   Form fields remain editable and text inside them can still be selected. */
+(() => {
+  const isEditable = target =>
+    target instanceof Element &&
+    !!target.closest('input,textarea,select,[contenteditable="true"]');
+
+  ["copy","cut","selectstart","dragstart","contextmenu"].forEach(type => {
+    document.addEventListener(type, event => {
+      if (isEditable(event.target)) return;
+      event.preventDefault();
+    }, true);
+  });
+})();
+</script>
 
 </body>
 </html>
