@@ -440,6 +440,108 @@ html.qamqor-reveal-ready .qamqor-reveal{
 }
 html.qamqor-reveal-ready .qamqor-reveal.qamqor-visible{opacity:1;transform:translate3d(0,0,0)}
 
+
+/* CLEAN PREMIUM REDESIGN — replace excessive decorative effects */
+body{
+ background:
+  radial-gradient(ellipse at 78% 5%,rgba(36,104,166,.13),transparent 36rem),
+  radial-gradient(ellipse at 8% 45%,rgba(17,111,115,.08),transparent 30rem),
+  #080f1b;
+}
+body:before{filter:blur(32px);opacity:.55}
+body:after{display:none}
+.wrap{width:min(1160px,calc(100% - 44px))}
+header{height:82px;border-bottom-color:#26384e}
+.hero{padding:76px 0 62px;gap:62px}
+h1{font-size:clamp(42px,5.8vw,66px);line-height:1.04;letter-spacing:-2.8px}
+.lead{max-width:500px;font-size:15px;line-height:1.85;color:#afbdd0}
+.points{gap:9px}
+.point{background:#101c2b;border-color:#293b50;color:#cfdae8}
+.premium-art{
+ min-height:350px;border-radius:28px;overflow:hidden;isolation:isolate;
+ display:grid;place-items:center;
+ background:
+  radial-gradient(ellipse at 50% 45%,rgba(65,131,190,.22),transparent 48%),
+  linear-gradient(145deg,#14263b,#0b1625 72%);
+ border:1px solid #344b64;
+ box-shadow:0 24px 70px #0005,inset 0 1px 0 #ffffff10;
+}
+.premium-art:before{
+ width:250px;height:250px;right:-85px;top:-100px;
+ background:#287dbb;filter:blur(65px);opacity:.18;
+}
+.premium-art:after{
+ width:220px;height:220px;left:-90px;bottom:-125px;
+ background:#159a91;filter:blur(70px);opacity:.13;
+}
+.art-glow{
+ position:absolute;z-index:1;width:230px;height:230px;border-radius:50%;
+ background:#5ca8ff0c;border:1px solid #8dc8ff19;
+ box-shadow:0 0 70px #51a9ff16,inset 0 0 55px #51a9ff0c;
+}
+.device{
+ z-index:2;width:154px;height:268px;border-radius:34px;
+ border:6px solid #9aafc4;
+ background:linear-gradient(155deg,#182b40 0%,#0b1727 70%,#132b42 100%);
+ box-shadow:0 25px 60px #0009,0 0 0 1px #ffffff30,inset 0 0 0 2px #ffffff0c;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+ transform-style:preserve-3d;will-change:transform;
+ animation:cleanPhoneFloat 7s ease-in-out infinite;
+}
+@keyframes cleanPhoneFloat{
+ 0%,100%{transform:translate3d(0,0,0) rotateZ(-3deg) rotateX(var(--device-tilt-y,0deg)) rotateY(var(--device-tilt-x,0deg))}
+ 50%{transform:translate3d(0,-8px,0) rotateZ(-1deg) rotateX(var(--device-tilt-y,0deg)) rotateY(var(--device-tilt-x,0deg))}
+}
+.device:before{display:none}
+.device-camera{top:9px;width:38px;height:6px;background:#050c15;border:1px solid #344d65}
+.device b{
+ width:78px;height:78px;display:grid;place-items:center;
+ border-radius:23px;color:#fff;font-size:43px;font-weight:850;
+ background:linear-gradient(145deg,#65b7f5,#1767b8);
+ box-shadow:0 12px 28px #176bd044,inset 0 1px 0 #ffffff70;
+}
+.device small{color:#9cb7d2;font-size:8px;font-weight:800;letter-spacing:2.8px}
+.device-shine{border-radius:27px}
+.device-shine:after{opacity:.3;animation-duration:7s}
+.art-caption{
+ position:absolute;z-index:2;bottom:23px;left:0;right:0;
+ text-align:center;color:#93a9c1a8;font-size:8px;font-weight:800;letter-spacing:3px;
+}
+.orbit,.scan-line,.art-grid,.art-particle,.mini-card,.tool{display:none!important}
+.card{
+ background:linear-gradient(150deg,#111f31,#0d1726);
+ border-color:#2a3d54;border-radius:25px;
+ box-shadow:0 22px 65px #0004,inset 0 1px 0 #ffffff0a;
+}
+.card:before{opacity:.45;filter:none}
+.cardhead{margin-bottom:27px}
+h2{font-size:27px}
+input,select,textarea{background:#0a1524;border-color:#30445d}
+.map-field{background:#0d1a2a;border-color:#2b4059}
+.map-button,.map-direction{background:#142941;border-color:#385572}
+.submit{background:linear-gradient(105deg,#2878e8,#469bea)}
+footer{border-top:1px solid #1d2c40;padding-top:20px}
+@media(max-width:760px){
+ .wrap{width:calc(100% - 32px)}
+ .hero{padding:48px 0 38px;gap:25px}
+ .premium-art{min-height:285px}
+ h1{font-size:clamp(40px,9.5vw,56px)}
+}
+@media(max-width:560px){
+ .wrap{width:calc(100% - 24px)}
+ .hero{padding:36px 0 29px}
+ .premium-art{min-height:245px;border-radius:22px}
+ .device{width:112px;height:194px;border-width:5px;border-radius:27px}
+ .device b{width:62px;height:62px;font-size:36px;border-radius:19px}
+ .art-glow{width:180px;height:180px}
+ .art-caption{bottom:14px;font-size:7px;letter-spacing:2px}
+ .card{border-radius:21px}
+}
+@media(prefers-reduced-motion:reduce){
+ .device{animation:none!important}
+ .premium-art,.hero>div:first-child{animation:none!important}
+}
+
 </style>
 </head>
 <body>
@@ -448,17 +550,15 @@ html.qamqor-reveal-ready .qamqor-reveal.qamqor-visible{opacity:1;transform:trans
 <main>
 <section class="hero">
 <div><div class="tag">Жөндеу • Қолдау • Сенім</div><h1>Телефоныңызға<br><span>көмек керек пе?</span></h1><p class="lead">Телефоныңызды жөндету енді оңай. Өтінім қалдырыңыз — маман сізбен байланысып, жөндеу жолын келіседі.</p><div class="hero-actions"><a class="hero-cta" href="#repair">Маман шақыру <span>→</span></a><span class="hero-note"><i></i> Онлайн өтінім қабылдаймыз</span></div><div class="points"><span class="point">✓ Экран және дисплей</span><span class="point">✓ Батарея</span><span class="point">✓ Зарядтау ұясы</span></div></div>
-<div class="art premium-art" aria-label="QAMQOR PHONE телефон белгісі">
-  <div class="art-grid"></div>
-  <div class="orbit orbit-one"><i></i></div>
-  <div class="orbit orbit-two"><i></i></div>
-  <div class="scan-line"></div>
-  <div class="art-particle particle-one"></div><div class="art-particle particle-two"></div><div class="art-particle particle-three"></div>
-  <div class="device"><div class="device-camera"></div><b>Q</b><small>QAMQOR</small><span class="device-shine"></span></div>
-  <div class="tool">⌁</div>
-  <div class="mini-card mini-top"><span class="mini-icon">✦</span><span><b>Сапалы сервис</b><small>Ұқыпты жөндеу</small></span></div>
-  <div class="mini-card mini-bottom"><span class="mini-check">✓</span><span><b>Маман шақыру</b><small>Өтінім онлайн</small></span></div>
-  <div class="art-caption">CARE • REPAIR • TRUST</div>
+<div class="art premium-art" aria-label="QAMQOR PHONE телефоны">
+  <div class="art-glow"></div>
+  <div class="device">
+    <div class="device-camera"></div>
+    <b>Q</b>
+    <small>QAMQOR PHONE</small>
+    <span class="device-shine"></span>
+  </div>
+  <div class="art-caption">REPAIR · RIGHT AT YOUR DOOR</div>
 </div>
 </section>
 <section class="card" id="repair">
@@ -602,32 +702,76 @@ function initServiceMap() {
   setTimeout(() => serviceMap.invalidateSize(), 150);
 }
 
-locateButton.addEventListener("click", () => {
+function getBrowserPosition(options) {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(resolve, reject, options);
+  });
+}
+
+locateButton.addEventListener("click", async () => {
   if (!navigator.geolocation) {
-    mapStatus.textContent = "Бұл браузер геолокацияны қолдамайды. Картадан орныңызды қолмен белгілеңіз.";
+    mapStatus.textContent = "Бұл браузер орналасқан жерді анықтауды қолдамайды. Картадан орынды қолмен белгілеңіз.";
     mapStatus.classList.add("error");
+    return;
+  }
+
+  if (!serviceMap) {
+    mapStatus.textContent = "Карта әлі жүктеліп жатыр. Бір сәттен кейін қайталап көріңіз.";
+    mapStatus.classList.remove("error");
     return;
   }
 
   locateButton.disabled = true;
   locateButton.textContent = "Орныңыз анықталып жатыр…";
-  navigator.geolocation.getCurrentPosition(position => {
-    const {latitude, longitude} = position.coords;
-    serviceMap.setView([latitude, longitude], 16);
+  mapStatus.classList.remove("error");
+  mapStatus.textContent = "Телефонның орналасқан жерін іздеп жатырмыз…";
+
+  let lastError = null;
+  const attempts = [
+    {enableHighAccuracy: false, timeout: 25000, maximumAge: 180000},
+    {enableHighAccuracy: true, timeout: 40000, maximumAge: 60000}
+  ];
+
+  try {
+    let position = null;
+
+    for (let index = 0; index < attempts.length; index++) {
+      try {
+        if (index === 1) {
+          mapStatus.textContent = "Орныңызды дәлірек анықтап жатырмыз…";
+        }
+        position = await getBrowserPosition(attempts[index]);
+        break;
+      } catch (error) {
+        lastError = error;
+        // Permission denial cannot be fixed by a second GPS attempt.
+        if (error && error.code === 1) break;
+      }
+    }
+
+    if (!position) {
+      if (lastError && lastError.code === 1) {
+        mapStatus.textContent = "Орналасқан жерге рұқсат берілмеген. Телефон баптауынан браузерге Location рұқсатын беріп, қайта көріңіз.";
+        mapStatus.classList.add("error");
+      } else {
+        // Do not show a timeout/expired error. Leave the map usable for manual selection.
+        mapStatus.textContent = "Телефонның орнын автоматты анықтау әзірге мүмкін болмады. GPS-ті қосып қайталаңыз немесе картадан орынды түртіп белгілеңіз.";
+        mapStatus.classList.remove("error");
+      }
+      return;
+    }
+
+    const {latitude, longitude, accuracy} = position.coords;
+    serviceMap.setView([latitude, longitude], accuracy && accuracy > 500 ? 14 : 16, {animate: true, duration: 0.7});
     updateMapPoint(latitude, longitude);
+
+    const accuracyText = accuracy ? " (шамамен " + Math.round(accuracy) + " м дәлдікпен)" : "";
+    mapStatus.textContent = "Орналасқан жеріңіз картада белгіленді" + accuracyText + ". Қажет болса, белгіні жылжытыңыз.";
+    mapStatus.classList.remove("error");
+  } finally {
     locateButton.disabled = false;
     locateButton.textContent = "◎ Менің орнымды анықтау";
-  }, error => {
-    const message = error.code === 1
-      ? "Геолокацияға рұқсат берілмеді. Браузерден рұқсат беріңіз немесе картадан нүкте таңдаңыз."
-      : error.code === 3
-        ? "Орналасқан жерді анықтау уақыты аяқталды. Қайта көріңіз немесе картадан нүкте таңдаңыз."
-        : "Орналасқан жер анықталмады. Картадан нүктені қолмен таңдаңыз.";
-    mapStatus.textContent = message;
-    mapStatus.classList.add("error");
-    locateButton.disabled = false;
-    locateButton.textContent = "◎ Менің орнымды анықтау";
-  }, {enableHighAccuracy: true, timeout: 12000, maximumAge: 30000});
+  }
 });
 
 clearPointButton.addEventListener("click", clearMapPoint);
