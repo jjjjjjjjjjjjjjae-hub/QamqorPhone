@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#f7f9fc">
+<meta name="theme-color" content="#080f1b">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
 <title>QAMQOR PHONE — Телефон жөндеу</title>
 <style>
 :root{--ink:#13233d;--muted:#66758b;--blue:#2878e8;--blue2:#5ba7ff;--line:#e4eaf2;--bg:#f7f9fc;--white:#fff}
@@ -74,6 +75,19 @@ footer strong{color:#e5edfa}
  body{background:#080f1b;color:var(--ink)}
 }
 
+.map-field{display:grid;gap:10px}
+.map-actions{display:flex;flex-wrap:wrap;gap:9px}
+.map-button,.map-direction{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid #344a68;background:#172943;color:#eaf3ff;padding:11px 14px;border-radius:11px;font:700 13px system-ui,sans-serif;cursor:pointer;text-decoration:none}
+.map-button:hover,.map-direction:hover{border-color:#65a9ff;background:#1b3555}
+.map-button:disabled{opacity:.55;cursor:not-allowed}
+.map-direction[hidden]{display:none}
+#serviceMap{height:340px;width:100%;border:1px solid #31445f;border-radius:15px;overflow:hidden;background:#142238;z-index:1}
+#serviceMap .leaflet-tile-pane{filter:brightness(.86) saturate(.82)}
+#serviceMap .leaflet-control-attribution{font-size:10px}
+.map-status{font-size:12px;line-height:1.6;color:#a9bbd2;margin:0}
+.map-status.error{color:#ff9b9b}
+.map-help{font-size:11px;line-height:1.55;color:#8295ae;margin:0}
+@media(max-width:560px){#serviceMap{height:300px}.map-actions>*{flex:1 1 100%}.map-button,.map-direction{width:100%}}
 
 #telegramVerifyButton{display:inline-flex;align-items:center;gap:9px}
 #telegramVerifyButton:disabled{opacity:.65;cursor:wait}
@@ -96,7 +110,19 @@ footer strong{color:#e5edfa}
 <div class="field"><label for="brand">Телефон маркасы мен моделі *</label><input id="brand" name="brand" required maxlength="90" placeholder="Мысалы: iPhone 13, Samsung A54"></div>
 <div class="field"><label for="problem">Қандай жөндеу керек? *</label><select id="problem" name="problem" required><option value="" selected disabled>Жөндеу түрін таңдаңыз</option><option>Экран / дисплей ауыстыру</option><option>Батарея ауыстыру</option><option>Зарядтау ұясын жөндеу</option><option>Камераны жөндеу</option><option>Динамик / микрофон</option><option>Артқы қақпақты ауыстыру</option><option>Телефон қосылмайды</option><option>Басқа мәселе</option></select></div>
 <div class="field full"><label for="details">Қосымша ақпарат <span class="optional">(міндетті емес)</span></label><textarea id="details" name="details" maxlength="500" placeholder="Ақауды қысқаша сипаттаңыз..."></textarea></div>
-<div class="field full"><label for="address">Мекенжайыңыз *</label><input id="address" name="address" required maxlength="180" placeholder="Мысалы: Қаскелең, Абылай хан көшесі..."></div>
+<div class="field full"><label for="address">Мекенжайыңыз *</label><input id="address" name="address" required maxlength="180" autocomplete="street-address" placeholder="Мысалы: Қаскелең, Абылай хан көшесі, 10-үй"></div>
+
+<div class="field full map-field">
+  <label>Клиенттің орналасқан жері *</label>
+  <div class="map-actions">
+    <button class="map-button" id="locateButton" type="button">◎ Менің орнымды анықтау</button>
+    <button class="map-button" id="clearPointButton" type="button" disabled>× Белгіні өшіру</button>
+    <a class="map-direction" id="directionsLink" href="#" target="_blank" rel="noopener noreferrer" hidden>↗ Google Maps-та маршрут</a>
+  </div>
+  <div id="serviceMap" role="application" aria-label="Жөндеу жасалатын орынды картадан таңдау"></div>
+  <p class="map-status" id="mapStatus" role="status" aria-live="polite">Картадан үйіңізді немесе жөндеу жасалатын орынды түртіңіз. Белгіні саусақпен жылжытуға болады.</p>
+  <p class="map-help">GPS батырмасы браузердің орналасқан жерді анықтау рұқсатын сұрайды. Көше мен үй нөмірін мекенжай өрісіне де жазыңыз.</p>
+</div>
 
 <div class="field full" id="telegramVerifyBox">
   <label>Нөмірді растау</label>
@@ -111,14 +137,105 @@ footer strong{color:#e5edfa}
 </main>
 <footer><div><strong>QAMQOR PHONE</strong> · Телефон жөндеу қызметі</div><div>© <span id="year"></span> Барлық құқық қорғалған</div></footer>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
 <script>
 const form = document.getElementById("repairForm");
 const notice = document.getElementById("notice");
 const API = "https://qamqorphone-auth.jjjjjjjjjjjjjjae.workers.dev";
 const verifyButton = document.getElementById("telegramVerifyButton");
 const verifyStatus = document.getElementById("telegramVerifyStatus");
+const mapStatus = document.getElementById("mapStatus");
+const locateButton = document.getElementById("locateButton");
+const clearPointButton = document.getElementById("clearPointButton");
+const directionsLink = document.getElementById("directionsLink");
+
+let serviceMap = null;
+let locationMarker = null;
+let selectedPoint = null;
 
 document.getElementById("year").textContent = new Date().getFullYear();
+
+function updateMapPoint(lat, lng) {
+  const point = {lat: Number(lat.toFixed(6)), lng: Number(lng.toFixed(6))};
+  selectedPoint = point;
+
+  if (!locationMarker) {
+    locationMarker = L.marker([point.lat, point.lng], {draggable: true}).addTo(serviceMap);
+    locationMarker.on("dragend", () => {
+      const moved = locationMarker.getLatLng();
+      updateMapPoint(moved.lat, moved.lng);
+    });
+  } else {
+    locationMarker.setLatLng([point.lat, point.lng]);
+  }
+
+  locationMarker.bindPopup("Жөндеу жасалатын орын").openPopup();
+  mapStatus.classList.remove("error");
+  mapStatus.textContent = "✓ Таңдалған нүкте: " + point.lat.toFixed(6) + ", " + point.lng.toFixed(6);
+  directionsLink.href = "https://www.google.com/maps/dir/?api=1&destination=" + point.lat + "," + point.lng;
+  directionsLink.hidden = false;
+  clearPointButton.disabled = false;
+}
+
+function clearMapPoint() {
+  selectedPoint = null;
+  if (locationMarker && serviceMap) serviceMap.removeLayer(locationMarker);
+  locationMarker = null;
+  directionsLink.hidden = true;
+  directionsLink.removeAttribute("href");
+  clearPointButton.disabled = true;
+  mapStatus.classList.remove("error");
+  mapStatus.textContent = "Картадан үйіңізді немесе жөндеу жасалатын орынды түртіңіз.";
+}
+
+function initServiceMap() {
+  if (!window.L) {
+    mapStatus.textContent = "Карта жүктелмеді. Интернетті тексеріп, бетті қайта ашыңыз.";
+    mapStatus.classList.add("error");
+    locateButton.disabled = true;
+    return;
+  }
+
+  serviceMap = L.map("serviceMap", {scrollWheelZoom: false}).setView([43.205, 76.78], 10);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(serviceMap);
+
+  serviceMap.on("click", event => updateMapPoint(event.latlng.lat, event.latlng.lng));
+  setTimeout(() => serviceMap.invalidateSize(), 150);
+}
+
+locateButton.addEventListener("click", () => {
+  if (!navigator.geolocation) {
+    mapStatus.textContent = "Бұл браузер геолокацияны қолдамайды. Картадан орныңызды қолмен белгілеңіз.";
+    mapStatus.classList.add("error");
+    return;
+  }
+
+  locateButton.disabled = true;
+  locateButton.textContent = "Орныңыз анықталып жатыр…";
+  navigator.geolocation.getCurrentPosition(position => {
+    const {latitude, longitude} = position.coords;
+    serviceMap.setView([latitude, longitude], 16);
+    updateMapPoint(latitude, longitude);
+    locateButton.disabled = false;
+    locateButton.textContent = "◎ Менің орнымды анықтау";
+  }, error => {
+    const message = error.code === 1
+      ? "Геолокацияға рұқсат берілмеді. Браузерден рұқсат беріңіз немесе картадан нүкте таңдаңыз."
+      : error.code === 3
+        ? "Орналасқан жерді анықтау уақыты аяқталды. Қайта көріңіз немесе картадан нүкте таңдаңыз."
+        : "Орналасқан жер анықталмады. Картадан нүктені қолмен таңдаңыз.";
+    mapStatus.textContent = message;
+    mapStatus.classList.add("error");
+    locateButton.disabled = false;
+    locateButton.textContent = "◎ Менің орнымды анықтау";
+  }, {enableHighAccuracy: true, timeout: 12000, maximumAge: 30000});
+});
+
+clearPointButton.addEventListener("click", clearMapPoint);
+initServiceMap();
 
 function setVerifyStatus(message, kind = "") {
   verifyStatus.textContent = message;
@@ -139,7 +256,7 @@ function collectPayload() {
   return {
     brand: String(data.get("brand") || "").trim(),
     problem: String(data.get("problem") || "").trim(),
-    details: String(data.get("details") || "").trim(),
+    details: String(data.get("details") || "").trim() + (selectedPoint ? "\nКартадағы орны: https://maps.google.com/?q=" + selectedPoint.lat.toFixed(6) + "," + selectedPoint.lng.toFixed(6) : ""),
     address: String(data.get("address") || "").trim()
   };
 }
@@ -147,6 +264,12 @@ function collectPayload() {
 function validPayload(payload) {
   if (!payload.brand || !payload.problem || !payload.address) {
     showNotice("Телефон моделін, жөндеу түрін және мекенжайды толтырыңыз.");
+    return false;
+  }
+  if (!selectedPoint) {
+    showNotice("Өтінімді жіберу үшін картадан жөндеу жасалатын орынды белгілеңіз.");
+    mapStatus.classList.add("error");
+    document.getElementById("serviceMap").scrollIntoView({behavior: "smooth", block: "center"});
     return false;
   }
   return true;
@@ -178,6 +301,7 @@ async function sendRequest(payload, sessionId) {
     setVerifyStatus("✓ Өтініш менеджерге жіберілді. Менеджер бағасын есептеп, сізбен өзі байланысады.", "verified");
     showNotice("Өтініш менеджерге жіберілді. Енді менеджер жөндеу бағасын есептеп, сізбен өзі хабарласады.");
     form.reset();
+    clearMapPoint();
     verifyButton.textContent = "Telegram арқылы жаңа өтініш жіберу";
   } catch (error) {
     showNotice("Жіберу қатесі: " + (error.message || "Қайталап көріңіз."));
