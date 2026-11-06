@@ -31,16 +31,16 @@ a{display:inline-block;margin-top:18px;color:#83bdff;text-decoration:none;font-w
  const expectedState=sessionStorage.getItem("qamqorOidcState");
  const verifier=sessionStorage.getItem("qamqorOidcVerifier");
  const nonce=sessionStorage.getItem("qamqorOidcNonce");
- const pendingPhone=sessionStorage.getItem("qamqorPendingPhone");
+
  const fail=message=>{
-   sessionStorage.removeItem("qamqorVerifiedPhone");
+
    sessionStorage.setItem("qamqorAuthResult",message);
    status.textContent=message;
    setTimeout(()=>location.replace(HOME),1800);
  };
  history.replaceState({},document.title,location.pathname);
  if(error){fail("Telegram авторизациядан бас тартылды немесе қате қайтарды.");return;}
- if(!code || !state || state!==expectedState || !verifier || !nonce || !pendingPhone){
+ if(!code || !state || state!==expectedState || !verifier || !nonce){
    fail("Авторизация деректері сәйкес келмеді. Қайтадан көріңіз.");return;
  }
  try{
@@ -49,14 +49,10 @@ a{display:inline-block;margin-top:18px;color:#83bdff;text-decoration:none;font-w
      body:JSON.stringify({code,verifier,nonce})
    });
    const result=await response.json();
-   if(!response.ok || !result.ok || result.phone_number_verified!==true){
+   if(!response.ok || !result.ok || result.authenticated!==true || typeof result.session_id!=="string"){
      throw new Error(result.error||"Telegram нөмірді растамады");
    }
-   const telegramDigits=String(result.phone_number).replace(/\D/g,"");
-   if(telegramDigits!=="7"+pendingPhone){
-     fail("Telegram аккаунтындағы нөмір енгізілген нөмірмен сәйкес келмейді.");return;
-   }
-   sessionStorage.setItem("qamqorVerifiedPhone",telegramDigits);
+   sessionStorage.setItem("qamqorAuthSession",result.session_id);
    sessionStorage.setItem("qamqorAuthResult","✓ Telegram нөмірі сәтті расталды.");
    sessionStorage.removeItem("qamqorOidcVerifier");
    sessionStorage.removeItem("qamqorOidcState");
