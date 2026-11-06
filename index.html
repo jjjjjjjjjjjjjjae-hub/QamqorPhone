@@ -299,6 +299,122 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(10,132,255,.5);outli
   *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
 }
 
+
+/* QAMQOR PHONE — refined premium interface */
+:root{
+  --bg:#07090d;
+  --surface:#11151c;
+  --surface-2:#171d26;
+  --surface-3:#202936;
+  --line:rgba(177,202,232,.16);
+  --text:#f7faff;
+  --muted:#a8b4c4;
+  --blue:#1688ff;
+  --blue-hover:#48a2ff;
+}
+body{
+  background:
+    radial-gradient(ellipse at 50% -18%,rgba(22,136,255,.20),transparent 38rem),
+    radial-gradient(ellipse at 100% 42%,rgba(93,111,255,.075),transparent 30rem),
+    #07090d;
+}
+.wrap{width:min(1160px,calc(100% - 52px))}
+header{
+  height:80px;
+  border-bottom:1px solid rgba(205,225,255,.10);
+  background:rgba(7,9,13,.76);
+  box-shadow:0 12px 40px rgba(0,0,0,.12);
+}
+.mark{border-radius:15px;box-shadow:0 7px 24px rgba(0,0,0,.3)}
+.brand{letter-spacing:.075em}
+.header-cta,.hero-cta,.submit,.wizard-next{
+  background:linear-gradient(135deg,#1688ff,#0865d7);
+  box-shadow:0 9px 28px rgba(10,132,255,.23),inset 0 1px rgba(255,255,255,.2);
+}
+.header-cta:hover,.hero-cta:hover,.submit:hover,.wizard-next:hover{
+  background:linear-gradient(135deg,#48a2ff,#1478e8);
+  box-shadow:0 13px 34px rgba(10,132,255,.30);
+}
+.hero{padding:88px 0 66px;gap:34px}
+.tag{color:#91c8ff;letter-spacing:.22em}
+h1{font-weight:780;letter-spacing:-.082em}
+.lead{color:#b0bdce;max-width:620px}
+.point{
+  border-color:rgba(177,202,232,.17);
+  background:rgba(20,28,39,.72);
+  color:#dce8f7;
+  backdrop-filter:blur(12px);
+}
+.art,.premium-art{
+  border-color:rgba(188,214,247,.15);
+  border-radius:36px;
+  background:
+    radial-gradient(ellipse at 50% 42%,rgba(45,117,204,.27),transparent 44%),
+    linear-gradient(145deg,#192331,#0d121a 62%,#171827);
+  box-shadow:0 35px 100px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.09);
+}
+.card{
+  border-color:rgba(177,202,232,.16);
+  border-radius:32px;
+  background:linear-gradient(155deg,rgba(20,26,35,.98),rgba(12,16,23,.98));
+  box-shadow:0 30px 90px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.055);
+}
+.step,.wizard-step-number{
+  border-color:rgba(87,160,230,.34);
+  background:rgba(24,83,137,.20);
+  color:#a9d4ff;
+}
+.wizard-progress,.wizard-step{
+  border-color:rgba(177,202,232,.14);
+  background:rgba(10,15,23,.62);
+}
+.wizard-step{border-radius:22px}
+input,select,textarea{
+  border-color:rgba(177,202,232,.18);
+  border-radius:15px;
+  background:#141b25;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:#3b9cff;
+  background:#172333;
+  box-shadow:0 0 0 4px rgba(22,136,255,.14);
+}
+.choice{
+  border-color:rgba(177,202,232,.16);
+  background:#141b25;
+}
+.choice.active,.choice:hover{
+  border-color:#398fe0;
+  background:#172b40;
+}
+.map-field,#telegramVerifyBox{
+  border-color:rgba(177,202,232,.16);
+  background:#111a25;
+}
+#serviceMap{border-color:rgba(177,202,232,.2)}
+.notice{
+  border-color:rgba(68,157,235,.4);
+  background:rgba(20,57,91,.65);
+}
+footer{border-color:rgba(205,225,255,.10);color:#91a0b3}
+footer strong{color:#e4efff}
+button,a{transition:all .22s ease}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:3px solid rgba(69,162,255,.5);outline-offset:3px
+}
+@media(max-width:760px){
+  .wrap{width:min(100% - 30px,620px)}
+  .hero{padding:58px 0 42px}
+  .card{border-radius:25px}
+}
+@media(max-width:560px){
+  .wrap{width:calc(100% - 22px)}
+  header{height:70px}
+  .hero{padding:46px 0 32px}
+  .art,.premium-art{border-radius:25px}
+  .card{border-radius:22px}
+}
+
 </style>
 </head>
 <body>
