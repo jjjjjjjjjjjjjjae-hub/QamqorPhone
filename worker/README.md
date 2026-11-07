@@ -41,3 +41,14 @@ The current frontend still submits the legacy payload shape. This draft preserve
 3. Add a cryptographically strong client-facing estimate access token before exposing public estimate URLs. The current estimate route is an ID lookup and must not be considered private enough for production.
 4. Add rate limiting / abuse controls and idempotency.
 5. Run integration tests with a test Telegram chat before production deployment.
+
+
+## Webhook authentication
+The Worker derives the Telegram webhook secret as the lowercase hexadecimal SHA-256 digest of the existing TELEGRAM_BOT_TOKEN binding. Configure Telegram's setWebhook with:
+- url: https://qamqorphone-auth.<workers-subdomain>.workers.dev/telegram/webhook
+- secret_token: SHA256(TELEGRAM_BOT_TOKEN), lowercase hex
+
+The Worker rejects webhook requests without the matching X-Telegram-Bot-Api-Secret-Token header. Do not paste the bot token into source control or logs.
+
+## Current status
+This branch is a development draft only. Do not deploy until webhook configuration, admin authorization, integration tests, and the remaining customer notification/timeout behavior have been reviewed.
