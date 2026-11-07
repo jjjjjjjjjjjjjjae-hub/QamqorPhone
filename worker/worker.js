@@ -60,6 +60,10 @@ async function putRequest(env, data) {
   data.updated_at = now();
   await env.QAMQOR_PHONE_DATA.put("request:"+data.id, JSON.stringify(data), {expirationTtl:TTL});
 }
+async function webhookSecret(env) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(env.TELEGRAM_BOT_TOKEN || ""));
+  return Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2,"0")).join("");
+}
 async function tokenHash(value) {
   const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
   return Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2,"0")).join("");
@@ -157,6 +161,8 @@ export default {
 
   if(url.pathname==="/health" && request.method==="GET") return json({ok:true,status:env.TELEGRAM_BOT_TOKEN&&env.CHAT_ID&&env.TELEGRAM_CLIENT_SECRET?"ready":"configuration_required",workflow:"estimate-v1"});
   if(url.pathname==="/telegram/webhook" && request.method==="POST") {
+    const supplied=request.headers.get("X-Telegram-Bot-Api-Secret-Token") || "";
+    if (!await sameHash(supplied,await webhookSecret(env))) return new Response("Forbidden",{status:403});
     try { return await handleTelegramUpdate(request,env); } catch { return new Response("Webhook processing failed",{status:500}); }
   }
 
