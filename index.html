@@ -1703,7 +1703,7 @@ async function createAutoQuotePdf(saved,quote){
   doc.setTextColor(255,255,255);doc.setFontSize(19);doc.text("Болжамды жөндеу сметасы",18,40);
   doc.setFontSize(9);doc.text("Смета ID: "+saved.request_id,18,51);doc.text("Күні: "+new Date().toLocaleString("kk-KZ"),18,58);
   const p=saved.payload||{},m=saved.manager||{};let y=73;
-  const lines=["Клиент: "+(p.client_name||"—"),"WhatsApp: "+(p.whatsapp_number||"—"),"Telegram: "+(p.telegram_username?"@"+p.telegram_username:"—"),"Телефон: "+(p.brand||"—"),"Қызмет: "+(p.problem||"—"),"Бөлшек сапасы: "+(p.part_type||"—"),"Ақау: "+(p.details||"—"),"Мекенжай: "+(p.address||"—"),"Координат: "+(p.lat??"—")+", "+(p.lng??"—"),"Менеджер WhatsApp: "+(m.phone||"—"),"Менеджер Telegram: "+(m.username?"@"+m.username:"—")];
+  const lines=["Клиент: "+(p.client_name||"—"),"WhatsApp: "+(p.whatsapp_number||"—"),"Telegram: "+(p.telegram_username?"@"+p.telegram_username:"—"),"Telegram ID: "+(p.telegram_id||"—"),"Телефон: "+(p.brand||"—"),"Қызмет: "+(p.problem||"—"),"Бөлшек сапасы: "+(p.part_type||"—"),"Ақау: "+(p.details||"—"),"Мекенжай: "+(p.address||"—"),"Координат: "+(p.lat??"—")+", "+(p.lng??"—"),"Менеджер WhatsApp: "+(m.phone||"—"),"Менеджер Telegram: "+(m.username?"@"+m.username:"—")];
   doc.setFontSize(10);
   for(const line of lines){const wrapped=doc.splitTextToSize(line,174);if(y+wrapped.length*5>178){doc.addPage();doc.setFont(font);y=20;}doc.text(wrapped,18,y);y+=wrapped.length*5+2;}
   y+=5;doc.setDrawColor(76,112,151);doc.line(18,y,192,y);y+=12;
@@ -1751,7 +1751,7 @@ async function pollQuoteStatus(){
   try{
     const response=await fetch(API+"/quote/status",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({request_id:activeQuoteRequest.request_id,access_token:activeQuoteRequest.access_token})});
     const result=await response.json().catch(()=>({}));if(!response.ok||!result.ok)throw new Error(result.error||"status_check_failed");
-    if(result.client_name)activeQuoteRequest.payload.client_name=result.client_name;if(result.manager)activeQuoteRequest.manager=result.manager;
+    if(result.client_name)activeQuoteRequest.payload.client_name=result.client_name;if(result.telegram_username)activeQuoteRequest.payload.telegram_username=result.telegram_username;if(result.telegram_id)activeQuoteRequest.payload.telegram_id=result.telegram_id;if(result.manager)activeQuoteRequest.manager=result.manager;
     const agree=document.getElementById("quoteAgreeButton");
     if(result.quote&&["auto_quoted","quoted","customer_agreed"].includes(result.status))renderQuoteAmounts(result.quote);
     if(result.status==="auto_quoted"&&result.quote){
