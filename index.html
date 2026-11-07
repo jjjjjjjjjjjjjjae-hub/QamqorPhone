@@ -975,12 +975,56 @@ body,body *{-webkit-user-select:auto!important;user-select:auto!important}
 }
 </style>
 
+
+<style id="qamqor-page-navigation">
+/* One clear screen at a time, with persistent navigation. */
+main [data-app-page][hidden]{display:none!important}
+main [data-app-page]:not([hidden]){animation:pageIn .28s ease both}
+@keyframes pageIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+.site-header .main-nav a{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:38px;padding:9px 13px;border:1px solid transparent;
+  border-radius:999px;color:#a9bfd9;white-space:nowrap;
+}
+.site-header .main-nav a:hover{background:rgba(44,135,224,.12);color:#edf7ff}
+.site-header .main-nav a.is-active{
+  border-color:rgba(92,173,255,.24);
+  background:linear-gradient(135deg,rgba(34,137,239,.22),rgba(24,84,153,.14));
+  color:#fff;box-shadow:inset 0 1px rgba(255,255,255,.07);
+}
+.page-context{
+  display:flex;align-items:center;gap:10px;
+  width:min(1220px,calc(100% - 56px));margin:12px auto 0;padding:0 3px;
+  color:#8fa9c7;font-size:10px;font-weight:800;letter-spacing:.16em;
+}
+.page-context-dot{width:7px;height:7px;border-radius:50%;background:#43d59a;box-shadow:0 0 0 4px rgba(67,213,154,.1)}
+.page-context strong{
+  margin-left:auto;padding:7px 11px;border:1px solid rgba(153,190,232,.15);
+  border-radius:999px;background:rgba(15,28,44,.65);color:#a9d4ff;
+  font-size:9px;letter-spacing:.12em;
+}
+@media(max-width:900px){.page-context{width:min(100% - 36px,760px)}}
+@media(max-width:620px){
+  .page-context{width:calc(100% - 26px);margin-top:9px;font-size:9px}
+  .site-header .main-nav{gap:3px}
+  .site-header .main-nav a{min-height:37px;padding:8px 10px;font-size:9px}
+}
+@media(max-width:370px){
+  .site-header .main-nav{gap:1px;padding:6px}
+  .site-header .main-nav a{padding:8px 8px;font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){
+  main [data-app-page]:not([hidden]){animation:none}
+}
+</style>
+
 </head>
 <body>
 <div class="wrap">
-<header class="site-header"><a class="brand" href="#top" aria-label="QAMQOR PHONE басты беті"><div class="mark"><img src="QamqorPhone.png" alt="QAMQOR PHONE логотипі" width="46" height="46"></div><div>QAMQOR PHONE<small>PHONE REPAIR SERVICE</small></div></a><nav class="main-nav" aria-label="Негізгі навигация"><a href="#services">Қызметтер</a><a href="#steps">Қалай жұмыс істейді</a><a href="#repair">Өтінім</a></nav><div class="header-right"><span class="topnote"><i></i> Онлайн өтінім қабылдаймыз</span><a class="header-cta" href="#repair">Маман шақыру <span>↗</span></a></div></header>
+<header class="site-header"><a class="brand" href="#top" aria-label="QAMQOR PHONE басты беті"><div class="mark"><img src="QamqorPhone.png" alt="QAMQOR PHONE логотипі" width="46" height="46"></div><div>QAMQOR PHONE<small>PHONE REPAIR SERVICE</small></div></a><nav class="main-nav" aria-label="Негізгі навигация"><a href="#top">Басты бет</a><a href="#services">Қызметтер</a><a href="#steps">Қадамдар</a><a href="#repair">Өтінім</a></nav><div class="header-right"><span class="topnote"><i></i> Онлайн өтінім қабылдаймыз</span><a class="header-cta" href="#repair">Маман шақыру <span>↗</span></a></div></header>
 <main>
-<section class="hero" id="top">
+<div class="page-context" aria-live="polite"><span class="page-context-dot"></span><span id="pageContextLabel">БАСТЫ БЕТ</span><strong id="pageContextIndex">01 / 04</strong></div>
+<section class="hero" id="top" data-app-page="home">
   <div class="hero-copy">
     <div class="tag">Жөндеу • Қолдау • Сенім</div>
     <h1>Телефоныңызға<br><span>қамқорлық</span> керек пе?</h1>
@@ -1017,7 +1061,7 @@ body,body *{-webkit-user-select:auto!important;user-select:auto!important}
 </section>
 
 
-<section class="services-section" id="services">
+<section class="services-section" id="services" data-app-page="services" hidden>
   <div class="section-heading">
     <span class="tag">QAMQOR PHONE ҚЫЗМЕТТЕРІ</span>
     <h2>Қандай көмек керек?</h2>
@@ -1033,7 +1077,7 @@ body,body *{-webkit-user-select:auto!important;user-select:auto!important}
   </div>
 </section>
 
-<section class="process-section" id="steps">
+<section class="process-section" id="steps" data-app-page="steps" hidden>
   <div class="section-heading">
     <span class="tag">ҚАРАПАЙЫМ ҮДЕРІС</span>
     <h2>Үш қадам. Болды.</h2>
@@ -1046,7 +1090,7 @@ body,body *{-webkit-user-select:auto!important;user-select:auto!important}
   </div>
   <div class="process-cta"><div><strong>Жөндеуді бастауға дайынсыз ба?</strong><span>Өтінімді бірнеше қадаммен толтырыңыз.</span></div><a href="#repair">Өтінімге өту <b>↗</b></a></div>
 </section>
-<section class="card" id="repair">
+<section class="card" id="repair" data-app-page="repair" hidden>
 <div class="cardhead"><div><div class="tag">Онлайн өтінім</div><h2>Жөндеуге өтініш қалдыру</h2><p class="sub">Жұлдызшамен белгіленген жолдарды толтырыңыз.</p></div><div class="step">7 ҚАДАМ</div></div>
 <form id="repairForm">
 <div class="wizard-progress" aria-live="polite">
@@ -2075,6 +2119,90 @@ verifyButton.addEventListener("click", async () => {
       event.preventDefault();
     }, true);
   });
+})();
+</script>
+
+
+<script id="qamqor-page-router">
+/* Simple page navigation: keeps the existing repair form and its integrations intact. */
+(() => {
+  const pages = Array.from(document.querySelectorAll("main [data-app-page]"));
+  const navLinks = Array.from(document.querySelectorAll(".main-nav a"));
+  const label = document.getElementById("pageContextLabel");
+  const index = document.getElementById("pageContextIndex");
+  const pageInfo = [
+    {id:"top",label:"БАСТЫ БЕТ"},
+    {id:"services",label:"ҚЫЗМЕТТЕР"},
+    {id:"steps",label:"ҚАЛАЙ ЖҰМЫС ІСТЕЙДІ"},
+    {id:"repair",label:"ӨТІНІМ ҚАЛДЫРУ"}
+  ];
+  if (!pages.length) return;
+
+  const reduceMotion = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function showPage(id, options = {}) {
+    const activePage = pages.find(page => page.id === id);
+    if (!activePage) return;
+
+    pages.forEach(page => {
+      const active = page === activePage;
+      page.hidden = !active;
+      page.setAttribute("aria-hidden", String(!active));
+      page.classList.toggle("page-active", active);
+    });
+
+    const activeIndex = pageInfo.findIndex(item => item.id === id);
+    const info = pageInfo[activeIndex] || pageInfo[0];
+    if (label) label.textContent = info.label;
+    if (index) index.textContent =
+      String(activeIndex + 1).padStart(2,"0") + " / " + String(pageInfo.length).padStart(2,"0");
+
+    navLinks.forEach(link => {
+      const active = link.getAttribute("href") === "#" + id;
+      link.classList.toggle("is-active", active);
+      if (active) link.setAttribute("aria-current","page");
+      else link.removeAttribute("aria-current");
+    });
+
+    if (options.updateHistory && window.location.hash !== "#" + id) {
+      window.history.pushState({qamqorPage:id},"","#" + id);
+    }
+    if (options.scroll !== false) {
+      window.scrollTo({top:0,behavior:reduceMotion ? "auto" : "smooth"});
+    }
+    if (id === "repair" && typeof serviceMap !== "undefined" && serviceMap) {
+      requestAnimationFrame(() => serviceMap.invalidateSize());
+    }
+  }
+
+  document.addEventListener("click", event => {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link) return;
+    const id = link.getAttribute("href").slice(1);
+    if (!pages.some(page => page.id === id)) return;
+    event.preventDefault();
+    showPage(id,{updateHistory:true});
+  });
+
+  window.addEventListener("popstate",() => {
+    showPage(window.location.hash.slice(1) || "top",{scroll:true});
+  });
+  window.addEventListener("hashchange",() => {
+    showPage(window.location.hash.slice(1) || "top",{scroll:true});
+  });
+
+  let initialPage = pages.some(page => page.id === window.location.hash.slice(1))
+    ? window.location.hash.slice(1) : "top";
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("code") ||
+        sessionStorage.getItem("qamqorPendingRequest") ||
+        sessionStorage.getItem("qamqorQuoteRequest")) {
+      initialPage = "repair";
+    }
+  } catch (_) {}
+  showPage(initialPage,{scroll:false});
 })();
 </script>
 
