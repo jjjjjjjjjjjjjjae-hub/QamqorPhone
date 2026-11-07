@@ -1105,7 +1105,7 @@ input,select,textarea,.choice,.main-nav{
 </head>
 <body>
 <div id="qamqor-video-background" aria-hidden="true">
-  <video id="qamqor-background-video" autoplay muted playsinline preload="metadata" tabindex="-1">
+  <video id="qamqor-background-video" autoplay muted playsinline preload="metadata" tabindex="-1" volume="0.12">
     <source src="https://pub-60f67fee510b4876ad5634ad1d313b01.r2.dev/1108%282%29.mp4" type="video/mp4">
   </video>
   <div class="qamqor-video-shade"></div>
@@ -2289,18 +2289,70 @@ verifyButton.addEventListener("click", async () => {
 (() => {
   const video = document.getElementById("qamqor-background-video");
   if (!video) return;
+
   const startAt = 6;
+  const backgroundVolume = 0.12;
+  let audioEnabled = false;
+
+  video.volume = backgroundVolume;
+
   const seekToStart = () => {
     if (!Number.isFinite(video.duration) || video.duration <= startAt) return;
     try { video.currentTime = startAt; } catch (_) {}
   };
-  video.addEventListener("loadedmetadata", seekToStart, {once:true});
+
+  const playMutedFallback = () => {
+    video.muted = true;
+    const playback = video.play();
+    if (playback && typeof playback.catch === "function") playback.catch(() => {});
+  };
+
+  const tryAudibleAutoplay = () => {
+    video.volume = backgroundVolume;
+    video.muted = false;
+    const playback = video.play();
+    if (playback && typeof playback.catch === "function") {
+      playback.catch(() => {
+        if (!audioEnabled) playMutedFallback();
+      });
+    }
+  };
+
+  const enableAudioAfterInteraction = () => {
+    if (audioEnabled) return;
+    audioEnabled = true;
+    video.volume = backgroundVolume;
+    video.muted = false;
+    const playback = video.play();
+    if (playback && typeof playback.catch === "function") {
+      playback.catch(() => { video.muted = true; });
+    }
+    ["pointerdown", "touchstart", "keydown"].forEach(type => {
+      document.removeEventListener(type, enableAudioAfterInteraction, true);
+    });
+  };
+
+  video.addEventListener("loadedmetadata", () => {
+    seekToStart();
+    tryAudibleAutoplay();
+    ["pointerdown", "touchstart", "keydown"].forEach(type => {
+      document.addEventListener(type, enableAudioAfterInteraction, {once:true, capture:true, passive:true});
+    });
+  }, {once:true});
+
   video.addEventListener("ended", () => {
     seekToStart();
     const playback = video.play();
     if (playback && typeof playback.catch === "function") playback.catch(() => {});
   });
-  if (video.readyState >= 1) seekToStart();
+
+  if (video.readyState >= 1) {
+    seekToStart();
+    tryAudibleAutoplay();
+    ["pointerdown", "touchstart", "keydown"].forEach(type => {
+      document.addEventListener(type, enableAudioAfterInteraction, {once:true, capture:true, passive:true});
+    });
+  }
 })();
 </script>
 
