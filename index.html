@@ -1681,6 +1681,10 @@ function revealManagerContacts(){
 }
 function setQuoteStatus(message){document.getElementById("quotePanelStatus").textContent=message;}
 let activeQuoteData=null;
+function moneyText(value){
+  const amount=Number(value);
+  return (Number.isFinite(amount)?amount:0).toLocaleString("ru-RU")+" ₸";
+}
 function renderQuoteAmounts(quote){
   activeQuoteData=quote;
   document.getElementById("quoteAmounts").hidden=false;
