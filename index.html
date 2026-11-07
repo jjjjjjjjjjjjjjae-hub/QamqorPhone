@@ -801,6 +801,29 @@ footer strong{color:#d5e9ff}
 }
 
 </style>
+<style>
+.quote-consent{display:flex;align-items:flex-start;gap:10px;margin-top:14px;color:#cbd5e1;font-size:12px;line-height:1.55}
+.quote-consent input{width:18px;height:18px;flex:0 0 18px;margin-top:1px;accent-color:#60a5fa}
+.quote-panel{margin-top:18px;padding:22px;border:1px solid rgba(139,184,230,.24);border-radius:22px;background:linear-gradient(145deg,#101b2b,#10151f);color:#f7f9fc;box-shadow:0 18px 55px rgba(0,0,0,.22)}
+.quote-panel-top{margin-bottom:18px}
+.quote-kicker{font-size:10px;letter-spacing:.16em;color:#8eb8e8;font-weight:800}
+.quote-panel h3{margin:8px 0;font-size:22px;color:#fff}
+.quote-panel p{color:#abb9cb;font-size:13px;line-height:1.6}
+.quote-id{font-size:11px!important;color:#7f95ae!important;word-break:break-all}
+.quote-amounts{padding:16px;border:1px solid rgba(255,255,255,.09);border-radius:15px;background:rgba(255,255,255,.035)}
+.quote-line{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:13px}
+.quote-line span{color:#aebbd0}.quote-line strong{color:#f5f8fc;text-align:right}
+.quote-total{display:flex;justify-content:space-between;gap:12px;padding-top:16px;font-size:15px;font-weight:800}
+.quote-total strong{color:#75c7ff;font-size:22px}
+.quote-disclaimer{margin:14px 0 0!important;font-size:11px!important}
+.quote-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.quote-actions button,.quote-new{min-height:46px;padding:12px 16px;border-radius:13px;font-weight:750;cursor:pointer}
+.quote-accept{border:1px solid #2a9e70;background:#16865b;color:white}
+.quote-accept:disabled{opacity:.45;cursor:not-allowed}
+.quote-cancel{border:1px solid rgba(255,255,255,.16);background:#242b37;color:#e7edf5}
+.quote-new{margin-top:12px;border:1px solid rgba(129,177,226,.25);background:#1b2c41;color:#dcecff}
+@media(max-width:520px){.quote-panel{padding:16px}.quote-actions{flex-direction:column}.quote-actions button{width:100%}.quote-line{font-size:12px}}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -939,7 +962,8 @@ footer strong{color:#d5e9ff}
   <path fill="#fff" d="M31.2 26.8c-.4-.2-2.2-1.1-2.6-1.2-.3-.1-.6-.2-.8.2-.3.4-1 1.2-1.2 1.4-.2.3-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8l.6-.7c.2-.2.3-.4.4-.7.1-.2 0-.5 0-.7l-1.2-2.8c-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.7.1-1 .5-.4.4-1.4 1.3-1.4 3.2s1.4 3.7 1.6 4c.2.3 2.8 4.3 6.8 6 .9.4 1.6.6 2.2.7.9.3 1.7.2 2.3.1.7-.1 2.2-.9 2.5-1.8.3-.9.3-1.7.2-1.8-.1-.1-.4-.2-.8-.4Z"/>
 </svg><span>WhatsApp байланыс нөмірі *</span></span></label>
   <input id="whatsappNumber" name="whatsapp_number" type="tel" inputmode="tel" autocomplete="tel" required maxlength="24" placeholder="+7 7XX XXX XX XX">
-  <p class="map-help">WhatsApp нөміріңізді жазыңыз. Код жіберілмейді және WhatsApp арқылы растау қажет емес — бұл нөмір менеджерге байланысу үшін беріледі.</p>
+  <p class="map-help">WhatsApp нөміріңіз менеджерге өтінім бойынша байланысу үшін қажет.</p>
+  <label class="quote-consent"><input id="contactConsent" name="contact_consent" type="checkbox" required> Өтінімді өңдеу және қажет болған жағдайда кейін байланысу үшін байланыс деректерімді сақтауға келісемін.</label>
 </div>
 <div class="wizard-nav">
 <button class="wizard-back" type="button" data-wizard-back>← Артқа</button>
@@ -964,6 +988,22 @@ footer strong{color:#d5e9ff}
 <button class="wizard-back" type="button" id="cancelRepairButton">Өтінімді тазарту</button>
 </div></section>
 </form>
+<section id="quotePanel" class="quote-panel" hidden aria-live="polite">
+  <div class="quote-panel-top"><span class="quote-kicker">QAMQOR PHONE · ӨТІНІМ</span><h3>Болжамды жөндеу сметасы</h3><p id="quotePanelStatus">Өтінім қабылданды. Жеткізушіден баға күтілуде.</p><p id="quotePanelId" class="quote-id"></p></div>
+  <div id="quoteAmounts" class="quote-amounts" hidden>
+    <div class="quote-line"><span>Бөлшек түрі</span><strong id="quotePartType">—</strong></div>
+    <div class="quote-line"><span>Бөлшек құны</span><strong id="quotePartCost">—</strong></div>
+    <div class="quote-line"><span>Жеткізу құны</span><strong id="quoteDeliveryCost">—</strong></div>
+    <div class="quote-line"><span>Ауыстыру және жөндеу</span><strong id="quoteLaborCost">—</strong></div>
+    <div class="quote-total"><span>Жалпы сома</span><strong id="quoteTotal">—</strong></div>
+    <p class="quote-disclaimer">Бұл — алдын ала есеп. Соңғы баға бөлшектің қолжетімділігі мен телефонды тексергеннен кейін нақтыланады.</p>
+  </div>
+  <div class="quote-actions">
+    <button id="quoteAcceptButton" type="button" class="quote-accept" disabled>Сметамен келісемін</button>
+    <button id="quoteCancelButton" type="button" class="quote-cancel">Тапсырыстан бас тарту</button>
+  </div>
+  <button id="quoteNewRequestButton" type="button" class="quote-new" hidden>Жаңа өтінім беру</button>
+</section>
 <div class="notice" id="notice" role="status" aria-live="polite"></div>
 </section>
 
@@ -1465,7 +1505,9 @@ function collectPayload() {
       extraDetails ? "Қосымша ақпарат: " + extraDetails : "",
       mapLink
     ].filter(Boolean).join("\n"),
-    address: String(data.get("address") || "").trim()
+    address: String(data.get("address") || "").trim(),
+    whatsapp_number: whatsappNumber,
+    consent: !!document.getElementById("contactConsent")?.checked
   };
 }
 
@@ -1484,6 +1526,11 @@ function validPayload(payload) {
     showNotice("Өтінімді жіберу үшін картадан жөндеу жасалатын орынды белгілеңіз.");
     mapStatus.classList.add("error");
     document.getElementById("serviceMap").scrollIntoView({behavior: "smooth", block: "center"});
+    return false;
+  }
+  if (!document.getElementById("contactConsent")?.checked) {
+    showNotice("Өтінімді өңдеу және байланыс деректерін пайдалану үшін келісіміңіз қажет.");
+    document.getElementById("contactConsent")?.focus();
     return false;
   }
   return true;
@@ -1526,6 +1573,11 @@ function validPayload(payload) {
   }
 
   function validate(index) {
+    if (index === 6 && !document.getElementById("contactConsent")?.checked) {
+      showNotice("Өтінімді өңдеу және байланыс деректерін пайдалану үшін келісіміңіз қажет.");
+      document.getElementById("contactConsent")?.focus();
+      return false;
+    }
     const fields = {
       0: document.getElementById("brand"),
       1: document.getElementById("problem"),
@@ -1588,10 +1640,141 @@ function validPayload(payload) {
   render(0, false);
 })();
 
+let activeQuoteRequest = null;
+let quotePollTimer = null;
+
+function moneyText(value) {
+  return Number(value || 0).toLocaleString("ru-RU") + " ₸";
+}
+
+function showQuotePanel(saved) {
+  activeQuoteRequest = saved;
+  document.getElementById("quotePanel").hidden = false;
+  form.hidden = true;
+  document.getElementById("quotePanelId").textContent = "Өтінім ID: " + saved.request_id;
+  document.getElementById("quotePanel").scrollIntoView({behavior:"smooth",block:"center"});
+}
+
+function renderApprovedQuote(quote) {
+  document.getElementById("quoteAmounts").hidden = false;
+  document.getElementById("quotePartType").textContent = quote.part_type || "—";
+  document.getElementById("quotePartCost").textContent = moneyText(quote.part_cost);
+  document.getElementById("quoteDeliveryCost").textContent = moneyText(quote.delivery_cost);
+  document.getElementById("quoteLaborCost").textContent = moneyText(quote.labor_cost);
+  document.getElementById("quoteTotal").textContent = moneyText(quote.total);
+  document.getElementById("quoteAcceptButton").disabled = false;
+}
+
+async function pollQuoteStatus() {
+  if (!activeQuoteRequest) return;
+  try {
+    const response = await fetch(API + "/quote/status", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({request_id:activeQuoteRequest.request_id,access_token:activeQuoteRequest.access_token})
+    });
+    const result = await response.json().catch(()=>({}));
+    if (!response.ok || !result.ok) throw new Error(result.error || "status_check_failed");
+    const status = document.getElementById("quotePanelStatus");
+    if (result.status === "quoted" && result.quote) {
+      renderApprovedQuote(result.quote);
+      status.textContent = "✓ Смета дайын. Бағаны қарап, шешіміңізді таңдаңыз.";
+      document.getElementById("quoteAcceptButton").hidden = false;
+      document.getElementById("quoteCancelButton").hidden = false;
+    } else if (result.status === "accepted") {
+      status.textContent = "✓ Сметаны қабылдадыңыз. Өтінім менеджерге жіберілді.";
+      document.getElementById("quoteAcceptButton").hidden = true;
+      document.getElementById("quoteCancelButton").hidden = true;
+      document.getElementById("quoteNewRequestButton").hidden = false;
+    } else if (result.status === "cancelled") {
+      status.textContent = "Өтінім тоқтатылды.";
+      document.getElementById("quoteAcceptButton").hidden = true;
+      document.getElementById("quoteCancelButton").hidden = true;
+      document.getElementById("quoteNewRequestButton").hidden = false;
+    } else if (result.timed_out) {
+      status.textContent = "Мамандар бос емес, кейінірек хабарласамыз. Өтініміңіз сақталды, көрсеткен WhatsApp нөміріңіз арқылы байланысамыз.";
+      document.getElementById("quoteAcceptButton").hidden = true;
+    } else {
+      status.textContent = "Өтінім қабылданды. Қосалқы бөлшек жеткізушілерінен баға күтілуде. Соңғы смета бекітілмейінше баға көрсетілмейді.";
+    }
+  } catch (error) {
+    document.getElementById("quotePanelStatus").textContent = "Смета күйін тексеру уақытша мүмкін болмады. Бет ашық тұрса, қайта тексереміз.";
+  }
+  clearTimeout(quotePollTimer);
+  quotePollTimer = setTimeout(pollQuoteStatus, 12000);
+}
+
+async function downloadEstimatePng(saved, quote) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1200;
+  canvas.height = 1400;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("PNG жасау мүмкін болмады");
+  ctx.fillStyle = "#101827";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "#18263a";
+  ctx.fillRect(60,60,1080,1280);
+  ctx.fillStyle = "#8ec5ff";
+  ctx.font = "bold 28px Arial";
+  ctx.fillText("QAMQOR PHONE",110,145);
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 48px Arial";
+  ctx.fillText("Болжамды жөндеу сметасы",110,235);
+  ctx.fillStyle = "#a9bad0";
+  ctx.font = "24px Arial";
+  ctx.fillText("Смета ID: " + saved.request_id,110,305);
+  ctx.fillText("Жасалған уақыты: " + new Date(quote.approved_at || Date.now()).toLocaleString("kk-KZ"),110,350);
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 30px Arial";
+  ctx.fillText("Телефон: " + String(saved.payload.brand || ""),110,455);
+  ctx.fillText("Жөндеу: " + String(saved.payload.problem || ""),110,510);
+  ctx.font = "26px Arial";
+  const rows = [
+    ["Бөлшек түрі", quote.part_type || "—"],
+    ["Бөлшек құны", moneyText(quote.part_cost)],
+    ["Жеткізу құны", moneyText(quote.delivery_cost)],
+    ["Ауыстыру және жөндеу", moneyText(quote.labor_cost)]
+  ];
+  let y = 630;
+  for (const row of rows) {
+    ctx.fillStyle = "#a9bad0";
+    ctx.fillText(row[0],110,y);
+    ctx.fillStyle = "#ffffff";
+    ctx.textAlign = "right";
+    ctx.fillText(row[1],1080,y);
+    ctx.textAlign = "left";
+    y += 88;
+  }
+  ctx.strokeStyle = "#49617c";
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(110,1000); ctx.lineTo(1080,1000); ctx.stroke();
+  ctx.fillStyle = "#8ec5ff";
+  ctx.font = "bold 32px Arial";
+  ctx.fillText("Жалпы сома",110,1080);
+  ctx.textAlign = "right";
+  ctx.font = "bold 44px Arial";
+  ctx.fillText(moneyText(quote.total),1080,1085);
+  ctx.textAlign = "left";
+  ctx.fillStyle = "#a9bad0";
+  ctx.font = "22px Arial";
+  ctx.fillText("Бұл — алдын ала есеп. Соңғы баға бөлшектің қолжетімділігі",110,1195);
+  ctx.fillText("мен телефонды тексергеннен кейін нақтыланады.",110,1235);
+  ctx.fillText("Бұл құжат төлем түбіртегі немесе фискалдық чек емес.",110,1310);
+  const blob = await new Promise(resolve => canvas.toBlob(resolve,"image/png"));
+  if (!blob) throw new Error("PNG файлын дайындау мүмкін болмады");
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "QamqorPhone-smeta-" + saved.request_id + ".png";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),2000);
+}
+
 async function sendRequest(payload, sessionId) {
-  if (!sessionId) throw new Error("Нөмірді растау қажет.");
+  if (!sessionId) throw new Error("Telegram арқылы растау қажет.");
   verifyButton.disabled = true;
-  setVerifyStatus("Өтініш менеджерге автоматты түрде жіберілуде…");
+  setVerifyStatus("Өтінім серверге жіберілуде…");
   try {
     const response = await fetch(API + "/request", {
       method: "POST",
@@ -1605,17 +1788,28 @@ async function sendRequest(payload, sessionId) {
         sessionStorage.setItem("qamqorPendingRequest", JSON.stringify(payload));
         setVerifyStatus("Сессия уақыты аяқталды. Telegram арқылы қайта растаңыз.", "failed");
       }
-      throw new Error(result.error || "Өтініш жіберілмеді");
+      if (result.error === "contact_consent_required") throw new Error("Байланыс деректерін өңдеуге келісім қажет.");
+      throw new Error(result.error || "Өтінім жіберілмеді");
     }
 
     sessionStorage.removeItem("qamqorAuthSession");
     sessionStorage.removeItem("qamqorPendingRequest");
     sessionStorage.removeItem("qamqorAutoSend");
-    setVerifyStatus("✓ Өтініш менеджерге жіберілді. Менеджер бағасын есептеп, сізбен өзі байланысады.", "verified");
-    showNotice("Өтініш менеджерге жіберілді. Енді менеджер жөндеу бағасын есептеп, сізбен өзі хабарласады.");
-    form.reset();
-    clearMapPoint();
-    verifyButton.textContent = "Telegram арқылы жаңа өтініш жіберу";
+
+    if (result.request_id && result.access_token) {
+      const saved = {request_id:result.request_id,access_token:result.access_token,payload};
+      sessionStorage.setItem("qamqorQuoteRequest", JSON.stringify(saved));
+      showQuotePanel(saved);
+      setVerifyStatus("✓ Өтінім қабылданды. Смета дайын болғанда осы жерде көрінеді.", "verified");
+      clearTimeout(quotePollTimer);
+      await pollQuoteStatus();
+    } else {
+      setVerifyStatus("✓ Өтініш менеджерге жіберілді. Менеджер бағасын есептеп, сізбен өзі байланысады.", "verified");
+      showNotice("Өтініш менеджерге жіберілді. Енді менеджер жөндеу бағасын есептеп, сізбен өзі хабарласады.");
+      form.reset();
+      clearMapPoint();
+      verifyButton.textContent = "Telegram арқылы жаңа өтініш жіберу";
+    }
   } catch (error) {
     showNotice("Жіберу қатесі: " + (error.message || "Қайталап көріңіз."));
     setVerifyStatus("Өтініш жіберілмеді. Қайта тексеріңіз.", "failed");
@@ -1624,6 +1818,62 @@ async function sendRequest(payload, sessionId) {
   }
 }
 
+document.getElementById("quoteAcceptButton").addEventListener("click", async () => {
+  if (!activeQuoteRequest) return;
+  const button = document.getElementById("quoteAcceptButton");
+  button.disabled = true;
+  try {
+    const response = await fetch(API + "/quote/accept", {
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({request_id:activeQuoteRequest.request_id,access_token:activeQuoteRequest.access_token})
+    });
+    const result = await response.json().catch(()=>({}));
+    if (!response.ok || !result.ok) throw new Error(result.error || "accept_failed");
+    document.getElementById("quotePanelStatus").textContent = "✓ Сметаны қабылдадыңыз. Өтінім менеджерге жіберілді.";
+    button.hidden = true;
+    document.getElementById("quoteCancelButton").hidden = true;
+    document.getElementById("quoteNewRequestButton").hidden = false;
+    await downloadEstimatePng(activeQuoteRequest, result.quote);
+    clearTimeout(quotePollTimer);
+  } catch (error) {
+    document.getElementById("quotePanelStatus").textContent = "Келісімді жіберу мүмкін болмады. Қайта көріңіз.";
+    button.disabled = false;
+  }
+});
+
+document.getElementById("quoteCancelButton").addEventListener("click", async () => {
+  if (!activeQuoteRequest || !window.confirm("Осы өтінімнен бас тартасыз ба?")) return;
+  try {
+    const response = await fetch(API + "/quote/cancel", {
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({request_id:activeQuoteRequest.request_id,access_token:activeQuoteRequest.access_token})
+    });
+    const result = await response.json().catch(()=>({}));
+    if (!response.ok || !result.ok) throw new Error(result.error || "cancel_failed");
+    document.getElementById("quotePanelStatus").textContent = "Өтінім тоқтатылды.";
+    document.getElementById("quoteAcceptButton").hidden = true;
+    document.getElementById("quoteCancelButton").hidden = true;
+    document.getElementById("quoteNewRequestButton").hidden = false;
+    clearTimeout(quotePollTimer);
+  } catch {
+    document.getElementById("quotePanelStatus").textContent = "Бас тартуды жіберу мүмкін болмады. Қайталап көріңіз.";
+  }
+});
+
+document.getElementById("quoteNewRequestButton").addEventListener("click", () => {
+  sessionStorage.removeItem("qamqorQuoteRequest");
+  activeQuoteRequest = null;
+  clearTimeout(quotePollTimer);
+  document.getElementById("quotePanel").hidden = true;
+  document.getElementById("quoteAmounts").hidden = true;
+  document.getElementById("quoteAcceptButton").hidden = false;
+  document.getElementById("quoteAcceptButton").disabled = true;
+  document.getElementById("quoteCancelButton").hidden = false;
+  document.getElementById("quoteNewRequestButton").hidden = true;
+  form.hidden = false;
+  form.reset();
+  clearMapPoint();
+});
 if (getAuthSession()) {
   setVerifyStatus("✓ Telegram арқылы расталдыңыз.", "verified");
   verifyButton.textContent = "✓ Telegram расталды";
@@ -1645,6 +1895,17 @@ if (getAuthSession() && pendingRaw && sessionStorage.getItem("qamqorAutoSend") =
     sessionStorage.removeItem("qamqorPendingRequest");
     sessionStorage.removeItem("qamqorAutoSend");
     showNotice("Сақталған өтінішті оқу мүмкін болмады. Мәліметтерді қайта толтырыңыз.");
+  }
+}
+
+const savedQuoteRequest = sessionStorage.getItem("qamqorQuoteRequest");
+if (savedQuoteRequest) {
+  try {
+    const saved = JSON.parse(savedQuoteRequest);
+    showQuotePanel(saved);
+    pollQuoteStatus();
+  } catch {
+    sessionStorage.removeItem("qamqorQuoteRequest");
   }
 }
 
