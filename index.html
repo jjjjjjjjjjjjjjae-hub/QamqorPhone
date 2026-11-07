@@ -965,6 +965,7 @@ footer strong{color:#d5e9ff}
 </div></section>
 </form>
 <div class="notice" id="notice" role="status" aria-live="polite"></div>
+<div id="customerEstimatePanel" class="card" hidden style="margin-top:22px"></div>
 </section>
 
 
@@ -1588,6 +1589,68 @@ function validPayload(payload) {
   render(0, false);
 })();
 
+
+async function showEstimatePanel(requestId, clientToken) {
+  const panel = document.getElementById("customerEstimatePanel");
+  panel.hidden = false;
+  panel.innerHTML = '<div class="tag">QAMQOR PHONE · ӨТІНІМ</div><h2>Өтінім қабылданды</h2><p class="sub" id="estimateWait">Өтінім ID: </p><p class="sub">Мамандар бөлшектің бағасын тексеріп жатыр. Әкімші сметаны бекіткеннен кейін осы жерде көрінеді.</p><button type="button" class="submit" id="refreshEstimate">Сметаны тексеру</button><div id="estimateDetails" style="margin-top:18px"></div>';
+  panel.querySelector("#estimateWait").textContent = "Өтінім ID: " + requestId;
+  const details = panel.querySelector("#estimateDetails");
+  async function refresh() {
+    const button = panel.querySelector("#refreshEstimate");
+    button.disabled = true;
+    try {
+      const r = await fetch(API + "/estimate?" + new URLSearchParams({id:requestId,token:clientToken}), {cache:"no-store"});
+      const data = await r.json();
+      if (!r.ok || !data.ok) throw new Error("Сметаны алу мүмкін болмады.");
+      if (!data.approved) {
+        details.textContent = "Мамандар бос емес немесе баға әлі бекітілмеген. Кейінірек қайта тексеріңіз.";
+        return;
+      }
+      const e = data.estimate;
+      details.innerHTML = '<h3>Болжамды жөндеу сметасы</h3><p id="estimateModel"></p><p id="estimateProblem"></p><div id="estimateRows"></div><h2 id="estimateTotal"></h2><p class="map-help">Бұл — алдын ала есеп. Соңғы баға бөлшектің қолжетімділігі мен телефонды тексергеннен кейін нақтыланады.</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button type="button" class="submit" id="acceptEstimate">Сметамен келісемін</button><button type="button" class="wizard-back" id="declineEstimate">Тапсырыстан бас тарту</button><button type="button" class="wizard-back" id="downloadEstimate">PNG жүктеу</button></div><p id="estimateDecision" class="sub" role="status"></p>';
+      details.querySelector("#estimateModel").textContent = "Телефон: " + e.model;
+      details.querySelector("#estimateProblem").textContent = "Жөндеу: " + e.problem;
+      const rows = details.querySelector("#estimateRows");
+      [["Бөлшек бағасы",e.part],["Жеткізу құны",e.delivery],["Ауыстыру және жөндеу жұмысы",e.labor]].forEach(([label,value])=>{
+        const row=document.createElement("p"); row.textContent=label+": "+Number(value).toLocaleString("kk-KZ")+" ₸"; rows.appendChild(row);
+      });
+      details.querySelector("#estimateTotal").textContent = "Жалпы: " + Number(e.total).toLocaleString("kk-KZ") + " ₸";
+      const decide = async decision => {
+        const out=details.querySelector("#estimateDecision");
+        try {
+          const response=await fetch(API+"/estimate/decision",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({request_id:requestId,client_token:clientToken,decision})});
+          const result=await response.json();
+          if(!response.ok||!result.ok) throw new Error("Әрекетті тіркеу мүмкін болмады.");
+          out.textContent=decision==="accept"?"Келісіміңіз тіркелді. Менеджер сізбен байланысады.":"Тапсырыстан бас тартуыңыз тіркелді.";
+          details.querySelector("#acceptEstimate").disabled=true; details.querySelector("#declineEstimate").disabled=true;
+        } catch(err) { out.textContent=err.message; }
+      };
+      details.querySelector("#acceptEstimate").addEventListener("click",()=>decide("accept"));
+      details.querySelector("#declineEstimate").addEventListener("click",()=>decide("decline"));
+      details.querySelector("#downloadEstimate").addEventListener("click",()=>{
+        const canvas=document.createElement("canvas"); canvas.width=1000; canvas.height=760;
+        const ctx=canvas.getContext("2d"); ctx.fillStyle="#101820"; ctx.fillRect(0,0,1000,760);
+        ctx.fillStyle="#ffffff"; ctx.font="bold 38px Arial"; ctx.fillText("QAMQOR PHONE",60,75);
+        ctx.font="bold 32px Arial"; ctx.fillText("Болжамды жөндеу сметасы",60,145);
+        ctx.font="22px Arial"; ctx.fillText("Смета ID: "+requestId,60,200);
+        ctx.fillText("Телефон: "+e.model,60,250); ctx.fillText("Жөндеу: "+e.problem,60,295);
+        ctx.fillText("Бөлшек бағасы: "+e.part+" ₸",60,380); ctx.fillText("Жеткізу: "+e.delivery+" ₸",60,425);
+        ctx.fillText("Жөндеу жұмысы: "+e.labor+" ₸",60,470);
+        ctx.font="bold 30px Arial"; ctx.fillText("ЖАЛПЫ: "+e.total+" ₸",60,545);
+        ctx.font="18px Arial"; ctx.fillText("Жасалған уақыты: "+new Date(e.created_at).toLocaleString("kk-KZ"),60,600);
+        ctx.font="16px Arial"; ctx.fillText("Бұл — алдын ала есеп. Соңғы баға тексеруден кейін нақтыланады.",60,665);
+        ctx.fillText("Төлем түбіртегі немесе фискалдық чек емес.",60,700);
+        const a=document.createElement("a"); a.download="QamqorPhone-"+requestId+".png"; a.href=canvas.toDataURL("image/png"); a.click();
+      });
+    } catch(err) { details.textContent=err.message; }
+    finally { button.disabled=false; }
+  }
+  panel.querySelector("#refreshEstimate").addEventListener("click",refresh);
+  await refresh();
+  panel.scrollIntoView({behavior:"smooth",block:"center"});
+}
+
 async function sendRequest(payload, sessionId) {
   if (!sessionId) throw new Error("Нөмірді растау қажет.");
   verifyButton.disabled = true;
@@ -1612,6 +1675,7 @@ async function sendRequest(payload, sessionId) {
     sessionStorage.removeItem("qamqorPendingRequest");
     sessionStorage.removeItem("qamqorAutoSend");
     setVerifyStatus("✓ Өтініш менеджерге жіберілді. Менеджер бағасын есептеп, сізбен өзі байланысады.", "verified");
+    if (result.request_id && result.client_token) showEstimatePanel(result.request_id, result.client_token);
     showNotice("Өтініш менеджерге жіберілді. Енді менеджер жөндеу бағасын есептеп, сізбен өзі хабарласады.");
     form.reset();
     clearMapPoint();
