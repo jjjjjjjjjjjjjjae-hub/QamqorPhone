@@ -1759,8 +1759,8 @@ async function pollQuoteStatus(){
     const agree=document.getElementById("quoteAgreeButton");
     if(result.quote&&["auto_quoted","quoted","customer_agreed"].includes(result.status))renderQuoteAmounts(result.quote);
     if(result.status==="auto_quoted"&&result.quote){
-      setQuoteStatus("✓ Дәл сәйкес сақталған баға табылды. Смета растаусыз автоматты жасалды. Менеджер сізге WhatsApp немесе Telegram арқылы хабарласады. Күте тұрыңыз.");
-      showManagerContacts(result.manager);agree.hidden=false;
+      setQuoteStatus("✓ Дәл сәйкес сақталған баға табылды. Смета автоматты жасалды. Менеджер сізге WhatsApp немесе Telegram арқылы хабарласады. Күте тұрыңыз.");
+      showManagerContacts(result.manager);agree.hidden=true;
       try{await sendAutoQuotePdf(activeQuoteRequest,result.quote);}catch(e){setQuoteStatus("Смета дайын. PDF Telegram-ға жіберу уақытша сәтсіз аяқталды; бет ашық тұрса, қайта тексеріледі.");}
     }else if(result.status==="quoted"){
       setQuoteStatus("✓ Менеджер сметаны толтырды. Бағаны қарап, «Бағамен келісу» батырмасын басыңыз.");
