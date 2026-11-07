@@ -1041,11 +1041,48 @@ main [data-app-page]:not([hidden]){animation:pageIn .28s ease both}
 @media(prefers-reduced-motion:reduce){
   #qamqor-video-background video{display:none}
 }
+
+
+/* Make the site surfaces transparent so the R2 video is visible everywhere. */
+html,body{background:transparent!important}
+.site-header,.page-context,.page-context strong,
+.hero,.hero-copy,.services-section,.section-heading,
+.art,.premium-art,.service-card,
+#repair,.card,.cardhead,
+.wizard-progress,.wizard-step,.wizard-step-heading,
+.map-field,#telegramVerifyBox,.quote-panel,.quote-amounts,
+.manager-contact-links,.notice,.point,.choice,
+input,select,textarea,.prefix,
+.hero-float,.main-nav,
+footer,.service-icon,.service-card-top,
+.wizard-step-number,.step{
+  background:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+}
+.site-header,.card,.service-card,.wizard-progress,.wizard-step,
+.map-field,#telegramVerifyBox,.quote-panel,.notice,
+input,select,textarea,.choice,.main-nav{
+  border-color:rgba(190,220,255,.30)!important;
+}
+#qamqor-video-background video{
+  opacity:1!important;
+  filter:none!important;
+}
+#qamqor-video-background .qamqor-video-shade{
+  background:transparent!important;
+}
+.hero-copy,.section-heading,.service-card,.card,.page-context,footer{
+  text-shadow:0 1px 7px rgba(0,0,0,.8);
+}
+@media(max-width:620px){
+  .site-header .main-nav{background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+}
 </style>
 </head>
 <body>
 <div id="qamqor-video-background" aria-hidden="true">
-  <video autoplay muted loop playsinline preload="auto" tabindex="-1">
+  <video id="qamqor-background-video" autoplay muted playsinline preload="metadata" tabindex="-1">
     <source src="https://pub-60f67fee510b4876ad5634ad1d313b01.r2.dev/1108%282%29.mp4" type="video/mp4">
   </video>
   <div class="qamqor-video-shade"></div>
@@ -2221,6 +2258,26 @@ verifyButton.addEventListener("click", async () => {
     }
   } catch (_) {}
   showPage(initialPage,{scroll:false});
+})();
+</script>
+
+
+<script id="qamqor-background-video-start">
+(() => {
+  const video = document.getElementById("qamqor-background-video");
+  if (!video) return;
+  const startAt = 6;
+  const seekToStart = () => {
+    if (!Number.isFinite(video.duration) || video.duration <= startAt) return;
+    try { video.currentTime = startAt; } catch (_) {}
+  };
+  video.addEventListener("loadedmetadata", seekToStart, {once:true});
+  video.addEventListener("ended", () => {
+    seekToStart();
+    const playback = video.play();
+    if (playback && typeof playback.catch === "function") playback.catch(() => {});
+  });
+  if (video.readyState >= 1) seekToStart();
 })();
 </script>
 
