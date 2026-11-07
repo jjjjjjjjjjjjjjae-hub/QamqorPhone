@@ -93,6 +93,9 @@ async function handleTelegramUpdate(request, env) {
 
   if (text === "/start" || text.startsWith("/start ")) {
     await env.QAMQOR_PHONE_DATA.put(supplierKey, JSON.stringify({chat_id:chatId,name:clean([msg.from.first_name,msg.from.last_name].filter(Boolean).join(" "),100),username:clean(msg.from.username,64),active:true,joined_at:now()}));
+    const supplierIds = await env.QAMQOR_PHONE_DATA.get("suppliers:index",{type:"json"}).catch(()=>[]);
+    const index = Array.isArray(supplierIds) ? supplierIds : [];
+    if (!index.includes(chatId)) { index.push(chatId); await env.QAMQOR_PHONE_DATA.put("suppliers:index",JSON.stringify(index)); }
     await telegram(env,"sendMessage",{chat_id:chatId,text:"QamqorPhone жеткізушілер жүйесіне тіркелдіңіз. Бөлшек бағасын сұрау келгенде осы чатқа жауап беріңіз.\nБаға форматы: /price ӨТІНІМ_ID БӨЛШЕК_АТЫ БАҒА"});
     return new Response("OK");
   }
