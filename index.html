@@ -819,6 +819,8 @@ footer strong{color:#d5e9ff}
 .quote-disclaimer{margin:14px 0 0!important;font-size:11px!important}
 .quote-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
 .quote-actions button,.quote-new{min-height:46px;padding:12px 16px;border-radius:13px;font-weight:750;cursor:pointer}
+.quote-agree{border:1px solid #2a9e70;background:linear-gradient(135deg,#16865b,#1e9b6d);color:white}
+.quote-agree:disabled{opacity:.55;cursor:wait}
 .quote-accept{border:1px solid #2a9e70;background:#16865b;color:white}
 .quote-accept:disabled{opacity:.45;cursor:not-allowed}
 .quote-cancel{border:1px solid rgba(255,255,255,.16);background:#242b37;color:#e7edf5}
@@ -993,12 +995,23 @@ footer strong{color:#d5e9ff}
 </form>
 <section id="quotePanel" class="quote-panel" hidden aria-live="polite">
   <div class="quote-panel-top"><span class="quote-kicker">QAMQOR PHONE · ӨТІНІМ</span><h3>Өтінім мәртебесі</h3><p id="quotePanelStatus">Өтінім қабылданды. Мастер ізделуде.</p><p id="quotePanelId" class="quote-id"></p></div>
+  <div id="quoteAmounts" class="quote-amounts" hidden>
+    <div class="quote-line"><span>Бөлшек түрі</span><strong id="quotePartType">—</strong></div>
+    <div class="quote-line"><span>Бөлшек құны</span><strong id="quotePartCost">—</strong></div>
+    <div class="quote-line"><span>Барып жөндеу құны</span><strong id="quoteDeliveryCost">—</strong></div>
+    <div class="quote-line"><span>Жұмыс бағасы</span><strong id="quoteLaborCost">—</strong></div>
+    <div class="quote-total"><span>Жалпы болжамды сома</span><strong id="quoteTotal">—</strong></div>
+    <p class="quote-disclaimer">Бұл — алдын ала жөндеу сметасы. Бөлшектің қолжетімділігі мен телефон жағдайына қарай соңғы баға менеджермен нақтыланады. Бұл төлем немесе фискалдық чек емес.</p>
+  </div>
+  <div class="quote-actions">
+    <button id="quoteAgreeButton" type="button" class="quote-agree" hidden>Бағамен келісу</button>
+    <button id="quoteCancelButton" type="button" class="quote-cancel">Тапсырыстан бас тарту</button>
+  </div>
   <div id="managerContactLinks" class="manager-contact-links" hidden>
     <p>Менеджермен тікелей байланысу:</p>
     <a id="managerWhatsappLink" class="manager-contact whatsapp" href="#" target="_blank" rel="noopener noreferrer" hidden>WhatsApp арқылы жазу</a>
     <a id="managerTelegramLink" class="manager-contact telegram" href="#" target="_blank" rel="noopener noreferrer" hidden>Telegram арқылы жазу</a>
   </div>
-  <div class="quote-actions"><button id="quoteCancelButton" type="button" class="quote-cancel">Тапсырыстан бас тарту</button></div>
   <button id="quoteNewRequestButton" type="button" class="quote-new" hidden>Жаңа өтінім беру</button>
 </section>
 <div class="notice" id="notice" role="status" aria-live="polite"></div>
@@ -1652,97 +1665,115 @@ function showQuotePanel(saved) {
 }
 
 function showManagerContacts(manager) {
-  const box = document.getElementById("managerContactLinks");
-  const wa = document.getElementById("managerWhatsappLink");
-  const tg = document.getElementById("managerTelegramLink");
-  const phone = String(manager?.phone || "").replace(/\D/g, "");
-  const username = String(manager?.username || "").replace(/^@/, "");
-  wa.hidden = !phone;
-  tg.hidden = !username;
-  if (phone) wa.href = "https://wa.me/" + phone;
-  else wa.removeAttribute("href");
-  if (username) tg.href = "https://t.me/" + encodeURIComponent(username);
-  else tg.removeAttribute("href");
-  box.hidden = !phone && !username;
+  const box=document.getElementById("managerContactLinks");
+  const wa=document.getElementById("managerWhatsappLink");
+  const tg=document.getElementById("managerTelegramLink");
+  const phone=String(manager?.phone||"").replace(/\D/g,"");
+  const username=String(manager?.username||"").replace(/^@/,"");
+  wa.hidden=!phone;tg.hidden=!username;
+  if(phone)wa.href="https://wa.me/"+phone;else wa.removeAttribute("href");
+  if(username)tg.href="https://t.me/"+encodeURIComponent(username);else tg.removeAttribute("href");
+  box.hidden=true;
 }
-
-function setQuoteStatus(message) { document.getElementById("quotePanelStatus").textContent = message; }
-
-async function createAutoQuotePdf(saved, quote) {
-  if (!window.jspdf?.jsPDF) throw new Error("PDF модулі жүктелмеді.");
-  const {jsPDF} = window.jspdf;
-  const doc = new jsPDF({unit:"mm",format:"a4"});
-  let font = "helvetica";
-  try {
-    const response = await fetch("https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSans/hinted/ttf/NotoSans-Regular.ttf");
-    if (response.ok) {
-      const bytes = new Uint8Array(await response.arrayBuffer());
-      let binary = "";
-      for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
-      doc.addFileToVFS("NotoSans.ttf", btoa(binary)); doc.addFont("NotoSans.ttf", "NotoSans", "normal"); font = "NotoSans";
-    }
-  } catch (_) {}
-  doc.setFont(font);
-  doc.setFillColor(11, 22, 38); doc.roundedRect(8, 8, 194, 281, 5, 5, "F");
-  doc.setTextColor(126, 190, 255); doc.setFontSize(13); doc.text("QAMQOR PHONE", 18, 23);
-  doc.setTextColor(255,255,255); doc.setFontSize(19); doc.text("Болжамды жөндеу сметасы", 18, 40);
-  doc.setFontSize(9); doc.text("Смета ID: " + saved.request_id, 18, 51); doc.text("Күні: " + new Date().toLocaleString("kk-KZ"), 18, 58);
-  const p = saved.payload || {}; let y = 73;
-  const lines = ["Клиент: " + (p.client_name || "—"), "WhatsApp: " + (p.whatsapp_number || "—"), "Telegram: " + (p.telegram_username ? "@" + p.telegram_username : "—"), "Telegram ID: " + (p.telegram_id || "—"), "Телефон: " + (p.brand || "—"), "Қызмет: " + (p.problem || "—"), "Бөлшек сапасы: " + (p.part_type || "—"), "Ақау: " + (p.details || "—"), "Мекенжай: " + (p.address || "—"), "Координат: " + (p.lat || "—") + ", " + (p.lng || "—")];
+function revealManagerContacts(){
+  const box=document.getElementById("managerContactLinks");
+  if(box.querySelector("a:not([hidden])"))box.hidden=false;
+}
+function setQuoteStatus(message){document.getElementById("quotePanelStatus").textContent=message;}
+let activeQuoteData=null;
+function renderQuoteAmounts(quote){
+  activeQuoteData=quote;
+  document.getElementById("quoteAmounts").hidden=false;
+  document.getElementById("quotePartType").textContent=quote.part_type||"—";
+  document.getElementById("quotePartCost").textContent=moneyText(quote.part_cost);
+  document.getElementById("quoteDeliveryCost").textContent=moneyText(quote.delivery_cost);
+  document.getElementById("quoteLaborCost").textContent=moneyText(quote.labor_cost);
+  document.getElementById("quoteTotal").textContent=moneyText(quote.total);
+}
+async function createAutoQuotePdf(saved,quote){
+  if(!window.jspdf?.jsPDF)throw new Error("PDF модулі жүктелмеді.");
+  const {jsPDF}=window.jspdf,doc=new jsPDF({unit:"mm",format:"a4"});
+  let font="helvetica";
+  try{
+    const response=await fetch("https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSans/hinted/ttf/NotoSans-Regular.ttf");
+    if(response.ok){const bytes=new Uint8Array(await response.arrayBuffer());let binary="";for(let i=0;i<bytes.length;i+=0x8000)binary+=String.fromCharCode(...bytes.subarray(i,i+0x8000));doc.addFileToVFS("NotoSans.ttf",btoa(binary));doc.addFont("NotoSans.ttf","NotoSans","normal");font="NotoSans";}
+  }catch(_){}
+  doc.setFont(font);doc.setFillColor(11,22,38);doc.roundedRect(8,8,194,281,5,5,"F");
+  doc.setTextColor(126,190,255);doc.setFontSize(13);doc.text("QAMQOR PHONE",18,23);
+  doc.setTextColor(255,255,255);doc.setFontSize(19);doc.text("Болжамды жөндеу сметасы",18,40);
+  doc.setFontSize(9);doc.text("Смета ID: "+saved.request_id,18,51);doc.text("Күні: "+new Date().toLocaleString("kk-KZ"),18,58);
+  const p=saved.payload||{},m=saved.manager||{};let y=73;
+  const lines=["Клиент: "+(p.client_name||"—"),"WhatsApp: "+(p.whatsapp_number||"—"),"Telegram: "+(p.telegram_username?"@"+p.telegram_username:"—"),"Телефон: "+(p.brand||"—"),"Қызмет: "+(p.problem||"—"),"Бөлшек сапасы: "+(p.part_type||"—"),"Ақау: "+(p.details||"—"),"Мекенжай: "+(p.address||"—"),"Координат: "+(p.lat??"—")+", "+(p.lng??"—"),"Менеджер WhatsApp: "+(m.phone||"—"),"Менеджер Telegram: "+(m.username?"@"+m.username:"—")];
   doc.setFontSize(10);
-  for (const line of lines) { const wrapped = doc.splitTextToSize(line, 174); if (y + wrapped.length * 5 > 178) { doc.addPage(); doc.setFont(font); y = 20; } doc.text(wrapped, 18, y); y += wrapped.length * 5 + 2; }
-  y += 5; doc.setDrawColor(76, 112, 151); doc.line(18, y, 192, y); y += 12;
-  const rows = [["Бөлшек құны", quote.part_cost], ["Жеткізу құны", quote.delivery_cost], ["Жұмыс бағасы", quote.labor_cost]];
-  doc.setFontSize(11); doc.setTextColor(235,242,250);
-  for (const row of rows) { doc.text(row[0], 18, y); doc.text(Number(row[1] || 0).toLocaleString("ru-RU") + " ₸", 190, y, {align:"right"}); y += 9; }
-  y += 4; doc.setTextColor(126,220,170); doc.setFontSize(16); doc.text("Жалпы сома: " + Number(quote.total || 0).toLocaleString("ru-RU") + " ₸", 18, y);
-  doc.setTextColor(190,205,222); doc.setFontSize(8); doc.text("Бұл — болжамды жөндеу сметасы, төлем немесе фискалдық чек емес.", 18, 278);
+  for(const line of lines){const wrapped=doc.splitTextToSize(line,174);if(y+wrapped.length*5>178){doc.addPage();doc.setFont(font);y=20;}doc.text(wrapped,18,y);y+=wrapped.length*5+2;}
+  y+=5;doc.setDrawColor(76,112,151);doc.line(18,y,192,y);y+=12;
+  const rows=[["Бөлшек құны",quote.part_cost],["Барып жөндеу құны",quote.delivery_cost],["Жұмыс бағасы",quote.labor_cost]];
+  doc.setFontSize(11);doc.setTextColor(235,242,250);
+  for(const row of rows){doc.text(row[0],18,y);doc.text(Number(row[1]||0).toLocaleString("ru-RU")+" ₸",190,y,{align:"right"});y+=9;}
+  y+=4;doc.setTextColor(126,220,170);doc.setFontSize(16);doc.text("Жалпы сома: "+Number(quote.total||0).toLocaleString("ru-RU")+" ₸",18,y);
+  doc.setTextColor(190,205,222);doc.setFontSize(8);doc.text("Бұл — болжамды жөндеу сметасы, төлем немесе фискалдық чек емес.",18,278);
   return doc.output("blob");
 }
-
-async function sendAutoQuotePdf(saved, quote) {
-  const key = "qamqorAutoReceiptSent:" + saved.request_id;
-  if (sessionStorage.getItem(key) === "yes") return;
-  const pdf = await createAutoQuotePdf(saved, quote);
-  const data = new FormData(); data.append("request_id", saved.request_id); data.append("access_token", saved.access_token); data.append("pdf", pdf, "QamqorPhone-" + saved.request_id + ".pdf");
-  const response = await fetch(API + "/quote/receipt", {method:"POST",body:data});
-  const result = await response.json().catch(() => ({}));
-  if (!response.ok || !result.ok) throw new Error(result.error || "PDF Telegram-ға жіберілмеді.");
-  sessionStorage.setItem(key, "yes");
+async function sendAutoQuotePdf(saved,quote){
+  const key="qamqorAutoReceiptSent:"+saved.request_id;if(sessionStorage.getItem(key)==="yes")return;
+  const pdf=await createAutoQuotePdf(saved,quote),data=new FormData();
+  data.append("request_id",saved.request_id);data.append("access_token",saved.access_token);data.append("pdf",pdf,"QamqorPhone-"+saved.request_id+".pdf");
+  const response=await fetch(API+"/quote/receipt",{method:"POST",body:data}),result=await response.json().catch(()=>({}));
+  if(!response.ok||!result.ok)throw new Error(result.error||"PDF Telegram-ға жіберілмеді.");
+  sessionStorage.setItem(key,"yes");
 }
-
-async function pollQuoteStatus() {
-  if (!activeQuoteRequest || quotePollBusy) return;
-  quotePollBusy = true;
-  try {
-    const response = await fetch(API + "/quote/status", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({request_id:activeQuoteRequest.request_id,access_token:activeQuoteRequest.access_token})});
-    const result = await response.json().catch(() => ({}));
-    if (!response.ok || !result.ok) throw new Error(result.error || "status_check_failed");
-    if (result.status === "auto_quoted" && result.quote) {
-      setQuoteStatus("✓ Бұрын сақталған дәл сәйкес баға табылды. Смета автоматты жасалды. Менеджер сізге WhatsApp немесе Telegram арқылы хабарласады. Күте тұрыңыз.");
-      showManagerContacts(result.manager);
-      try { await sendAutoQuotePdf(activeQuoteRequest, result.quote); } catch (e) { setQuoteStatus("Смета дайын, бірақ PDF жіберу уақытша сәтсіз аяқталды. Менеджерге қайта жіберіледі. " + (e.message || "")); }
-    } else if (result.status === "quoted") {
-      setQuoteStatus("✓ Менеджер сметаны толтырды. Ол сізге WhatsApp немесе Telegram арқылы хабарласып, PDF сметаны жібереді. Күте тұрыңыз.");
-      showManagerContacts(result.manager);
-    } else if (result.status === "manager_accepted") {
-      setQuoteStatus("✓ Менеджер өтінімді қабылдады. Қазір бөлшек пен жөндеу құнын есептеп жатыр.");
-      document.getElementById("managerContactLinks").hidden = true;
-    } else if (result.status === "waiting" || Number(result.attempts || 0) >= 5) {
-      setQuoteStatus("Мамандар бос емес. Сізге кейінірек WhatsApp нөміріңізге немесе тіркелген Telegram аккаунтыңызға хабарласамыз. Өтініміңіз сақталды, күте тұрыңыз.");
-    } else if (result.status === "cancelled") {
-      setQuoteStatus("Өтінімнен бас тартылды.");
-      document.getElementById("quoteCancelButton").hidden = true;
-      document.getElementById("quoteNewRequestButton").hidden = false;
-    } else {
-      setQuoteStatus("Мастер ізделуде. Өтініміңіз тіркелді, хабарламаларыңызды тексеріп отырыңыз.");
-    }
-  } catch (error) {
-    setQuoteStatus("Өтінім күйін тексеру уақытша мүмкін болмады. Бет ашық тұрса, қайта тексереміз.");
-  } finally {
-    quotePollBusy = false;
-    clearTimeout(quotePollTimer); quotePollTimer = setTimeout(pollQuoteStatus, 12000);
+async function downloadQuotePng(saved,quote){
+  const canvas=document.createElement("canvas");canvas.width=1200;canvas.height=1500;
+  const ctx=canvas.getContext("2d");if(!ctx)throw new Error("PNG дайындау мүмкін болмады.");
+  ctx.fillStyle="#edf2f7";ctx.fillRect(0,0,1200,1500);ctx.fillStyle="#10243d";ctx.fillRect(32,32,1136,1436);
+  ctx.fillStyle="#ffffff";ctx.fillRect(54,54,1092,1392);ctx.fillStyle="#0b2a4a";ctx.fillRect(54,54,1092,220);
+  ctx.fillStyle="#8fc7ff";ctx.font="bold 30px Arial";ctx.fillText("QAMQOR PHONE",100,115);
+  ctx.fillStyle="#ffffff";ctx.font="bold 43px Arial";ctx.fillText("БОЛЖАМДЫ ЖӨНДЕУ СМЕТАСЫ",100,190);
+  const p=saved.payload||{},m=saved.manager||{};let y=340;
+  const line=(label,value)=>{ctx.fillStyle="#718096";ctx.font="21px Arial";ctx.fillText(label,100,y);ctx.fillStyle="#172b44";ctx.font="bold 23px Arial";let v=String(value??"—"),max=900;while(ctx.measureText(v).width>max&&v.length>4)v=v.slice(0,-1);ctx.fillText(v,100,y+38);y+=92;};
+  line("СМЕТА НӨМІРІ",saved.request_id);line("КЛИЕНТ",p.client_name||"—");line("КЛИЕНТ WHATSAPP",p.whatsapp_number||"—");
+  line("ТЕЛЕФОН",p.brand||"—");line("ЖӨНДЕУ",p.problem||"—");line("БӨЛШЕК САПАСЫ",p.part_type||"—");
+  line("МЕКЕНЖАЙ",p.address||"—");line("ОРНАЛАСҚАН ЖЕРІ",(p.lat??"—")+", "+(p.lng??"—"));
+  y+=8;ctx.strokeStyle="#cbd5e1";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(100,y);ctx.lineTo(1100,y);ctx.stroke();y+=60;
+  for(const [label,value] of [["Бөлшек құны",quote.part_cost],["Барып жөндеу құны",quote.delivery_cost],["Жұмыс бағасы",quote.labor_cost]]){
+    ctx.fillStyle="#42566e";ctx.font="25px Arial";ctx.fillText(label,100,y);ctx.textAlign="right";ctx.fillStyle="#172b44";ctx.font="bold 27px Arial";ctx.fillText(moneyText(value),1100,y);ctx.textAlign="left";y+=74;
   }
+  ctx.fillStyle="#e9f2fb";ctx.fillRect(80,y-12,1040,118);ctx.fillStyle="#173d63";ctx.font="bold 27px Arial";ctx.fillText("ЖАЛПЫ БОЛЖАМДЫ СОМА",110,y+35);
+  ctx.textAlign="right";ctx.fillStyle="#08794f";ctx.font="bold 42px Arial";ctx.fillText(moneyText(quote.total),1080,y+45);ctx.textAlign="left";
+  ctx.fillStyle="#64748b";ctx.font="19px Arial";ctx.fillText("Менеджер: "+(m.phone||"—")+(m.username?" · @"+m.username:""),100,1370);
+  ctx.fillText("Бұл — алдын ала смета, төлем немесе фискалдық чек емес.",100,1410);
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/png"));if(!blob)throw new Error("PNG файлын жасау мүмкін болмады.");
+  const url=URL.createObjectURL(blob),link=document.createElement("a");link.href=url;link.download="QamqorPhone-smeta-"+saved.request_id+".png";
+  document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+}
+async function pollQuoteStatus(){
+  if(!activeQuoteRequest||quotePollBusy)return;quotePollBusy=true;
+  try{
+    const response=await fetch(API+"/quote/status",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({request_id:activeQuoteRequest.request_id,access_token:activeQuoteRequest.access_token})});
+    const result=await response.json().catch(()=>({}));if(!response.ok||!result.ok)throw new Error(result.error||"status_check_failed");
+    if(result.client_name)activeQuoteRequest.payload.client_name=result.client_name;if(result.manager)activeQuoteRequest.manager=result.manager;
+    const agree=document.getElementById("quoteAgreeButton");
+    if(result.quote&&["auto_quoted","quoted","customer_agreed"].includes(result.status))renderQuoteAmounts(result.quote);
+    if(result.status==="auto_quoted"&&result.quote){
+      setQuoteStatus("✓ Дәл сәйкес сақталған баға табылды. Смета растаусыз автоматты жасалды. Менеджер сізге WhatsApp немесе Telegram арқылы хабарласады. Күте тұрыңыз.");
+      showManagerContacts(result.manager);agree.hidden=false;
+      try{await sendAutoQuotePdf(activeQuoteRequest,result.quote);}catch(e){setQuoteStatus("Смета дайын. PDF Telegram-ға жіберу уақытша сәтсіз аяқталды; бет ашық тұрса, қайта тексеріледі.");}
+    }else if(result.status==="quoted"){
+      setQuoteStatus("✓ Менеджер сметаны толтырды. Бағаны қарап, «Бағамен келісу» батырмасын басыңыз.");
+      showManagerContacts(result.manager);agree.hidden=false;
+    }else if(result.status==="customer_agreed"){
+      setQuoteStatus("✓ Бағамен келісім тіркелді. Менеджермен тікелей байланысып, кездесу орнын нақтылаңыз.");
+      showManagerContacts(result.manager);revealManagerContacts();agree.hidden=true;
+    }else if(result.status==="manager_accepted"){
+      setQuoteStatus("✓ Менеджер өтінімді қабылдады. Қазір бөлшек пен жөндеу құнын есептеп жатыр.");
+      document.getElementById("managerContactLinks").hidden=true;agree.hidden=true;
+    }else if(result.status==="waiting"||Number(result.attempts||0)>=5){
+      setQuoteStatus("Мамандар бос емес. Сізге кейінірек WhatsApp нөміріңізге немесе тіркелген Telegram аккаунтыңызға хабарласамыз. Өтініміңіз сақталды, күте тұрыңыз.");agree.hidden=true;
+    }else if(result.status==="cancelled"){
+      setQuoteStatus("Өтінімнен бас тартылды.");document.getElementById("quoteCancelButton").hidden=true;document.getElementById("quoteNewRequestButton").hidden=false;agree.hidden=true;
+    }else{setQuoteStatus("Мастер ізделуде. Өтініміңіз тіркелді, хабарламаларыңызды тексеріп отырыңыз.");agree.hidden=true;}
+  }catch(e){setQuoteStatus("Өтінім күйін тексеру уақытша мүмкін болмады. Бет ашық тұрса, қайта тексереміз.");}
+  finally{quotePollBusy=false;clearTimeout(quotePollTimer);quotePollTimer=setTimeout(pollQuoteStatus,12000);}
 }
 
 async function sendRequest(payload, sessionId) {
@@ -1770,6 +1801,18 @@ async function sendRequest(payload, sessionId) {
   } finally { verifyButton.disabled = false; }
 }
 
+document.getElementById("quoteAgreeButton").addEventListener("click", async () => {
+  if(!activeQuoteRequest||!activeQuoteData)return;
+  const button=document.getElementById("quoteAgreeButton");button.disabled=true;
+  try{
+    const response=await fetch(API+"/quote/agree",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({request_id:activeQuoteRequest.request_id,access_token:activeQuoteRequest.access_token})});
+    const result=await response.json().catch(()=>({}));if(!response.ok||!result.ok)throw new Error(result.error||"agree_failed");
+    if(result.manager)activeQuoteRequest.manager=result.manager;
+    setQuoteStatus("✓ Бағамен келісім тіркелді. Менеджерге WhatsApp немесе Telegram арқылы жазыңыз. Кездесу орнын менеджермен нақтылаңыз.");
+    showManagerContacts(result.manager||activeQuoteRequest.manager);revealManagerContacts();button.hidden=true;
+    try{await downloadQuotePng(activeQuoteRequest,result.quote||activeQuoteData);}catch(e){setQuoteStatus("Келісім тіркелді. PNG файлын сақтау мүмкін болмады: "+(e.message||"Қате"));}
+  }catch(e){setQuoteStatus("Келісімді тіркеу мүмкін болмады. Қайта көріңіз.");button.disabled=false;}
+});
 document.getElementById("quoteCancelButton").addEventListener("click", async () => {
   if (!activeQuoteRequest || !window.confirm("Осы өтінімнен бас тартасыз ба?")) return;
   const button = document.getElementById("quoteCancelButton"); button.disabled = true;
@@ -1781,8 +1824,8 @@ document.getElementById("quoteCancelButton").addEventListener("click", async () 
 });
 document.getElementById("quoteNewRequestButton").addEventListener("click", () => {
   sessionStorage.removeItem("qamqorQuoteRequest"); activeQuoteRequest = null; clearTimeout(quotePollTimer);
-  document.getElementById("quotePanel").hidden = true; document.getElementById("quoteCancelButton").hidden = false; document.getElementById("quoteCancelButton").disabled = false;
-  document.getElementById("quoteNewRequestButton").hidden = true; document.getElementById("managerContactLinks").hidden = true;
+  document.getElementById("quotePanel").hidden = true; document.getElementById("quoteAmounts").hidden = true; document.getElementById("quoteAgreeButton").hidden = true; document.getElementById("quoteAgreeButton").disabled = false; document.getElementById("quoteCancelButton").hidden = false; document.getElementById("quoteCancelButton").disabled = false;
+  document.getElementById("quoteNewRequestButton").hidden = true; document.getElementById("managerContactLinks").hidden = true; activeQuoteData = null;
   form.hidden = false; form.reset(); clearMapPoint();
 });
 if (getAuthSession()) {
