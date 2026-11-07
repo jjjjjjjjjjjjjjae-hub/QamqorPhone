@@ -1345,6 +1345,43 @@ input:focus,select:focus,textarea:focus{
 }
 </style>
 
+
+<style id="qamqor-rounded-phone-logo">
+/* Keep the logo tile transparent, but give the image itself softly rounded edges. */
+.device-logo{
+  width:94px!important;
+  height:94px!important;
+  border:0!important;
+  border-radius:25px!important;
+  background:transparent!important;
+  overflow:hidden!important;
+  box-shadow:0 5px 18px rgba(12,42,78,.18)!important;
+  clip-path:inset(0 round 25px);
+}
+.device-logo img{
+  display:block;
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  border:0!important;
+  border-radius:25px!important;
+  clip-path:inset(0 round 25px);
+}
+@media(max-width:620px){
+  .device-logo{
+    width:39px!important;
+    height:39px!important;
+    border-radius:12px!important;
+    clip-path:inset(0 round 12px);
+    box-shadow:0 3px 10px rgba(12,42,78,.18)!important;
+  }
+  .device-logo img{
+    border-radius:12px!important;
+    clip-path:inset(0 round 12px);
+  }
+}
+</style>
+
 </head>
 <body>
 <div id="qamqor-video-background" aria-hidden="true">
