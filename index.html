@@ -247,7 +247,7 @@ footer strong{color:#d6d6dc;letter-spacing:.08em}
 @keyframes phoneFloat{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-10px) rotate(-2deg)}}
 button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}
 button:focus-visible,a:focus-visible{outline:3px solid rgba(10,132,255,.5);outline-offset:3px}
-#repair{scroll-margin-top:95px}
+.manager-contact-links{display:grid;gap:10px;margin:18px 0;padding:16px;border:1px solid #34485f;border-radius:16px;background:#1b2634}.manager-contact-links p{margin:0 0 3px;color:#dbeaff;font-size:13px;font-weight:700}.manager-contact{display:flex;align-items:center;justify-content:center;min-height:48px;padding:12px 16px;border-radius:999px;color:#fff;text-decoration:none;font-size:13px;font-weight:750}.manager-contact.whatsapp{background:#16834f}.manager-contact.telegram{background:#258acb}.manager-contact[hidden]{display:none!important}.inline-check{display:flex;align-items:center;gap:9px;margin:12px 0;color:#bfc0c8;font-size:12px}.inline-check input{width:18px;min-height:18px;accent-color:#0a84ff}#repair{scroll-margin-top:95px}
 @media(max-width:760px){
   .wrap{width:min(100% - 32px,620px)}
   header{height:68px}
@@ -913,6 +913,7 @@ footer strong{color:#d5e9ff}
   <div><strong id="phoneModelPreviewName"></strong><span>Таңдалған модель</span></div>
   <button id="phoneModelClear" type="button" aria-label="Таңдалған модельді өшіру">×</button>
 </div></div>
+<div class="field full"><label for="partType">Бөлшек сапасы</label><select id="partType" name="part_type"><option value="Қолданылмайды" selected>Қолданылмайды / бөлшек қажет емес</option><option value="Original">Original</option><option value="InCell">InCell</option><option value="AAA">AAA / сапалы көшірме</option><option value="Басқа">Басқа сапа</option></select><p class="map-help">Экран немесе басқа бөлшек ауыстырылса, нақты сапасын таңдаңыз. Бұрынғы баға тек дәл осы сапамен сәйкес келгенде қолданылады.</p></div>
 <div class="wizard-nav">
 <span class="wizard-first-note">Барлық өрісті ретімен толтырыңыз.</span>
 <button class="wizard-next" type="button" data-wizard-next>Келесі қадам <span>→</span></button>
@@ -933,7 +934,7 @@ footer strong{color:#d5e9ff}
 </div></section>
 <section class="wizard-step" data-wizard-step="3" hidden aria-label="4-қадам: Мекенжай">
 <div class="wizard-step-heading"><span class="wizard-step-number">04</span><div><h3>Мекенжай</h3><p>Маман қай мекенжайға баруы керек?</p></div></div>
-<div class="field full"><label for="address">Мекенжайыңыз *</label><input id="address" name="address" required minlength="5" maxlength="180" autocomplete="street-address" placeholder="Мысалы: Қаскелең, Абылай хан көшесі, 10-үй"></div>
+<div class="field full"><label for="street">Көше атауы</label><input id="street" name="street" maxlength="120" autocomplete="address-line1" placeholder="Көше атауы"><label class="inline-check"><input id="noStreet" name="no_street" type="checkbox"> Көше атауы жоқ</label><label for="house">Үй нөмірі</label><input id="house" name="house" maxlength="30" autocomplete="address-line2" placeholder="Үй нөмірі"><label class="inline-check"><input id="noHouse" name="no_house" type="checkbox"> Үй нөмірі жоқ</label><p class="map-help">Көше немесе үй нөмірі белгісіз болса, тиісті құсбелгіні қойыңыз.</p></div>
 <div class="wizard-nav">
 <button class="wizard-back" type="button" data-wizard-back>← Артқа</button>
 <button class="wizard-next" type="button" data-wizard-next>Келесі қадам <span>→</span></button>
@@ -991,19 +992,13 @@ footer strong{color:#d5e9ff}
 </div></section>
 </form>
 <section id="quotePanel" class="quote-panel" hidden aria-live="polite">
-  <div class="quote-panel-top"><span class="quote-kicker">QAMQOR PHONE · ӨТІНІМ</span><h3>Болжамды жөндеу сметасы</h3><p id="quotePanelStatus">Өтінім қабылданды. Жеткізушіден баға күтілуде.</p><p id="quotePanelId" class="quote-id"></p></div>
-  <div id="quoteAmounts" class="quote-amounts" hidden>
-    <div class="quote-line"><span>Бөлшек түрі</span><strong id="quotePartType">—</strong></div>
-    <div class="quote-line"><span>Бөлшек құны</span><strong id="quotePartCost">—</strong></div>
-    <div class="quote-line"><span>Жеткізу құны</span><strong id="quoteDeliveryCost">—</strong></div>
-    <div class="quote-line"><span>Ауыстыру және жөндеу</span><strong id="quoteLaborCost">—</strong></div>
-    <div class="quote-total"><span>Жалпы сома</span><strong id="quoteTotal">—</strong></div>
-    <p class="quote-disclaimer">Бұл — алдын ала есеп. Соңғы баға бөлшектің қолжетімділігі мен телефонды тексергеннен кейін нақтыланады.</p>
+  <div class="quote-panel-top"><span class="quote-kicker">QAMQOR PHONE · ӨТІНІМ</span><h3>Өтінім мәртебесі</h3><p id="quotePanelStatus">Өтінім қабылданды. Мастер ізделуде.</p><p id="quotePanelId" class="quote-id"></p></div>
+  <div id="managerContactLinks" class="manager-contact-links" hidden>
+    <p>Менеджермен тікелей байланысу:</p>
+    <a id="managerWhatsappLink" class="manager-contact whatsapp" href="#" target="_blank" rel="noopener noreferrer" hidden>WhatsApp арқылы жазу</a>
+    <a id="managerTelegramLink" class="manager-contact telegram" href="#" target="_blank" rel="noopener noreferrer" hidden>Telegram арқылы жазу</a>
   </div>
-  <div class="quote-actions">
-    <button id="quoteAcceptButton" type="button" class="quote-accept" disabled>Сметамен келісемін</button>
-    <button id="quoteCancelButton" type="button" class="quote-cancel">Тапсырыстан бас тарту</button>
-  </div>
+  <div class="quote-actions"><button id="quoteCancelButton" type="button" class="quote-cancel">Тапсырыстан бас тарту</button></div>
   <button id="quoteNewRequestButton" type="button" class="quote-new" hidden>Жаңа өтінім беру</button>
 </section>
 <div class="notice" id="notice" role="status" aria-live="polite"></div>
@@ -1015,6 +1010,7 @@ footer strong{color:#d5e9ff}
 <footer><div><strong>QAMQOR PHONE</strong> · Телефон жөндеу қызметі</div><div>© <span id="year"></span> Барлық құқық қорғалған</div></footer>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 <script>
 
 // Premium scroll reveal + subtle 3D pointer response. No external library required.
@@ -1069,6 +1065,7 @@ const directionsLink = document.getElementById("directionsLink");
 let serviceMap = null;
 let locationMarker = null;
 let selectedPoint = null;
+let locationConfirmed = false;
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -1369,6 +1366,7 @@ function updateMapPoint(lat, lng) {
 
 function clearMapPoint() {
   selectedPoint = null;
+  locationConfirmed = false;
   if (locationMarker && serviceMap) serviceMap.removeLayer(locationMarker);
   locationMarker = null;
   directionsLink.hidden = true;
@@ -1460,6 +1458,7 @@ locateButton.addEventListener("click", async () => {
     const {latitude, longitude, accuracy} = position.coords;
     serviceMap.setView([latitude, longitude], accuracy && accuracy > 500 ? 14 : 16, {animate: true, duration: 0.7});
     updateMapPoint(latitude, longitude);
+    locationConfirmed = true;
 
     const accuracyText = accuracy ? " (шамамен " + Math.round(accuracy) + " м дәлдікпен)" : "";
     mapStatus.textContent = "Орналасқан жеріңіз картада белгіленді" + accuracyText + ". Қажет болса, белгіні жылжытыңыз.";
@@ -1496,48 +1495,35 @@ function collectPayload() {
   const data = new FormData(form);
   const whatsappNumber = String(data.get("whatsapp_number") || "").trim();
   const extraDetails = String(data.get("details") || "").trim();
-  const mapLink = selectedPoint
-    ? "Картадағы орны: https://maps.google.com/?q=" + selectedPoint.lat.toFixed(6) + "," + selectedPoint.lng.toFixed(6)
-    : "";
+  const street = String(data.get("street") || "").trim();
+  const house = String(data.get("house") || "").trim();
+  const noStreet = !!document.getElementById("noStreet")?.checked;
+  const noHouse = !!document.getElementById("noHouse")?.checked;
+  const address = [noStreet ? "Көше атауы жоқ" : street, noHouse ? "Үй нөмірі жоқ" : house].filter(Boolean).join(", ");
+  const mapLink = selectedPoint ? "Картадағы орны: https://maps.google.com/?q=" + selectedPoint.lat.toFixed(6) + "," + selectedPoint.lng.toFixed(6) : "";
   return {
     brand: String(data.get("brand") || "").trim(),
     problem: String(data.get("problem") || "").trim(),
-    details: [
-      "WhatsApp нөмірі (клиент көрсеткен): " + whatsappNumber,
-      extraDetails ? "Қосымша ақпарат: " + extraDetails : "",
-      mapLink
-    ].filter(Boolean).join("\n"),
-    address: String(data.get("address") || "").trim(),
+    part_type: String(data.get("part_type") || "Қолданылмайды").trim(),
+    details: [extraDetails, mapLink].filter(Boolean).join("\n"),
+    address, street, house, no_street: noStreet, no_house: noHouse,
+    lat: selectedPoint ? selectedPoint.lat : null,
+    lng: selectedPoint ? selectedPoint.lng : null,
     whatsapp_number: whatsappNumber,
     consent: !!document.getElementById("contactConsent")?.checked
   };
 }
-
 function validPayload(payload) {
-  if (!payload.brand || !payload.problem || !String(document.getElementById("details").value || "").trim() || !payload.address) {
-    showNotice("Телефон моделін, жөндеу түрін, ақау сипаттамасын және мекенжайды толтырыңыз.");
-    return false;
+  if (!payload.brand || !payload.problem || !String(document.getElementById("details").value || "").trim()) {
+    showNotice("Телефон моделін, жөндеу түрін және ақау сипаттамасын толтырыңыз."); return false;
   }
   const whatsappDigits = String(document.getElementById("whatsappNumber").value || "").replace(/\D/g, "");
-  if (whatsappDigits.length < 10 || whatsappDigits.length > 15) {
-    showNotice("WhatsApp нөмірін дұрыс енгізіңіз. Мысалы: +7 777 123 45 67.");
-    document.getElementById("whatsappNumber").focus();
-    return false;
-  }
-  if (!selectedPoint) {
-    showNotice("Өтінімді жіберу үшін картадан жөндеу жасалатын орынды белгілеңіз.");
-    mapStatus.classList.add("error");
-    document.getElementById("serviceMap").scrollIntoView({behavior: "smooth", block: "center"});
-    return false;
-  }
-  if (!document.getElementById("contactConsent")?.checked) {
-    showNotice("Өтінімді өңдеу және байланыс деректерін пайдалану үшін келісіміңіз қажет.");
-    document.getElementById("contactConsent")?.focus();
-    return false;
-  }
+  if (whatsappDigits.length < 10 || whatsappDigits.length > 15) { showNotice("WhatsApp нөмірін дұрыс енгізіңіз. Мысалы: +7 777 123 45 67."); document.getElementById("whatsappNumber").focus(); return false; }
+  if (!payload.address) { showNotice("Көше немесе үй нөмірі жоқ болса, арнайы белгіні қойыңыз."); return false; }
+  if (!selectedPoint || !locationConfirmed) { showNotice("Келесі қадамға өту үшін «Менің орнымды анықтау» батырмасын басыңыз."); document.getElementById("serviceMap").scrollIntoView({behavior:"smooth",block:"center"}); return false; }
+  if (!payload.consent) { showNotice("Өтінімді өңдеу үшін келісіміңіз қажет."); return false; }
   return true;
 }
-
 
 /* Required 7-step repair wizard. Telegram OAuth below remains unchanged. */
 (() => {
@@ -1584,12 +1570,20 @@ function validPayload(payload) {
       0: document.getElementById("brand"),
       1: document.getElementById("problem"),
       2: document.getElementById("details"),
-      3: document.getElementById("address"),
       5: document.getElementById("whatsappNumber")
     };
+    if (index === 3) {
+      const street = document.getElementById("street").value.trim();
+      const house = document.getElementById("house").value.trim();
+      const noStreet = document.getElementById("noStreet").checked;
+      const noHouse = document.getElementById("noHouse").checked;
+      if (!street && !noStreet) { showNotice("Көше атауын енгізіңіз немесе «Көше атауы жоқ» деп белгілеңіз."); document.getElementById("street").focus(); return false; }
+      if (!house && !noHouse) { showNotice("Үй нөмірін енгізіңіз немесе «Үй нөмірі жоқ» деп белгілеңіз."); document.getElementById("house").focus(); return false; }
+      return true;
+    }
     if (index === 4) {
-      if (!selectedPoint) {
-        showNotice("Картадан жөндеу жасалатын орынды міндетті түрде белгілеңіз.");
+      if (!selectedPoint || !locationConfirmed) {
+        showNotice("«Менің орнымды анықтау» батырмасын басып, орналасқан жеріңізді растаңыз.");
         mapStatus.classList.add("error");
         document.getElementById("serviceMap").scrollIntoView({behavior:"smooth",block:"center"});
         return false;
@@ -1647,10 +1641,7 @@ function validPayload(payload) {
 
 let activeQuoteRequest = null;
 let quotePollTimer = null;
-
-function moneyText(value) {
-  return Number(value || 0).toLocaleString("ru-RU") + " ₸";
-}
+let quotePollBusy = false;
 
 function showQuotePanel(saved) {
   activeQuoteRequest = saved;
@@ -1660,225 +1651,139 @@ function showQuotePanel(saved) {
   document.getElementById("quotePanel").scrollIntoView({behavior:"smooth",block:"center"});
 }
 
-function renderApprovedQuote(quote) {
-  document.getElementById("quoteAmounts").hidden = false;
-  document.getElementById("quotePartType").textContent = quote.part_type || "—";
-  document.getElementById("quotePartCost").textContent = moneyText(quote.part_cost);
-  document.getElementById("quoteDeliveryCost").textContent = moneyText(quote.delivery_cost);
-  document.getElementById("quoteLaborCost").textContent = moneyText(quote.labor_cost);
-  document.getElementById("quoteTotal").textContent = moneyText(quote.total);
-  document.getElementById("quoteAcceptButton").disabled = false;
+function showManagerContacts(manager) {
+  const box = document.getElementById("managerContactLinks");
+  const wa = document.getElementById("managerWhatsappLink");
+  const tg = document.getElementById("managerTelegramLink");
+  const phone = String(manager?.phone || "").replace(/\D/g, "");
+  const username = String(manager?.username || "").replace(/^@/, "");
+  wa.hidden = !phone;
+  tg.hidden = !username;
+  if (phone) wa.href = "https://wa.me/" + phone;
+  else wa.removeAttribute("href");
+  if (username) tg.href = "https://t.me/" + encodeURIComponent(username);
+  else tg.removeAttribute("href");
+  box.hidden = !phone && !username;
+}
+
+function setQuoteStatus(message) { document.getElementById("quotePanelStatus").textContent = message; }
+
+async function createAutoQuotePdf(saved, quote) {
+  if (!window.jspdf?.jsPDF) throw new Error("PDF модулі жүктелмеді.");
+  const {jsPDF} = window.jspdf;
+  const doc = new jsPDF({unit:"mm",format:"a4"});
+  let font = "helvetica";
+  try {
+    const response = await fetch("https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSans/hinted/ttf/NotoSans-Regular.ttf");
+    if (response.ok) {
+      const bytes = new Uint8Array(await response.arrayBuffer());
+      let binary = "";
+      for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+      doc.addFileToVFS("NotoSans.ttf", btoa(binary)); doc.addFont("NotoSans.ttf", "NotoSans", "normal"); font = "NotoSans";
+    }
+  } catch (_) {}
+  doc.setFont(font);
+  doc.setFillColor(11, 22, 38); doc.roundedRect(8, 8, 194, 281, 5, 5, "F");
+  doc.setTextColor(126, 190, 255); doc.setFontSize(13); doc.text("QAMQOR PHONE", 18, 23);
+  doc.setTextColor(255,255,255); doc.setFontSize(19); doc.text("Болжамды жөндеу сметасы", 18, 40);
+  doc.setFontSize(9); doc.text("Смета ID: " + saved.request_id, 18, 51); doc.text("Күні: " + new Date().toLocaleString("kk-KZ"), 18, 58);
+  const p = saved.payload || {}; let y = 73;
+  const lines = ["Клиент: " + (p.client_name || "—"), "WhatsApp: " + (p.whatsapp_number || "—"), "Телефон: " + (p.brand || "—"), "Қызмет: " + (p.problem || "—"), "Бөлшек сапасы: " + (p.part_type || "—"), "Ақау: " + (p.details || "—"), "Мекенжай: " + (p.address || "—"), "Координат: " + (p.lat || "—") + ", " + (p.lng || "—")];
+  doc.setFontSize(10);
+  for (const line of lines) { const wrapped = doc.splitTextToSize(line, 174); if (y + wrapped.length * 5 > 178) { doc.addPage(); doc.setFont(font); y = 20; } doc.text(wrapped, 18, y); y += wrapped.length * 5 + 2; }
+  y += 5; doc.setDrawColor(76, 112, 151); doc.line(18, y, 192, y); y += 12;
+  const rows = [["Бөлшек құны", quote.part_cost], ["Жеткізу құны", quote.delivery_cost], ["Жұмыс бағасы", quote.labor_cost]];
+  doc.setFontSize(11); doc.setTextColor(235,242,250);
+  for (const row of rows) { doc.text(row[0], 18, y); doc.text(Number(row[1] || 0).toLocaleString("ru-RU") + " ₸", 190, y, {align:"right"}); y += 9; }
+  y += 4; doc.setTextColor(126,220,170); doc.setFontSize(16); doc.text("Жалпы сома: " + Number(quote.total || 0).toLocaleString("ru-RU") + " ₸", 18, y);
+  doc.setTextColor(190,205,222); doc.setFontSize(8); doc.text("Бұл — болжамды жөндеу сметасы, төлем немесе фискалдық чек емес.", 18, 278);
+  return doc.output("blob");
+}
+
+async function sendAutoQuotePdf(saved, quote) {
+  const key = "qamqorAutoReceiptSent:" + saved.request_id;
+  if (sessionStorage.getItem(key) === "yes") return;
+  const pdf = await createAutoQuotePdf(saved, quote);
+  const data = new FormData(); data.append("request_id", saved.request_id); data.append("access_token", saved.access_token); data.append("pdf", pdf, "QamqorPhone-" + saved.request_id + ".pdf");
+  const response = await fetch(API + "/quote/receipt", {method:"POST",body:data});
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok || !result.ok) throw new Error(result.error || "PDF Telegram-ға жіберілмеді.");
+  sessionStorage.setItem(key, "yes");
 }
 
 async function pollQuoteStatus() {
-  if (!activeQuoteRequest) return;
+  if (!activeQuoteRequest || quotePollBusy) return;
+  quotePollBusy = true;
   try {
-    const response = await fetch(API + "/quote/status", {
-      method:"POST", headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({request_id:activeQuoteRequest.request_id,access_token:activeQuoteRequest.access_token})
-    });
-    const result = await response.json().catch(()=>({}));
+    const response = await fetch(API + "/quote/status", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({request_id:activeQuoteRequest.request_id,access_token:activeQuoteRequest.access_token})});
+    const result = await response.json().catch(() => ({}));
     if (!response.ok || !result.ok) throw new Error(result.error || "status_check_failed");
-    const status = document.getElementById("quotePanelStatus");
-    if (result.status === "quoted" && result.quote) {
-      renderApprovedQuote(result.quote);
-      status.textContent = "✓ Смета дайын. Бағаны қарап, шешіміңізді таңдаңыз.";
-      document.getElementById("quoteAcceptButton").hidden = false;
-      document.getElementById("quoteCancelButton").hidden = false;
-    } else if (result.status === "accepted") {
-      if (result.quote) renderApprovedQuote(result.quote);
-      status.textContent = "✓ Сметаны қабылдадыңыз. Өтінім менеджерге жіберілді.";
-      document.getElementById("quoteAcceptButton").hidden = true;
-      document.getElementById("quoteCancelButton").hidden = true;
-      document.getElementById("quoteNewRequestButton").hidden = false;
+    if (result.status === "auto_quoted" && result.quote) {
+      setQuoteStatus("✓ Бұрын сақталған дәл сәйкес баға табылды. Смета автоматты жасалды. Менеджер сізге WhatsApp немесе Telegram арқылы хабарласады. Күте тұрыңыз.");
+      showManagerContacts(result.manager);
+      try { await sendAutoQuotePdf(activeQuoteRequest, result.quote); } catch (e) { setQuoteStatus("Смета дайын, бірақ PDF жіберу уақытша сәтсіз аяқталды. Менеджерге қайта жіберіледі. " + (e.message || "")); }
+    } else if (result.status === "quoted") {
+      setQuoteStatus("✓ Менеджер сметаны толтырды. Ол сізге WhatsApp немесе Telegram арқылы хабарласып, PDF сметаны жібереді. Күте тұрыңыз.");
+      showManagerContacts(result.manager);
+    } else if (result.status === "manager_accepted") {
+      setQuoteStatus("✓ Менеджер өтінімді қабылдады. Қазір бөлшек пен жөндеу құнын есептеп жатыр.");
+      document.getElementById("managerContactLinks").hidden = true;
+    } else if (result.status === "waiting" || Number(result.attempts || 0) >= 5) {
+      setQuoteStatus("Мамандар бос емес. Сізге кейінірек WhatsApp нөміріңізге немесе тіркелген Telegram аккаунтыңызға хабарласамыз. Өтініміңіз сақталды, күте тұрыңыз.");
     } else if (result.status === "cancelled") {
-      status.textContent = "Өтінім тоқтатылды.";
-      document.getElementById("quoteAcceptButton").hidden = true;
+      setQuoteStatus("Өтінімнен бас тартылды.");
       document.getElementById("quoteCancelButton").hidden = true;
       document.getElementById("quoteNewRequestButton").hidden = false;
-    } else if (result.timed_out) {
-      status.textContent = "Мамандар бос емес, кейінірек хабарласамыз. Өтініміңіз сақталды, көрсеткен WhatsApp нөміріңіз арқылы байланысамыз.";
-      document.getElementById("quoteAcceptButton").hidden = true;
     } else {
-      status.textContent = "Өтінім қабылданды. Қосалқы бөлшек жеткізушілерінен баға күтілуде. Соңғы смета бекітілмейінше баға көрсетілмейді.";
+      setQuoteStatus("Мастер ізделуде. Өтініміңіз тіркелді, хабарламаларыңызды тексеріп отырыңыз.");
     }
   } catch (error) {
-    document.getElementById("quotePanelStatus").textContent = "Смета күйін тексеру уақытша мүмкін болмады. Бет ашық тұрса, қайта тексереміз.";
+    setQuoteStatus("Өтінім күйін тексеру уақытша мүмкін болмады. Бет ашық тұрса, қайта тексереміз.");
+  } finally {
+    quotePollBusy = false;
+    clearTimeout(quotePollTimer); quotePollTimer = setTimeout(pollQuoteStatus, 12000);
   }
-  clearTimeout(quotePollTimer);
-  quotePollTimer = setTimeout(pollQuoteStatus, 12000);
-}
-
-async function downloadEstimatePng(saved, quote) {
-  const canvas = document.createElement("canvas");
-  canvas.width = 1200;
-  canvas.height = 1400;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("PNG жасау мүмкін болмады");
-  ctx.fillStyle = "#101827";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle = "#18263a";
-  ctx.fillRect(60,60,1080,1280);
-  ctx.fillStyle = "#8ec5ff";
-  ctx.font = "bold 28px Arial";
-  ctx.fillText("QAMQOR PHONE",110,145);
-  ctx.fillStyle = "#ffffff";
-  ctx.font = "bold 48px Arial";
-  ctx.fillText("Болжамды жөндеу сметасы",110,235);
-  ctx.fillStyle = "#a9bad0";
-  ctx.font = "24px Arial";
-  ctx.fillText("Смета ID: " + saved.request_id,110,305);
-  ctx.fillText("Жасалған уақыты: " + new Date(quote.approved_at || Date.now()).toLocaleString("kk-KZ"),110,350);
-  ctx.fillStyle = "#ffffff";
-  ctx.font = "bold 30px Arial";
-  ctx.fillText("Телефон: " + String(saved.payload.brand || ""),110,455);
-  ctx.fillText("Жөндеу: " + String(saved.payload.problem || ""),110,510);
-  ctx.font = "26px Arial";
-  const rows = [
-    ["Бөлшек түрі", quote.part_type || "—"],
-    ["Бөлшек құны", moneyText(quote.part_cost)],
-    ["Жеткізу құны", moneyText(quote.delivery_cost)],
-    ["Ауыстыру және жөндеу", moneyText(quote.labor_cost)]
-  ];
-  let y = 630;
-  for (const row of rows) {
-    ctx.fillStyle = "#a9bad0";
-    ctx.fillText(row[0],110,y);
-    ctx.fillStyle = "#ffffff";
-    ctx.textAlign = "right";
-    ctx.fillText(row[1],1080,y);
-    ctx.textAlign = "left";
-    y += 88;
-  }
-  ctx.strokeStyle = "#49617c";
-  ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(110,1000); ctx.lineTo(1080,1000); ctx.stroke();
-  ctx.fillStyle = "#8ec5ff";
-  ctx.font = "bold 32px Arial";
-  ctx.fillText("Жалпы сома",110,1080);
-  ctx.textAlign = "right";
-  ctx.font = "bold 44px Arial";
-  ctx.fillText(moneyText(quote.total),1080,1085);
-  ctx.textAlign = "left";
-  ctx.fillStyle = "#a9bad0";
-  ctx.font = "22px Arial";
-  ctx.fillText("Бұл — алдын ала есеп. Соңғы баға бөлшектің қолжетімділігі",110,1195);
-  ctx.fillText("мен телефонды тексергеннен кейін нақтыланады.",110,1235);
-  ctx.fillText("Бұл құжат төлем түбіртегі немесе фискалдық чек емес.",110,1310);
-  const blob = await new Promise(resolve => canvas.toBlob(resolve,"image/png"));
-  if (!blob) throw new Error("PNG файлын дайындау мүмкін болмады");
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "QamqorPhone-smeta-" + saved.request_id + ".png";
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),2000);
 }
 
 async function sendRequest(payload, sessionId) {
   if (!sessionId) throw new Error("Telegram арқылы растау қажет.");
-  verifyButton.disabled = true;
-  setVerifyStatus("Өтінім серверге жіберілуде…");
+  verifyButton.disabled = true; setVerifyStatus("Өтінім серверге жіберілуде…");
   try {
-    const response = await fetch(API + "/request", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({...payload, session_id: sessionId})
-    });
+    const response = await fetch(API + "/request", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...payload,session_id:sessionId})});
     const result = await response.json().catch(() => ({}));
     if (!response.ok || !result.ok) {
-      if (result.error === "auth_session_expired") {
-        sessionStorage.removeItem("qamqorAuthSession");
-        sessionStorage.setItem("qamqorPendingRequest", JSON.stringify(payload));
-        setVerifyStatus("Сессия уақыты аяқталды. Telegram арқылы қайта растаңыз.", "failed");
-      }
+      if (result.error === "auth_session_expired") { sessionStorage.removeItem("qamqorAuthSession"); sessionStorage.setItem("qamqorPendingRequest", JSON.stringify(payload)); setVerifyStatus("Сессия уақыты аяқталды. Telegram арқылы қайта растаңыз.", "failed"); }
       if (result.error === "contact_consent_required") throw new Error("Байланыс деректерін өңдеуге келісім қажет.");
       throw new Error(result.error || "Өтінім жіберілмеді");
     }
-
-    sessionStorage.removeItem("qamqorAuthSession");
-    sessionStorage.removeItem("qamqorPendingRequest");
-    sessionStorage.removeItem("qamqorAutoSend");
-
+    sessionStorage.removeItem("qamqorAuthSession"); sessionStorage.removeItem("qamqorPendingRequest"); sessionStorage.removeItem("qamqorAutoSend");
+    const saved = {request_id:result.request_id,access_token:result.access_token,payload};
     if (result.request_id && result.access_token) {
-      const saved = {request_id:result.request_id,access_token:result.access_token,payload};
-      sessionStorage.setItem("qamqorQuoteRequest", JSON.stringify(saved));
-      showQuotePanel(saved);
-      setVerifyStatus("✓ Өтінім қабылданды. Смета дайын болғанда осы жерде көрінеді.", "verified");
-      clearTimeout(quotePollTimer);
-      await pollQuoteStatus();
+      sessionStorage.setItem("qamqorQuoteRequest", JSON.stringify(saved)); showQuotePanel(saved);
+      setVerifyStatus("✓ Өтінім қабылданды. Менеджер іздеу басталды.", "verified");
+      clearTimeout(quotePollTimer); await pollQuoteStatus();
     } else {
-      setVerifyStatus("✓ Өтініш менеджерге жіберілді. Менеджер бағасын есептеп, сізбен өзі байланысады.", "verified");
-      showNotice("Өтініш менеджерге жіберілді. Енді менеджер жөндеу бағасын есептеп, сізбен өзі хабарласады.");
-      form.reset();
-      clearMapPoint();
-      verifyButton.textContent = "Telegram арқылы жаңа өтініш жіберу";
+      setVerifyStatus("Өтінімді жіберу аяқталмады. Қайталап көріңіз.", "failed");
     }
   } catch (error) {
-    showNotice("Жіберу қатесі: " + (error.message || "Қайталап көріңіз."));
-    setVerifyStatus("Өтініш жіберілмеді. Қайта тексеріңіз.", "failed");
-  } finally {
-    verifyButton.disabled = false;
-  }
+    showNotice("Жіберу қатесі: " + (error.message || "Қайталап көріңіз.")); setVerifyStatus("Өтінім жіберілмеді. Қайта тексеріңіз.", "failed");
+  } finally { verifyButton.disabled = false; }
 }
-
-document.getElementById("quoteAcceptButton").addEventListener("click", async () => {
-  if (!activeQuoteRequest) return;
-  const button = document.getElementById("quoteAcceptButton");
-  button.disabled = true;
-  try {
-    const response = await fetch(API + "/quote/accept", {
-      method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({request_id:activeQuoteRequest.request_id,access_token:activeQuoteRequest.access_token})
-    });
-    const result = await response.json().catch(()=>({}));
-    if (!response.ok || !result.ok) throw new Error(result.error || "accept_failed");
-    document.getElementById("quotePanelStatus").textContent = "✓ Сметаны қабылдадыңыз. Өтінім менеджерге жіберілді.";
-    button.hidden = true;
-    document.getElementById("quoteCancelButton").hidden = true;
-    document.getElementById("quoteNewRequestButton").hidden = false;
-    await downloadEstimatePng(activeQuoteRequest, result.quote);
-    clearTimeout(quotePollTimer);
-  } catch (error) {
-    document.getElementById("quotePanelStatus").textContent = "Келісімді жіберу мүмкін болмады. Қайта көріңіз.";
-    button.disabled = false;
-  }
-});
 
 document.getElementById("quoteCancelButton").addEventListener("click", async () => {
   if (!activeQuoteRequest || !window.confirm("Осы өтінімнен бас тартасыз ба?")) return;
+  const button = document.getElementById("quoteCancelButton"); button.disabled = true;
   try {
-    const response = await fetch(API + "/quote/cancel", {
-      method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({request_id:activeQuoteRequest.request_id,access_token:activeQuoteRequest.access_token})
-    });
-    const result = await response.json().catch(()=>({}));
-    if (!response.ok || !result.ok) throw new Error(result.error || "cancel_failed");
-    document.getElementById("quotePanelStatus").textContent = "Өтінім тоқтатылды.";
-    document.getElementById("quoteAcceptButton").hidden = true;
-    document.getElementById("quoteCancelButton").hidden = true;
-    document.getElementById("quoteNewRequestButton").hidden = false;
-    clearTimeout(quotePollTimer);
-  } catch {
-    document.getElementById("quotePanelStatus").textContent = "Бас тартуды жіберу мүмкін болмады. Қайталап көріңіз.";
-  }
+    const response = await fetch(API + "/quote/cancel", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({request_id:activeQuoteRequest.request_id,access_token:activeQuoteRequest.access_token})});
+    const result = await response.json().catch(() => ({})); if (!response.ok || !result.ok) throw new Error(result.error || "cancel_failed");
+    setQuoteStatus("Өтінімнен бас тартылды."); button.hidden = true; document.getElementById("quoteNewRequestButton").hidden = false; clearTimeout(quotePollTimer);
+  } catch (error) { setQuoteStatus("Бас тартуды жіберу мүмкін болмады. Қайталап көріңіз."); button.disabled = false; }
 });
-
 document.getElementById("quoteNewRequestButton").addEventListener("click", () => {
-  sessionStorage.removeItem("qamqorQuoteRequest");
-  activeQuoteRequest = null;
-  clearTimeout(quotePollTimer);
-  document.getElementById("quotePanel").hidden = true;
-  document.getElementById("quoteAmounts").hidden = true;
-  document.getElementById("quoteAcceptButton").hidden = false;
-  document.getElementById("quoteAcceptButton").disabled = true;
-  document.getElementById("quoteCancelButton").hidden = false;
-  document.getElementById("quoteNewRequestButton").hidden = true;
-  form.hidden = false;
-  form.reset();
-  clearMapPoint();
+  sessionStorage.removeItem("qamqorQuoteRequest"); activeQuoteRequest = null; clearTimeout(quotePollTimer);
+  document.getElementById("quotePanel").hidden = true; document.getElementById("quoteCancelButton").hidden = false; document.getElementById("quoteCancelButton").disabled = false;
+  document.getElementById("quoteNewRequestButton").hidden = true; document.getElementById("managerContactLinks").hidden = true;
+  form.hidden = false; form.reset(); clearMapPoint();
 });
 if (getAuthSession()) {
   setVerifyStatus("✓ Telegram арқылы расталдыңыз.", "verified");
