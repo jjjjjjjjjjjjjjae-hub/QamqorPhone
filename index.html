@@ -1078,6 +1078,29 @@ input,select,textarea,.choice,.main-nav{
 @media(max-width:620px){
   .site-header .main-nav{background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 }
+
+/* Remove remaining decorative panel fills as well. Keep action buttons and the logo readable. */
+.art:before,.art:after,.service-card:before,
+.art-grid,.art-glow,.art-orbit{
+  background:transparent!important;background-image:none!important;
+  filter:none!important;opacity:0!important;
+}
+.device,.device-screen,.device-logo,.device-camera,.device b,.device-check,
+.float-icon,.float-check,.service-icon,.choice .ico,
+.phone-model-suggestions,.phone-model-preview,.phone-model-preview button,
+.phone-model-option:hover,.phone-model-option:focus,
+.wizard-progress-track,.wizard-progress-line,
+.map-field,.map-status,.map-help,
+.quote-panel-top,.quote-amounts,.quote-line,
+.manager-contact-links,.notice{
+  background:transparent!important;background-image:none!important;
+  box-shadow:none!important;
+}
+.device,.device-screen,.device-logo,.device-camera,.device b,.device-check,
+.phone-model-suggestions,.phone-model-preview,.phone-model-preview button{
+  border-color:rgba(190,220,255,.35)!important;
+}
+.wizard-progress-track{border:1px solid rgba(190,220,255,.25)!important}
 </style>
 </head>
 <body>
