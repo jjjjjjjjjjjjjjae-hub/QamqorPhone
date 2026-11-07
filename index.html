@@ -958,10 +958,10 @@ footer strong{color:#d5e9ff}
   <p class="sub" id="telegramVerifyStatus" style="margin-top:12px" role="status" aria-live="polite">Өтінімді жіберу үшін Telegram аккаунтыңызды растаңыз. WhatsApp нөмірі тек байланыс үшін қолданылады.</p>
 </div>
 
-<div class="action"><div class="fine">WhatsApp нөмірін енгізіп, Telegram аккаунтын растаңыз. Растаудан кейін өтініш менеджерге автоматты түрде жіберіледі.</div></div>
+<div class="action"><div class="fine">Өтінім жіберілгеннен кейін маман бөлшектің бар-жоғын және бағасын тексереді. Соңғы жөндеу құны сізбен алдын ала келісіледі. Бұл кезеңде төлем алынбайды.</div></div>
 <div class="wizard-nav">
 <button class="wizard-back" type="button" data-wizard-back>← Артқа</button>
-
+<button class="wizard-back" type="button" id="cancelRepairButton">Өтінімді тазарту</button>
 </div></section>
 </form>
 <div class="notice" id="notice" role="status" aria-live="polite"></div>
@@ -1572,6 +1572,19 @@ function validPayload(payload) {
   form.addEventListener("reset", () => {
     setTimeout(() => render(0, false), 0);
   });
+  const cancelButton = document.getElementById("cancelRepairButton");
+  if (cancelButton) {
+    cancelButton.addEventListener("click", () => {
+      if (!window.confirm("Толтырылған өтінімнің барлық дерегін тазартасыз ба?")) return;
+      sessionStorage.removeItem("qamqorPendingRequest");
+      sessionStorage.removeItem("qamqorAutoSend");
+      form.reset();
+      if (typeof clearMapPoint === "function") clearMapPoint();
+      showNotice("Өтінім деректері тазартылды. Қайта бастауға болады.");
+      setVerifyStatus("Өтінім жіберілген жоқ. Қажет болса, қайта толтырыңыз.");
+      render(0, false);
+    });
+  }
   render(0, false);
 })();
 
