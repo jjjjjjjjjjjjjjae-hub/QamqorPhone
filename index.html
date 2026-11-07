@@ -1013,6 +1013,31 @@ main [data-app-page]:not([hidden]){animation:pageIn .28s ease both}
 }
 </style>
 
+<style id="qamqor-r2-video-style">
+/* QAMQOR PHONE — Cloudflare R2 video player */
+.repair-video-panel{
+  display:grid;gap:13px;margin:0 0 24px;padding:17px;
+  border:1px solid rgba(115,177,239,.22);border-radius:20px;
+  background:linear-gradient(145deg,rgba(18,34,53,.92),rgba(9,17,28,.96));
+  box-shadow:inset 0 1px rgba(255,255,255,.055),0 16px 42px rgba(0,0,0,.2);
+}
+.repair-video-copy{display:grid;gap:5px}
+.repair-video-copy strong{color:#eef7ff;font-size:16px;font-weight:760;letter-spacing:-.025em}
+.repair-video-copy p{margin:0;color:#9fb5ce;font-size:12px;line-height:1.55}
+#qamqor-r2-video{
+  display:block;width:100%;max-height:70vh;aspect-ratio:16/9;
+  border:1px solid rgba(174,207,243,.16);border-radius:14px;
+  background:#03070c;object-fit:contain;
+}
+.repair-video-link{justify-self:start;color:#8fc7ff;font-size:11px;font-weight:700;text-decoration:none}
+.repair-video-link:hover{color:#fff;text-decoration:underline}
+@media(max-width:620px){
+  .repair-video-panel{gap:10px;margin-bottom:17px;padding:12px;border-radius:15px}
+  .repair-video-copy strong{font-size:14px}
+  .repair-video-copy p{font-size:10px}
+  #qamqor-r2-video{border-radius:11px}
+}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -1073,6 +1098,17 @@ main [data-app-page]:not([hidden]){animation:pageIn .28s ease both}
 </section>
 
 <section class="card" id="repair" data-app-page="repair" hidden>
+<section class="repair-video-panel" aria-labelledby="qamqor-video-title">
+  <div class="repair-video-copy">
+    <strong id="qamqor-video-title">QAMQOR PHONE — бейне</strong>
+    <p>Видеоны осы жерден көре аласыз. Ойнату үшін ▶ батырмасын басыңыз.</p>
+  </div>
+  <video id="qamqor-r2-video" controls playsinline preload="metadata" aria-label="QAMQOR PHONE бейнежазбасы">
+    <source src="https://pub-60f67fee510b4876ad5634ad1d313b01.r2.dev/1108%282%29.mp4" type="video/mp4">
+    Браузеріңіз MP4 видеосын ойнатуды қолдамайды.
+  </video>
+  <a class="repair-video-link" href="https://pub-60f67fee510b4876ad5634ad1d313b01.r2.dev/1108%282%29.mp4" target="_blank" rel="noopener noreferrer">Видеоны бөлек ашу ↗</a>
+</section>
 <div class="cardhead"><div><div class="tag">Онлайн өтінім</div><h2>Жөндеуге өтініш қалдыру</h2><p class="sub">Жұлдызшамен белгіленген жолдарды толтырыңыз.</p></div><div class="step">7 ҚАДАМ</div></div>
 <form id="repairForm">
 <div class="wizard-progress" aria-live="polite">
