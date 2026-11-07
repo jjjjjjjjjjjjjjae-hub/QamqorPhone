@@ -1398,6 +1398,30 @@ input:focus,select:focus,textarea:focus{
 }
 </style>
 
+
+<style id="qamqor-phone-no-motion-final">
+/* Prevent the entire phone illustration and phone from shifting vertically. */
+.premium-art.qamqor-reveal,
+.premium-art.qamqor-reveal.qamqor-visible,
+.premium-art{
+  opacity:1!important;
+  transform:none!important;
+  translate:none!important;
+  animation:none!important;
+  transition:none!important;
+  will-change:auto!important;
+}
+.premium-art .device,
+.device{
+  animation:none!important;
+  transition:none!important;
+  transform:rotate(-8deg)!important;
+  translate:none!important;
+  scale:none!important;
+  will-change:auto!important;
+}
+</style>
+
 </head>
 <body>
 <div id="qamqor-video-background" aria-hidden="true">
@@ -1611,7 +1635,7 @@ input:focus,select:focus,textarea:focus{
     });
   }
 
-  const revealTargets = document.querySelectorAll(".card, footer, .map-field, #telegramVerifyBox, .service-card, .section-heading, .hero-copy, .premium-art");
+  const revealTargets = document.querySelectorAll(".card, footer, .map-field, #telegramVerifyBox, .service-card, .section-heading, .hero-copy");
   if (!reduceMotion && "IntersectionObserver" in window) {
     document.documentElement.classList.add("qamqor-reveal-ready");
     const observer = new IntersectionObserver(entries => {
