@@ -1630,6 +1630,9 @@ function validPayload(payload) {
       if (!window.confirm("Толтырылған өтінімнің барлық дерегін тазартасыз ба?")) return;
       sessionStorage.removeItem("qamqorPendingRequest");
       sessionStorage.removeItem("qamqorAutoSend");
+      sessionStorage.removeItem("qamqorQuoteRequest");
+      activeQuoteRequest = null;
+      clearTimeout(quotePollTimer);
       form.reset();
       if (typeof clearMapPoint === "function") clearMapPoint();
       showNotice("Өтінім деректері тазартылды. Қайта бастауға болады.");
@@ -1681,6 +1684,7 @@ async function pollQuoteStatus() {
       document.getElementById("quoteAcceptButton").hidden = false;
       document.getElementById("quoteCancelButton").hidden = false;
     } else if (result.status === "accepted") {
+      if (result.quote) renderApprovedQuote(result.quote);
       status.textContent = "✓ Сметаны қабылдадыңыз. Өтінім менеджерге жіберілді.";
       document.getElementById("quoteAcceptButton").hidden = true;
       document.getElementById("quoteCancelButton").hidden = true;
