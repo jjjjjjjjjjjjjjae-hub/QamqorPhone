@@ -1018,6 +1018,52 @@ main [data-app-page]:not([hidden]){animation:pageIn .28s ease both}
 }
 </style>
 
+
+<style id="qamqor-mobile-nav-position-fix">
+/* On small screens the blurred sticky header was becoming the fixed-nav
+   containing block. Remove that effect so the section bar sits at the viewport bottom. */
+@media(max-width:620px){
+  .site-header{
+    -webkit-backdrop-filter:none!important;
+    backdrop-filter:none!important;
+  }
+  .site-header .main-nav{
+    position:fixed!important;
+    top:auto!important;
+    right:auto!important;
+    bottom:calc(env(safe-area-inset-bottom, 0px) + 14px)!important;
+    left:50%!important;
+    z-index:2000!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:max-content!important;
+    max-width:calc(100vw - 20px)!important;
+    margin:0!important;
+    padding:6px!important;
+    gap:3px!important;
+    transform:translateX(-50%)!important;
+    border:1px solid rgba(164,204,247,.24)!important;
+    border-radius:999px!important;
+    background:rgba(8,17,29,.94)!important;
+    -webkit-backdrop-filter:blur(20px) saturate(150%)!important;
+    backdrop-filter:blur(20px) saturate(150%)!important;
+    box-shadow:0 12px 34px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.08)!important;
+  }
+  .site-header .main-nav a{
+    min-height:36px!important;
+    padding:8px 10px!important;
+    font-size:9px!important;
+  }
+  .page-context{margin-top:12px}
+  body{padding-bottom:calc(90px + env(safe-area-inset-bottom, 0px))!important}
+}
+@media(max-width:370px){
+  .site-header .main-nav{gap:1px!important;padding:5px!important}
+  .site-header .main-nav a{padding:8px 7px!important;font-size:8px!important}
+}
+</style>
+
 </head>
 <body>
 <div class="wrap">
