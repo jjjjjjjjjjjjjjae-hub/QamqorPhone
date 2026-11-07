@@ -52,7 +52,7 @@ header{
 .brand small{display:block;margin-top:4px;color:#85858e;font-size:8px;font-weight:650;letter-spacing:.2em}
 .header-right{display:flex;align-items:center;gap:20px}
 .topnote{color:#a1a1aa;font-size:12px}
-.header-cta,.hero-cta{
+.hero-cta{
   display:inline-flex;align-items:center;justify-content:center;gap:12px;
   min-height:44px;padding:12px 19px;border:0;border-radius:999px;
   color:#fff;background:var(--blue);text-decoration:none;
@@ -60,8 +60,8 @@ header{
   box-shadow:0 7px 22px rgba(10,132,255,.19);
   transition:background .2s,transform .2s,box-shadow .2s;
 }
-.header-cta:hover,.hero-cta:hover{background:var(--blue-hover);transform:translateY(-1px);box-shadow:0 10px 28px rgba(10,132,255,.27)}
-.header-cta span,.hero-cta span{font-size:17px;line-height:1}
+.hero-cta:hover{background:var(--blue-hover);transform:translateY(-1px);box-shadow:0 10px 28px rgba(10,132,255,.27)}
+.hero-cta span{font-size:17px;line-height:1}
 .hero{
   display:grid;grid-template-columns:1fr;justify-items:center;text-align:center;
   padding:76px 0 58px;gap:30px;
@@ -264,7 +264,6 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(10,132,255,.5);outli
   .brand small{font-size:7px;letter-spacing:.14em}
   .topnote{display:none}
   .header-right{gap:0}
-  .header-cta{min-height:40px;padding:10px 14px;font-size:11px}
   .hero{padding:42px 0 29px;gap:21px}
   h1{font-size:clamp(40px,11vw,54px);letter-spacing:-.07em}
   .lead{font-size:14px;line-height:1.7}
@@ -328,11 +327,11 @@ header{
 }
 .mark{border-radius:15px;box-shadow:0 7px 24px rgba(0,0,0,.3)}
 .brand{letter-spacing:.075em}
-.header-cta,.hero-cta,.submit,.wizard-next{
+.hero-cta,.submit,.wizard-next{
   background:linear-gradient(135deg,#1688ff,#0865d7);
   box-shadow:0 9px 28px rgba(10,132,255,.23),inset 0 1px rgba(255,255,255,.2);
 }
-.header-cta:hover,.hero-cta:hover,.submit:hover,.wizard-next:hover{
+.hero-cta:hover,.submit:hover,.wizard-next:hover{
   background:linear-gradient(135deg,#48a2ff,#1478e8);
   box-shadow:0 13px 34px rgba(10,132,255,.30);
 }
@@ -484,12 +483,12 @@ body{
 .header-right{gap:16px}
 .topnote{display:flex;align-items:center;gap:9px;color:#a6bad1}
 .topnote i{width:7px;height:7px;border-radius:50%;background:#45d59a;box-shadow:0 0 0 5px rgba(69,213,154,.12)}
-.header-cta,.hero-cta,.submit,.wizard-next{
+.hero-cta,.submit,.wizard-next{
   border:1px solid rgba(170,220,255,.25);
   background:linear-gradient(135deg,#2298ff 0%,#0870e4 58%,#0959c0 100%);
   box-shadow:0 10px 30px rgba(8,112,228,.23),inset 0 1px rgba(255,255,255,.23);
 }
-.header-cta:hover,.hero-cta:hover,.submit:hover,.wizard-next:hover{
+.hero-cta:hover,.submit:hover,.wizard-next:hover{
   background:linear-gradient(135deg,#54b4ff,#1685f4 65%,#0b67d8);
   transform:translateY(-2px);
 }
@@ -730,7 +729,6 @@ footer strong{color:#d5e9ff}
   .main-nav a:hover{background:rgba(45,139,239,.18)}
   body{padding-bottom:82px}
   .header-right{margin-left:auto}
-  .header-cta{min-height:39px;padding:10px 13px;font-size:10px}
   .hero{padding:48px 0 45px;gap:27px}
   .hero h1{font-size:clamp(42px,11vw,59px);margin:18px 0;letter-spacing:-.075em}
   .hero .lead{font-size:13px;line-height:1.75}
@@ -912,7 +910,6 @@ body,body *{-webkit-user-select:auto!important;user-select:auto!important}
 @media(max-width:370px){
   .wrap{width:calc(100% - 18px)}
   .brand{font-size:10px}
-  .header-cta{font-size:9px;padding:9px 10px}
   .hero h1{font-size:35px}
   .hero-actions{grid-template-columns:1fr}
   .service-card{min-height:164px;padding:10px}
@@ -1221,7 +1218,7 @@ main [data-app-page]:not([hidden]){animation:pageIn .28s ease both}
     });
   }
 
-  const revealTargets = document.querySelectorAll(".card, footer, .map-field, #telegramVerifyBox, .service-card, .process-card, .section-heading, .hero-copy, .premium-art");
+  const revealTargets = document.querySelectorAll(".card, footer, .map-field, #telegramVerifyBox, .service-card, .section-heading, .hero-copy, .premium-art");
   if (!reduceMotion && "IntersectionObserver" in window) {
     document.documentElement.classList.add("qamqor-reveal-ready");
     const observer = new IntersectionObserver(entries => {
