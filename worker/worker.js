@@ -60,6 +60,15 @@ async function putRequest(env, data) {
   data.updated_at = now();
   await env.QAMQOR_PHONE_DATA.put("request:"+data.id, JSON.stringify(data), {expirationTtl:TTL});
 }
+async function tokenHash(value) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
+  return Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2,"0")).join("");
+}
+async function sameHash(a,b) {
+  if (typeof a !== "string" || typeof b !== "string" || a.length !== b.length) return false;
+  let diff=0; for(let i=0;i<a.length;i++) diff |= a.charCodeAt(i)^b.charCodeAt(i);
+  return diff===0;
+}
 async function authProfile(env, session) {
   if (!/^[0-9a-f-]{36}$/i.test(session || "")) return null;
   const raw = await env.QAMQOR_PHONE_DATA.get("auth:"+session);
@@ -176,8 +185,8 @@ export default {
     const phone=(details.match(/WhatsApp нөмірі \(клиент көрсеткен\):\s*([^\n]+)/i)||[])[1]||"";
     const coords=details.match(/maps\.google\.com\/?\?q=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/i);
     if(!brand||!problem||details.length<5||address.length<5||!phone) return json({ok:false,error:"required_fields_missing"},400);
-    const requestId=id(),created=now();
-    const q={id:requestId,created_at:created,updated_at:created,status:"awaiting_supplier",customer:{name:clean(profile.name,120),username:clean(profile.username,64),telegram_phone:clean(profile.phone,24),whatsapp:clean(phone,24)},device:{model:brand,problem,details},location:{address,lat:coords?Number(coords[1]):null,lng:coords?Number(coords[2]):null},supplier_ids:[],supplier_quotes:[],estimate:{approved:false,history:[]},consent:null};
+    const requestId=id(),created=now(),clientToken=Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,"0")).join("");
+    const q={id:requestId,created_at:created,updated_at:created,status:"awaiting_supplier",customer:{name:clean(profile.name,120),username:clean(profile.username,64),telegram_phone:clean(profile.phone,24),whatsapp:clean(phone,24)},device:{model:brand,problem,details},location:{address,lat:coords?Number(coords[1]):null,lng:coords?Number(coords[2]):null},supplier_ids:[],supplier_quotes:[],client_token_hash:await tokenHash(clientToken),estimate:{approved:false,history:[]},consent:null};
     const list=await env.QAMQOR_PHONE_DATA.get("suppliers:index",{type:"json"}).catch(()=>[]);
     const suppliers=Array.isArray(list)?list:[];
     q.supplier_ids=suppliers;
@@ -189,7 +198,7 @@ export default {
         await telegram(env,"sendMessage",{chat_id:sid,text:"📦 Бөлшек бағасын жіберу\nӨтінім: "+requestId+"\nМодель: "+brand+"\nҚажет: "+problem+"\nЖауап: /price "+requestId+" Бөлшек_атауы Баға"}).catch(()=>{});
       }
       await env.QAMQOR_PHONE_DATA.delete("auth:"+body.session_id);
-      return json({ok:true,submitted:true,request_id:requestId,status:q.status});
+      return json({ok:true,submitted:true,request_id:requestId,client_token:clientToken,status:q.status});
     } catch {
       return json({ok:false,error:"telegram_delivery_failed"},502);
     }
@@ -199,14 +208,16 @@ export default {
     if(!validId(requestId)) return json({ok:false,error:"invalid_request_id"},400);
     const q=await getRequest(env,requestId);
     if(!q) return json({ok:false,error:"not_found"},404);
+    const suppliedToken=url.searchParams.get("token")||"";
+    if(!await sameHash(q.client_token_hash,await tokenHash(suppliedToken))) return json({ok:false,error:"not_found"},404);
     if(!q.estimate?.approved) return json({ok:true,approved:false,status:q.status});
     return json({ok:true,approved:true,estimate:{id:q.id,model:q.device.model,problem:q.device.problem,part:q.estimate.part,delivery:q.estimate.delivery,labor:q.estimate.labor,total:q.estimate.total,created_at:q.estimate.approved_at,notice:"Бұл — алдын ала есеп. Соңғы баға бөлшектің қолжетімділігі мен телефонды тексергеннен кейін нақтыланады"}});
   }
   if(url.pathname==="/estimate/decision" && request.method==="POST") {
     const body=await request.json().catch(()=>null);
-    if(!body||!validId(body.request_id)||!["accept","decline"].includes(body.decision)) return json({ok:false,error:"invalid_parameters"},400);
+    if(!body||!validId(body.request_id)||!["accept","decline"].includes(body.decision)||typeof body.client_token!=="string") return json({ok:false,error:"invalid_parameters"},400);
     const q=await getRequest(env,body.request_id);
-    if(!q||!q.estimate?.approved) return json({ok:false,error:"estimate_not_available"},404);
+    if(!q||!await sameHash(q.client_token_hash,await tokenHash(body.client_token))||!q.estimate?.approved) return json({ok:false,error:"estimate_not_available"},404);
     if(q.consent) return json({ok:false,error:"decision_already_recorded"},409);
     q.consent={decision:body.decision,created_at:now()}; q.status=body.decision==="accept"?"customer_accepted":"customer_declined";
     await putRequest(env,q);
