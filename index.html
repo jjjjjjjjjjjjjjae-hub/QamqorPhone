@@ -1303,6 +1303,48 @@ input:focus,select:focus,textarea:focus{
 }
 </style>
 
+
+<style id="qamqor-phone-only-hero">
+/* Remove the decorative rectangle and labels; keep the floating animated phone. */
+.art,.premium-art{
+  background:transparent!important;
+  background-color:transparent!important;
+  background-image:none!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+  perspective:1000px;
+}
+.art-grid,.art-orbit,.art-glow,
+.hero-float,.art-caption{
+  display:none!important;
+}
+/* Keep the logo itself, without the separate square tile behind it. */
+.device-logo{
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+.device-logo img{
+  object-fit:contain;
+}
+.device{
+  animation:qPhoneFloat 6.5s ease-in-out infinite!important;
+}
+@media(max-width:620px){
+  .art,.premium-art{
+    min-height:172px!important;
+    height:172px!important;
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div id="qamqor-video-background" aria-hidden="true">
