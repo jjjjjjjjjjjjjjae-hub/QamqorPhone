@@ -1038,8 +1038,43 @@ main [data-app-page]:not([hidden]){animation:pageIn .28s ease both}
   #qamqor-r2-video{border-radius:11px}
 }
 </style>
+<style id="qamqor-video-background-style">
+/* Full-site silent looping background video */
+#qamqor-video-background{
+  position:fixed;inset:0;z-index:0;overflow:hidden;
+  pointer-events:none;background:#070b12;
+}
+#qamqor-video-background video{
+  position:absolute;inset:0;width:100%;height:100%;
+  display:block;object-fit:cover;object-position:center;
+  opacity:.32;filter:saturate(.82) contrast(1.04);
+}
+#qamqor-video-background .qamqor-video-shade{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(180deg,rgba(5,10,18,.78),rgba(5,10,18,.70) 48%,rgba(5,10,18,.84)),
+    radial-gradient(ellipse at 50% 18%,rgba(8,22,40,.24),rgba(3,7,13,.52));
+}
+.wrap{position:relative;z-index:1}
+@media(max-width:620px){
+  #qamqor-video-background video{opacity:.22}
+  #qamqor-video-background .qamqor-video-shade{
+    background:linear-gradient(180deg,rgba(5,10,18,.82),rgba(5,10,18,.74) 48%,rgba(5,10,18,.88));
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #qamqor-video-background video{display:none}
+}
+</style>
 </head>
 <body>
+<div id="qamqor-video-background" aria-hidden="true">
+  <video autoplay muted loop playsinline preload="auto" tabindex="-1">
+    <source src="https://pub-60f67fee510b4876ad5634ad1d313b01.r2.dev/1108%282%29.mp4" type="video/mp4">
+  </video>
+  <div class="qamqor-video-shade"></div>
+</div>
+
 <div class="wrap">
 <header class="site-header"><a class="brand" href="#top" aria-label="QAMQOR PHONE басты беті"><div class="mark"><img src="QamqorPhone.png" alt="QAMQOR PHONE логотипі" width="46" height="46"></div><div>QAMQOR PHONE<small>PHONE REPAIR SERVICE</small></div></a><nav class="main-nav" aria-label="Негізгі навигация"><a href="#top">Басты бет</a><a href="#services">Қызметтер</a><a href="#repair">Өтінім</a></nav><div class="header-right"><span class="topnote"><i></i> Онлайн өтінім қабылдаймыз</span></div></header>
 <main>
@@ -1098,17 +1133,7 @@ main [data-app-page]:not([hidden]){animation:pageIn .28s ease both}
 </section>
 
 <section class="card" id="repair" data-app-page="repair" hidden>
-<section class="repair-video-panel" aria-labelledby="qamqor-video-title">
-  <div class="repair-video-copy">
-    <strong id="qamqor-video-title">QAMQOR PHONE — бейне</strong>
-    <p>Видеоны осы жерден көре аласыз. Ойнату үшін ▶ батырмасын басыңыз.</p>
-  </div>
-  <video id="qamqor-r2-video" controls playsinline preload="metadata" aria-label="QAMQOR PHONE бейнежазбасы">
-    <source src="https://pub-60f67fee510b4876ad5634ad1d313b01.r2.dev/1108%282%29.mp4" type="video/mp4">
-    Браузеріңіз MP4 видеосын ойнатуды қолдамайды.
-  </video>
-  <a class="repair-video-link" href="https://pub-60f67fee510b4876ad5634ad1d313b01.r2.dev/1108%282%29.mp4" target="_blank" rel="noopener noreferrer">Видеоны бөлек ашу ↗</a>
-</section>
+
 <div class="cardhead"><div><div class="tag">Онлайн өтінім</div><h2>Жөндеуге өтініш қалдыру</h2><p class="sub">Жұлдызшамен белгіленген жолдарды толтырыңыз.</p></div><div class="step">7 ҚАДАМ</div></div>
 <form id="repairForm">
 <div class="wizard-progress" aria-live="polite">
