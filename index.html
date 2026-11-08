@@ -3899,8 +3899,9 @@ verifyButton.addEventListener("click", async () => {
     }
   }
 
-  overlay.addEventListener("pointerdown", event => {
-    if (!opened || busy || !event.isPrimary || event.button > 0 ||
+  function startRotationDrag(event) {
+    if (!opened || busy || !overlay.contains(event.target) ||
+        !event.isPrimary || event.button > 0 ||
         event.target.closest(rotationInteractiveSelector) ||
         typeof viewer.getCameraOrbit !== "function") return;
 
@@ -3916,8 +3917,11 @@ verifyButton.addEventListener("click", async () => {
 
     // Temporarily remove the dynamic shadow while the 3D model is moving.
     viewer.shadowIntensity = 0;
-    try { overlay.setPointerCapture(event.pointerId); } catch (_) {}
-  });
+    if (event.cancelable) event.preventDefault();
+  }
+  // Capture on document: the transformed overlay may not receive the initial
+  // pointer event consistently on every browser/compositor.
+  document.addEventListener("pointerdown",startRotationDrag,true);
 
   // Track the drag at document level so it continues even when the pointer
   // briefly leaves the projected screen polygon.
