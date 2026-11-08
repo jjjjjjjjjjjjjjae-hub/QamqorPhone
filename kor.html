@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QAMQOR 3D Diagnostics</title>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.2.0/dist/model-viewer.min.js"></script>
+<style>
+body {
+  margin: 0;
+  padding: 20px;
+  background: #10141c;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+h2 { color: #55d6a0; }
+model-viewer {
+  width: 100%;
+  height: 75vh;
+  min-height: 450px;
+  background: #202a38;
+  border-radius: 16px;
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: #202a38;
+  border-radius: 10px;
+  padding: 15px;
+}
+</style>
+</head>
+<body>
+
+<h2>QAMQOR — GLB диагностика</h2>
+<p id="status">3D модель жүктелуде...</p>
+
+<model-viewer
+ id="phone"
+ src="./iPhone%2018%20pro%20max.glb"
+ camera-controls
+ environment-image="neutral"
+ shadow-intensity="1"
+ exposure="1">
+</model-viewer>
+
+<h3>Диагностика жағдайы</h3>
+<pre id="result">Модельді күту...</pre>
+
+<script>
+(() => {
+  const viewer = document.getElementById("phone");
+  const status = document.getElementById("status");
+  const result = document.getElementById("result");
+
+  const sleep = ms =>
+    new Promise(resolve => setTimeout(resolve, ms));
+
+  const vec = v => v ? {
+    x: Number(v.x),
+    y: Number(v.y),
+    z: Number(v.z)
+  } : null;
+
+  const diag = {
+    ready: false,
+
+    async collect() {
+      if (!viewer.loaded) {
+        throw new Error("GLB әлі жүктелмеді");
+      }
+
+      const initial = viewer.getCameraOrbit();
+      const originalGltf = viewer.originalGltfJson || {};
+
+      const report = {
+        model: {
+          file: viewer.getAttribute("src"),
+          dimensions: vec(viewer.getDimensions()),
+          center: vec(viewer.getBoundingBoxCenter()),
+          cameraTarget: vec(viewer.getCameraTarget()),
+          initialCamera: {
+            theta: initial.theta,
+            phi: initial.phi,
+            radius: initial.radius
+          },
+          gltf: {
+            asset: originalGltf.asset || null,
+            meshes: (originalGltf.meshes || []).map((m, i) => ({
+              index: i,
+              name: m.name || null,
+              primitives: m.primitives?.length || 0
+            })),
+            nodes: (originalGltf.nodes || []).map((n, i) => ({
+              index: i,
+              name: n.name || null,
+              mesh: n.mesh ?? null,
+              translation: n.translation || null,
+              rotation: n.rotation || null,
+              scale: n.scale || null
+            })),
+            materials: (originalGltf.materials || []).map((m, i) => ({
+              index: i,
+              name: m.name || null,
+              pbr: m.pbrMetallicRoughness || null
+            }))
+          }
+        },
+        views: [],
+        totalSamples: 0
+      };
+
+      const angles = [
+        { name: "view_0", offset: 0 },
+        { name: "view_90", offset: Math.PI / 2 },
+        { name: "view_180", offset: Math.PI },
+        { name: "view_270", offset: Math.PI * 1.5 }
+      ];
+
+      try {
+        for (const view of angles) {
+          const theta = initial.theta + view.offset;
+
+          viewer.cameraOrbit =
+            `${theta}rad ${initial.phi}rad ${initial.radius}m`;
+
+          await sleep(650);
+
+          const width = viewer.clientWidth;
+          const height = viewer.clientHeight;
+
+          const samples = [];
+
+          for (let row = 0; row <= 12; row++) {
+            for (let col = 0; col <= 14; col++) {
+              const u = 0.10 + col / 14 * 0.80;
+              const v = 0.08 + row / 12 * 0.84;
+
+              const x = width * u;
+              const y = height * v;
+
+              const hit =
+                viewer.positionAndNormalFromPoint(x, y);
+
+              if (!hit) continue;
+
+              const material =
+                viewer.materialFromPoint(x, y);
+
+              let surface = null;
+              try {
+                surface = viewer.surfaceFromPoint(x, y);
+              } catch (_) {}
+
+              samples.push({
+                pixel: { x, y },
+                normalized: { u, v },
+                position: vec(hit.position),
+                normal: vec(hit.normal),
+                uv: hit.uv ? {
+                  x: hit.uv.x,
+                  y: hit.uv.y
+                } : null,
+                material: material?.name || null,
+                surface
+              });
+            }
+          }
+
+          report.views.push({
+            name: view.name,
+            theta,
+            phi: initial.phi,
+            radius: initial.radius,
+            samples
+          });
+
+          report.totalSamples += samples.length;
+        }
+      } finally {
+        viewer.cameraOrbit =
+          `${initial.theta}rad ${initial.phi}rad ${initial.radius}m`;
+
+        await sleep(300);
+      }
+
+      result.textContent =
+        "Жиналған нүктелер: " + report.totalSamples +
+        "\nМештер: " + report.model.gltf.meshes.length +
+        "\nМатериалдар: " + report.model.gltf.materials.length;
+
+      return report;
+    }
+  };
+
+  window.QAMQOR_DIAGNOSTICS = diag;
+
+  function setReady() {
+    if (!viewer.loaded) return;
+
+    diag.ready = true;
+    status.textContent = "3D модель дайын. Автоматты диагностика іске қосуға әзір.";
+  }
+
+  viewer.addEventListener("load", setReady);
+  viewer.addEventListener("error", () => {
+    status.textContent = "GLB жүктелмеді. Файл жолын тексер.";
+  });
+
+  customElements.whenDefined("model-viewer").then(setReady);
+})();
+</script>
+
+</body>
+</html>
