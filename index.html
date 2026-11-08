@@ -3139,7 +3139,7 @@ function validPayload(payload) {
   }
 
   function validate(index) {
-    if (index === 6 && !document.getElementById("contactConsent")?.checked) {
+    if (index === 5 && !document.getElementById("contactConsent")?.checked) {
       showNotice("Өтінімді өңдеу және байланыс деректерін пайдалану үшін келісіміңіз қажет.");
       document.getElementById("contactConsent")?.focus();
       return false;
