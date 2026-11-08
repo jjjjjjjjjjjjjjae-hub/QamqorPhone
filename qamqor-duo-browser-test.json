@@ -2,74 +2,66 @@
   "model": "QAMQOR-iPhone-Duo.glb",
   "checks": {
     "duo_asset_loaded": true,
-    "all_screen_corners_visible": true,
-    "physical_button_visible": true,
-    "dark_idle_screen_visible": true,
-    "screen_hides_when_back_faces_camera": true,
-    "screen_returns_when_front_faces_camera": true,
-    "request_form_opens_on_display": true,
-    "home_screen_and_apply_button_hide": true,
-    "camera_not_forced_to_zoom": true,
-    "wizard_works_inside_phone": true,
-    "close_restores_duo_home_screen": true
+    "open_close_animation_preserved": true,
+    "starts_in_closed_pose": true,
+    "closed_screen_art_material_present": true,
+    "closed_outer_screen_is_visible": true,
+    "tap_plays_open_animation": true,
+    "camera_stays_locked_for_form": true,
+    "wizard_works_inside_open_duo": true,
+    "close_plays_forward_to_closed_pose": true
   },
   "browser_errors": [],
   "initial_state": {
-    "src": "./QAMQOR-iPhone-Duo.glb?v=duo-20261108",
+    "src": "./QAMQOR-iPhone-Duo.glb?v=duo-apply-hitbox-20261108",
     "loaded": true,
+    "animations": [
+      "open-close"
+    ],
+    "duration": 2,
+    "currentTime": 1.95,
+    "state": "closed",
+    "outerMaterial": {
+      "name": "QAMQOR_Duo_Closed_Display",
+      "loaded": true,
+      "emissive": [
+        0.72,
+        0.72,
+        0.72
+      ]
+    },
     "viewer": {
       "width": 560,
       "height": 870
-    },
-    "corners": [
-      {
-        "facingCamera": true,
-        "x": 33.51241747007427,
-        "y": 274.0377519105127
-      },
-      {
-        "facingCamera": true,
-        "x": 525.1986106010525,
-        "y": 274.0377519105127
-      },
-      {
-        "facingCamera": true,
-        "x": 506.87717633351485,
-        "y": 593.4423198722861
-      },
-      {
-        "facingCamera": true,
-        "x": 51.93016474040445,
-        "y": 593.4423198722861
-      }
-    ],
-    "button": {
-      "facingCamera": true,
-      "position": {
-        "x": 0,
-        "y": 0.0256175518,
-        "z": 0.0026460158,
-        "toString": null
-      },
-      "canvasPosition": {
-        "x": 279.3943145105635,
-        "y": 533.6390442904562,
-        "z": 0.9978329760506306,
-        "toString": null
-      }
-    },
-    "idleScreenVisible": true,
-    "cameraOrbit": {
-      "theta": 0,
-      "phi": 1.3089969389957472,
-      "radius": 0.37508408238825797
     }
   },
-  "form_state": {
-    "open": true,
-    "nativeScreenHidden": true,
-    "buttonHidden": true,
+  "closed_screen_hit_test": {
+    "x": 601.0823974609375,
+    "y": 627.4069213867188,
+    "width": 190,
+    "height": 40
+  },
+  "opened_state": {
+    "state": "form",
+    "currentTime": 0,
+    "duration": 2,
     "formInsideOverlay": true,
-    "cameraControls": true
+    "cameraControls": false,
+    "innerScreenRect": {
+      "width": 473.31660236204425,
+      "height": 319.93237130879487,
+      "matrix": "matrix3d(1.03881037,0,0,0,0.18173684,1.17313121,0,0.00025241,0,0,1,0,473.51241747,373.03775191,0,1)"
+    }
+  },
+  "closed_again_state": {
+    "state": "closed",
+    "open": false,
+    "currentTime": 2,
+    "duration": 2,
+    "timeScale": 1,
+    "paused": true,
+    "cameraControls": true,
+    "formHidden": true,
+    "overlayHidden": true
   }
 }
