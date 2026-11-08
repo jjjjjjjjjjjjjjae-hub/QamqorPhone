@@ -1,11 +1,13 @@
-name: Inspect iPhone Duo GLB
+name: Build and test Qamqor iPhone Duo
 
 on:
   push:
     branches: [main]
     paths:
       - "iPhone duo.glb"
+      - "index.html"
       - "scripts/inspect_duo_model.py"
+      - "scripts/build_duo_request_button.py"
       - ".github/workflows/qamqor-duo-inspect.yml"
   workflow_dispatch:
 
@@ -13,13 +15,13 @@ permissions:
   contents: write
 
 concurrency:
-  group: qamqor-duo-inspect
+  group: qamqor-duo-production
   cancel-in-progress: true
 
 jobs:
-  inspect:
+  build-and-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -27,20 +29,161 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - name: Install GLB inspection dependencies
+      - name: Install model and browser dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-dejavu-core
           python -m pip install --upgrade pip
-          python -m pip install numpy trimesh pygltflib
-      - name: Inspect Duo mesh and screen candidates
+          python -m pip install numpy trimesh pygltflib pillow playwright
+          python -m playwright install --with-deps chromium
+      - name: Build request button on the measured Duo inner display
+        run: python scripts/build_duo_request_button.py
+      - name: Inspect source Duo geometry
         run: python scripts/inspect_duo_model.py
-      - name: Commit inspection report
+      - name: Start local site server
+        run: |
+          python -m http.server 8765 --directory . > /tmp/qamqor-http.log 2>&1 &
+          echo $! > /tmp/qamqor-http.pid
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:8765/index.html >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/qamqor-http.log
+          exit 1
+      - name: Test Duo model, screen mapping, rotation, and repair form
+        run: |
+          mkdir -p diagnostics/duo
+          python - <<'PY'
+          import json, pathlib, time, traceback
+          from playwright.sync_api import sync_playwright
+
+          errors = []
+          result = {"model":"QAMQOR-iPhone-Duo.glb","checks":{},"browser_errors":errors}
+          try:
+              with sync_playwright() as p:
+                  browser = p.chromium.launch(headless=True,args=["--no-sandbox","--disable-dev-shm-usage"])
+                  page = browser.new_page(viewport={"width":1440,"height":1000},device_scale_factor=1)
+                  page.on("pageerror",lambda e: errors.append(str(e)))
+                  page.goto("http://127.0.0.1:8765/index.html",wait_until="domcontentloaded",timeout=90000)
+                  page.wait_for_function("""() => {
+                    const v=document.querySelector('.qamqor-phone-model');
+                    return v && v.loaded && typeof v.queryHotspot==='function';
+                  }""",timeout=120000)
+                  page.wait_for_function("""() => {
+                    const el=document.querySelector('.qamqor-ios-dark-screen');
+                    return el && !el.hidden;
+                  }""",timeout=15000)
+
+                  state = page.evaluate("""() => {
+                    const v=document.querySelector('.qamqor-phone-model');
+                    const names=['hotspot-screen-top-left','hotspot-screen-top-right','hotspot-screen-bottom-right','hotspot-screen-bottom-left'];
+                    const corners=names.map(n=>{const h=v.queryHotspot(n);return h?{facingCamera:h.facingCamera,x:h.canvasPosition.x,y:h.canvasPosition.y}:null;});
+                    const button=v.queryHotspot('hotspot-probe');
+                    return {
+                      src:v.getAttribute('src'),
+                      loaded:v.loaded,
+                      viewer:{width:v.clientWidth,height:v.clientHeight},
+                      corners,
+                      button:button?{facingCamera:button.facingCamera,position:button.position,canvasPosition:button.canvasPosition}:null,
+                      idleScreenVisible:!document.querySelector('.qamqor-ios-dark-screen').hidden,
+                      cameraOrbit:(()=>{const o=v.getCameraOrbit();return {theta:o.theta,phi:o.phi,radius:o.radius};})()
+                    };
+                  }""")
+                  result["initial_state"]=state
+                  result["checks"]["duo_asset_loaded"]="QAMQOR-iPhone-Duo.glb" in (state.get("src") or "")
+                  result["checks"]["all_screen_corners_visible"]=bool(state.get("corners")) and all(x and x["facingCamera"] for x in state["corners"])
+                  result["checks"]["physical_button_visible"]=bool(state.get("button") and state["button"]["facingCamera"])
+                  result["checks"]["dark_idle_screen_visible"]=state.get("idleScreenVisible",False)
+                  page.locator(".qamqor-phone-model").screenshot(path="diagnostics/duo/duo-front.png")
+
+                  # Turn the device around: the inner screen layer must disappear instead of floating.
+                  page.evaluate("""async () => {
+                    const v=document.querySelector('.qamqor-phone-model');
+                    const o=v.getCameraOrbit();
+                    v.cameraOrbit=(o.theta+Math.PI)+'rad '+o.phi+'rad '+o.radius+'m';
+                    await new Promise(r=>setTimeout(r,700));
+                  }""")
+                  back_hidden=page.evaluate("""() => document.querySelector('.qamqor-ios-dark-screen').hidden""")
+                  result["checks"]["screen_hides_when_back_faces_camera"]=back_hidden
+                  page.evaluate("""async () => {
+                    const v=document.querySelector('.qamqor-phone-model');
+                    const o=v.getCameraOrbit();
+                    v.cameraOrbit=(o.theta+Math.PI)+'rad '+o.phi+'rad '+o.radius+'m';
+                    await new Promise(r=>setTimeout(r,700));
+                  }""")
+                  front_again=page.evaluate("""() => !document.querySelector('.qamqor-ios-dark-screen').hidden""")
+                  result["checks"]["screen_returns_when_front_faces_camera"]=front_again
+
+                  hitbox=page.locator(".qamqor-apply-hitbox")
+                  hitbox.click(force=True)
+                  page.wait_for_function("""() => {
+                    const o=document.getElementById('qamqor-phone-form-overlay');
+                    const f=document.getElementById('repair');
+                    return o && !o.hidden && f && o.contains(f) && !f.hidden;
+                  }""",timeout=12000)
+                  form_state=page.evaluate("""() => ({
+                    open:window.qamqorPhoneForm.isOpen(),
+                    nativeScreenHidden:document.querySelector('.qamqor-ios-dark-screen').hidden,
+                    buttonHidden:document.querySelector('.qamqor-apply-hitbox').hidden,
+                    formInsideOverlay:document.getElementById('qamqor-phone-form-overlay').contains(document.getElementById('repair')),
+                    cameraControls:document.querySelector('.qamqor-phone-model').hasAttribute('camera-controls')
+                  })""")
+                  result["form_state"]=form_state
+                  result["checks"]["request_form_opens_on_display"]=form_state["open"] and form_state["formInsideOverlay"]
+                  result["checks"]["home_screen_and_apply_button_hide"]=form_state["nativeScreenHidden"] and form_state["buttonHidden"]
+                  result["checks"]["camera_not_forced_to_zoom"]=form_state["cameraControls"]
+
+                  page.locator("#brand").fill("iPhone Duo")
+                  page.locator("[data-wizard-next]").first.click()
+                  page.wait_for_function("""() => {
+                    const s=document.querySelector('#repair [data-wizard-step="1"]');
+                    return s && !s.hidden;
+                  }""",timeout=7000)
+                  result["checks"]["wizard_works_inside_phone"]=page.evaluate("""() =>
+                    window.qamqorPhoneForm.isOpen() &&
+                    document.getElementById('qamqor-phone-form-overlay').contains(document.getElementById('repair')) &&
+                    !document.querySelector('#repair [data-wizard-step="1"]').hidden
+                  """)
+                  page.locator(".qamqor-phone-form-close").click()
+                  page.wait_for_function("""() => {
+                    const f=document.getElementById('repair');
+                    const b=document.querySelector('.qamqor-apply-hitbox');
+                    const n=document.querySelector('.qamqor-ios-dark-screen');
+                    return window.qamqorPhoneForm && !window.qamqorPhoneForm.isOpen() &&
+                      b && !b.hidden && n && !n.hidden && f && f.hidden;
+                  }""",timeout=7000)
+                  result["checks"]["close_restores_duo_home_screen"]=True
+                  page.screenshot(path="diagnostics/duo/duo-home-screen.png",full_page=True)
+                  browser.close()
+          except Exception as e:
+              result["error"]=str(e)
+              result["traceback"]=traceback.format_exc()
+
+          pathlib.Path("qamqor-duo-browser-test.json").write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf-8")
+          print("QAMQOR_DUO_BROWSER_TEST="+json.dumps(result,ensure_ascii=False))
+          failed=[k for k,v in result["checks"].items() if v is not True]
+          if failed or errors or result.get("error"):
+              raise SystemExit("Duo browser tests failed: "+", ".join(failed))
+          PY
+      - name: Upload Duo preview screenshots and test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qamqor-duo-preview
+          path: |
+            diagnostics/duo/
+            qamqor-duo-browser-test.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Commit generated Duo model and reports
+        if: success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add qamqor-duo-model-report.json
+          git add QAMQOR-iPhone-Duo.glb qamqor-duo-button-build.json qamqor-duo-model-report.json qamqor-duo-browser-test.json
           if git diff --cached --quiet; then
-            echo "No report changes."
+            echo "No generated Duo assets or report changes."
           else
-            git commit -m "chore: inspect iPhone Duo GLB geometry"
+            git commit -m "chore: build and verify Qamqor iPhone Duo model"
             git push
           fi
