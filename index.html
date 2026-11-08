@@ -3686,19 +3686,27 @@ verifyButton.addEventListener("click", async () => {
     requestAnimationFrame(() => requestAnimationFrame(resolve))
   );
 
-  function playDuoAnimation(direction) {
+  async function selectDuoAnimation() {
+    viewer.animationName = animationName;
+    // model-viewer applies animation-name in its asynchronous Lit update.
+    if (viewer.updateComplete && typeof viewer.updateComplete.then === "function") {
+      await viewer.updateComplete;
+    }
+    await nextFrame();
+    return viewer.availableAnimations &&
+      viewer.availableAnimations.includes(animationName) &&
+      Number.isFinite(viewer.duration) && viewer.duration > 0;
+  }
+
+  async function playDuoAnimation(direction) {
+    if (!await selectDuoAnimation()) return false;
+
+    let settled = false;
+    let fallbackTimer = null;
+    const duration = viewer.duration;
+    const destination = direction < 0 ? 0 : duration;
+
     return new Promise(resolve => {
-      if (!viewer.availableAnimations ||
-          !viewer.availableAnimations.includes(animationName) ||
-          !Number.isFinite(viewer.duration) || viewer.duration <= 0) {
-        resolve(false);
-        return;
-      }
-
-      let settled = false;
-      let fallbackTimer = null;
-      const destination = direction < 0 ? 0 : viewer.duration;
-
       const finish = () => {
         if (settled) return;
         settled = true;
@@ -3707,20 +3715,19 @@ verifyButton.addEventListener("click", async () => {
         viewer.pause();
         viewer.currentTime = destination;
         viewer.timeScale = 1;
-        resolve(true);
+        requestAnimationFrame(() => resolve(true));
       };
 
       viewer.pause();
-      viewer.animationName = animationName;
       viewer.timeScale = direction;
-      viewer.currentTime = direction < 0 ? viewer.duration : 0;
+      viewer.currentTime = direction < 0 ? duration : 0;
 
       requestAnimationFrame(() => {
         viewer.addEventListener("finished", finish, {once:true});
         viewer.play({repetitions:1});
         fallbackTimer = setTimeout(
           finish,
-          Math.ceil(viewer.duration * 1000) + 1800
+          Math.ceil(duration * 1000) + 1800
         );
       });
     });
@@ -3914,23 +3921,30 @@ verifyButton.addEventListener("click", async () => {
     openDuoAndForm();
   }
 
-  function initializeClosedDuo() {
+  async function initializeClosedDuo() {
     if (!viewer.loaded || state !== "loading") return;
-    if (!viewer.availableAnimations ||
-        !viewer.availableAnimations.includes(animationName)) {
+    state = "initializing";
+    const selected = await selectDuoAnimation();
+    if (!selected) {
       state = "open";
       console.error("Duo GLB open-close animation is missing.");
       return;
     }
+
     viewer.pause();
-    viewer.animationName = animationName;
     viewer.timeScale = 1;
     viewer.currentTime = viewer.duration;
-    requestAnimationFrame(() => {
-      viewer.pause();
-      state = "closed";
-      if (shouldRestore) openDuoAndForm();
-    });
+    await nextFrame();
+    viewer.pause();
+
+    // Read after the seek/render cycle so the initial state is genuinely closed.
+    if (Math.abs(viewer.currentTime - viewer.duration) > 0.05) {
+      viewer.currentTime = viewer.duration;
+      await nextFrame();
+    }
+
+    state = "closed";
+    if (shouldRestore) openDuoAndForm();
   }
 
   viewer.addEventListener("pointerup",handleClosedDisplayPress,{passive:false});
