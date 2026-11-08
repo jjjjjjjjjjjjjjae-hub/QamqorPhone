@@ -2427,10 +2427,10 @@ body.qamqor-phone-form-open .hero#top .qamqor-phone-model{
       tabindex="0">
       <span slot="hotspot-probe" class="qamqor-button-probe" data-position="0 0.04201275 0.004502" data-normal="0 0 1" data-visibility-attribute="visible" aria-hidden="true"></span>
       <button slot="hotspot-apply" class="qamqor-apply-hitbox" data-position="0 0.04201275 0.004502" data-normal="0 0 1" data-visibility-attribute="visible" type="button" aria-label="Өтінім беру"></button>
-      <span slot="screen-top-left" class="qamqor-screen-probe" data-position="-0.0365150012 0.1608780026 0.004502" data-normal="0 0 1" aria-hidden="true"></span>
-      <span slot="screen-top-right" class="qamqor-screen-probe" data-position="0.0365150012 0.1608780026 0.004502" data-normal="0 0 1" aria-hidden="true"></span>
-      <span slot="screen-bottom-right" class="qamqor-screen-probe" data-position="0.0365150012 0.0023910000 0.004502" data-normal="0 0 1" aria-hidden="true"></span>
-      <span slot="screen-bottom-left" class="qamqor-screen-probe" data-position="-0.0365150012 0.0023910000 0.004502" data-normal="0 0 1" aria-hidden="true"></span>
+      <span slot="hotspot-screen-top-left" class="qamqor-screen-probe" data-position="-0.0365150012 0.1608780026 0.004502" data-normal="0 0 1" aria-hidden="true"></span>
+      <span slot="hotspot-screen-top-right" class="qamqor-screen-probe" data-position="0.0365150012 0.1608780026 0.004502" data-normal="0 0 1" aria-hidden="true"></span>
+      <span slot="hotspot-screen-bottom-right" class="qamqor-screen-probe" data-position="0.0365150012 0.0023910000 0.004502" data-normal="0 0 1" aria-hidden="true"></span>
+      <span slot="hotspot-screen-bottom-left" class="qamqor-screen-probe" data-position="-0.0365150012 0.0023910000 0.004502" data-normal="0 0 1" aria-hidden="true"></span>
     </model-viewer>
   </div>
 </section>
@@ -3694,10 +3694,10 @@ verifyButton.addEventListener("click", async () => {
     if (typeof viewer.queryHotspot !== "function") return null;
     const rect = viewer.getBoundingClientRect();
     const names = [
-      "screen-top-left",
-      "screen-top-right",
-      "screen-bottom-right",
-      "screen-bottom-left"
+      "hotspot-screen-top-left",
+      "hotspot-screen-top-right",
+      "hotspot-screen-bottom-right",
+      "hotspot-screen-bottom-left"
     ];
     const points = names.map(name => viewer.queryHotspot(name));
     if (points.some(point =>
