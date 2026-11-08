@@ -3397,10 +3397,10 @@ verifyButton.addEventListener("click", async () => {
     if (!viewer.loaded ||
         typeof viewer.positionAndNormalFromPoint !== "function") return;
 
-    const rect = viewer.getBoundingClientRect();
+    // model-viewer's hit-test API expects viewport (client) coordinates.
     const hit = viewer.positionAndNormalFromPoint(
-      event.clientX - rect.left,
-      event.clientY - rect.top
+      event.clientX,
+      event.clientY
     );
     if (!hit || !hit.position || !hit.normal) return;
 
