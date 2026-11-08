@@ -77,16 +77,19 @@ jobs:
                   )
                   page.wait_for_function("""() => {
                     const v=document.querySelector('.qamqor-phone-model');
-                    return v && v.loaded &&
-                      v.availableAnimations &&
-                      v.availableAnimations.includes('open-close') &&
-                      window.qamqorPhoneForm &&
-                      window.qamqorPhoneForm.getState()==='closed';
-                  }""")
+                    const o=document.getElementById('qamqor-phone-form-overlay');
+                    const l=document.querySelector('.qamqor-lock-screen-ui');
+                    return v && v.loaded && window.qamqorPhoneForm &&
+                      window.qamqorPhoneForm.getState()==='locked' &&
+                      o && !o.hidden && l && o.contains(l) &&
+                      !o.contains(document.getElementById('repair'));
+                  }""",timeout=120000)
 
                   initial = page.evaluate("""() => {
                     const v=document.querySelector('.qamqor-phone-model');
                     const mat=v.model && v.model.getMaterialByName('QAMQOR_Duo_Closed_Display');
+                    const o=document.getElementById('qamqor-phone-form-overlay');
+                    const l=document.querySelector('.qamqor-lock-screen-ui');
                     return {
                       src:v.getAttribute('src'),
                       loaded:v.loaded,
@@ -94,6 +97,8 @@ jobs:
                       duration:v.duration,
                       currentTime:v.currentTime,
                       state:window.qamqorPhoneForm.getState(),
+                      lockScreenVisible:!!l && !o.hidden && o.contains(l),
+                      requestFormStillClosed:!o.contains(document.getElementById('repair')),
                       outerMaterial:mat ? {
                         name:mat.name,
                         loaded:mat.isLoaded,
@@ -105,78 +110,41 @@ jobs:
                   result["initial_state"]=initial
                   result["checks"]["duo_asset_loaded"]="QAMQOR-iPhone-Duo.glb" in (initial.get("src") or "")
                   result["checks"]["open_close_animation_preserved"]="open-close" in initial.get("animations",[])
-                  closed_pose_time = initial.get("duration",0) - min(
-                    0.05, initial.get("duration",0) * 0.025
+                  closed_pose_time=initial.get("duration",0)-min(
+                    0.05,initial.get("duration",0)*0.025
                   )
                   result["checks"]["starts_in_closed_pose"]=(
                     initial.get("duration",0)>0 and
                     abs(initial.get("currentTime",0)-closed_pose_time)<0.08 and
-                    initial.get("state")=="closed"
+                    initial.get("state")=="locked"
                   )
                   result["checks"]["closed_screen_art_material_present"]=bool(
                     initial.get("outerMaterial") and
                     initial["outerMaterial"]["name"]=="QAMQOR_Duo_Closed_Display"
                   )
-
-                  # Click the actual transparent hotspot that sits over the baked 3D CTA.
-                  hitbox = page.locator(".qamqor-phone-model .qamqor-apply-hitbox")
-                  hit = hitbox.bounding_box()
-                  if not hit or hit["width"] < 20 or hit["height"] < 15:
-                    raise RuntimeError("The physical Duo request-button hotspot is missing or has no hit area.")
-                  hit_center = {
-                    "x": hit["x"] + hit["width"] / 2,
-                    "y": hit["y"] + hit["height"] / 2,
-                    "width": hit["width"],
-                    "height": hit["height"]
-                  }
-                  result["closed_screen_hit_test"]=hit_center
-                  result["checks"]["closed_outer_screen_is_visible"]=True
-                  page.locator(".qamqor-phone-model").screenshot(
-                    path="diagnostics/duo/duo-closed-screen.png"
+                  result["checks"]["lock_screen_shows_on_folded_outer_display"]=(
+                    initial.get("lockScreenVisible") and
+                    initial.get("requestFormStillClosed")
                   )
-                  page.mouse.click(hit_center["x"],hit_center["y"])
 
-                  # The first action must reveal the lock screen only. The form must remain hidden.
-                  page.wait_for_function("""() => {
-                    const o=document.getElementById('qamqor-phone-form-overlay');
-                    const l=document.querySelector('.qamqor-lock-screen-ui');
-                    const f=document.getElementById('repair');
-                    return window.qamqorPhoneForm &&
-                      window.qamqorPhoneForm.getState()==='locked' &&
-                      !window.qamqorPhoneForm.isOpen() &&
-                      o && !o.hidden && l && o.contains(l) &&
-                      !o.contains(f);
-                  }""",timeout=10000)
-                  locked = page.evaluate("""() => {
-                    const v=document.querySelector('.qamqor-phone-model');
-                    const o=document.getElementById('qamqor-phone-form-overlay');
-                    const l=document.querySelector('.qamqor-lock-screen-ui');
-                    const r=window.qamqorPhoneForm.getScreenRect();
-                    const b=l.getBoundingClientRect();
-                    return {
-                      state:window.qamqorPhoneForm.getState(),
-                      lockScreenVisible:!!l && !o.hidden && o.contains(l),
-                      formStillOutsideOverlay:!o.contains(document.getElementById('repair')),
-                      swipeHint:l.textContent.includes('жоғары сырғытыңыз'),
-                      cameraControls:v.hasAttribute('camera-controls'),
-                      innerScreenRect:r,
-                      lockRect:{left:b.left,top:b.top,width:b.width,height:b.height}
-                    };
-                  }""")
-                  result["locked_state"]=locked
-                  result["checks"]["tap_shows_lock_screen_first"]=(
-                    locked["state"]=="locked" and locked["lockScreenVisible"] and
-                    locked["formStillOutsideOverlay"] and locked["swipeHint"] and
-                    locked["innerScreenRect"] is not None
+                  lock_box=page.locator(".qamqor-lock-screen-ui").bounding_box()
+                  if not lock_box or lock_box["width"]<30 or lock_box["height"]<60:
+                    raise RuntimeError("The lock screen is not projected on the folded outer display.")
+                  result["closed_screen_hit_test"]={
+                    "x":lock_box["x"]+lock_box["width"]/2,
+                    "y":lock_box["y"]+lock_box["height"]/2,
+                    "width":lock_box["width"],
+                    "height":lock_box["height"]
+                  }
+                  page.locator(".qamqor-phone-model").screenshot(
+                    path="diagnostics/duo/duo-closed-lock-screen.png"
                   )
                   page.locator(".qamqor-lock-screen-ui").screenshot(
-                    path="diagnostics/duo/duo-lock-screen.png"
+                    path="diagnostics/duo/duo-outer-lock-screen.png"
                   )
 
-                  # A real upward drag dismisses the lock screen. Only then may the repair form appear.
-                  lock_box=page.locator(".qamqor-lock-screen-ui").bounding_box()
-                  if not lock_box:
-                    raise RuntimeError("Duo lock screen is not projected onto the inner display.")
+                  # Swipe UP on the folded outer display: only now should Duo unfold
+                  # and the request form attach to the inner display.
                   swipe_x=lock_box["x"]+lock_box["width"]*0.5
                   swipe_start_y=lock_box["y"]+lock_box["height"]*0.82
                   swipe_end_y=lock_box["y"]+lock_box["height"]*0.18
@@ -190,8 +158,9 @@ jobs:
                     return window.qamqorPhoneForm &&
                       window.qamqorPhoneForm.getState()==='form' &&
                       window.qamqorPhoneForm.isOpen() &&
-                      o && !o.hidden && o.contains(f);
-                  }""",timeout=10000)
+                      o && !o.hidden && o.contains(f) &&
+                      !document.querySelector('.qamqor-lock-screen-ui');
+                  }""",timeout=15000)
 
                   opened = page.evaluate("""() => {
                     const v=document.querySelector('.qamqor-phone-model');
@@ -208,12 +177,15 @@ jobs:
                     };
                   }""")
                   result["opened_state"]=opened
-                  result["checks"]["swipe_up_unlocks_to_form"]=(
+                  result["checks"]["swipe_up_unlocks_then_opens_duo_and_form"]=(
                     opened["state"]=="form" and opened["currentTime"]<0.08 and
                     opened["formInsideOverlay"] and opened["lockScreenGone"] and
                     opened["innerScreenRect"] is not None
                   )
                   result["checks"]["camera_controls_enabled_for_form"]=opened["cameraControls"]
+                  page.locator("#qamqor-phone-form-overlay").screenshot(
+                    path="diagnostics/duo/duo-inner-request-form.png"
+                  )
 
                   # Drag the empty heading area: the phone should rotate and the
                   # form's projective overlay must follow the measured screen.
@@ -300,6 +272,7 @@ jobs:
                     const v=document.querySelector('.qamqor-phone-model');
                     const f=document.getElementById('repair');
                     const o=document.getElementById('qamqor-phone-form-overlay');
+                    const l=document.querySelector('.qamqor-lock-screen-ui');
                     return {
                       state:window.qamqorPhoneForm.getState(),
                       open:window.qamqorPhoneForm.isOpen(),
@@ -309,20 +282,22 @@ jobs:
                       paused:v.paused,
                       cameraControls:v.hasAttribute('camera-controls'),
                       formHidden:f.hidden,
-                      overlayHidden:o.hidden
+                      overlayHidden:o.hidden,
+                      lockScreenVisible:!!l && !o.hidden && o.contains(l)
                     };
                   }""")
                   result["closed_again_state"]=closed_again
                   closed_pose_time = closed_again["duration"] - min(
                     0.05, closed_again["duration"] * 0.025
                   )
-                  result["checks"]["close_plays_forward_to_closed_pose"]=(
-                    closed_again["state"]=="closed" and
+                  result["checks"]["close_returns_to_folded_lock_screen"]=(
+                    closed_again["state"]=="locked" and
                     not closed_again["open"] and
                     abs(closed_again["currentTime"]-closed_pose_time)<0.08 and
                     closed_again["cameraControls"] and
                     closed_again["formHidden"] and
-                    closed_again["overlayHidden"]
+                    not closed_again["overlayHidden"] and
+                    closed_again["lockScreenVisible"]
                   )
                   page.locator(".qamqor-phone-model").screenshot(
                     path="diagnostics/duo/duo-closed-again.png"
