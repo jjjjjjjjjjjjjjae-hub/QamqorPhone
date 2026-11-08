@@ -139,16 +139,19 @@ jobs:
                     path="diagnostics/duo/duo-closed-screen.png"
                   )
 
-                  if hit:
-                    page.mouse.click(hit["x"],hit["y"])
-                    page.wait_for_function("""() =>
-                      window.qamqorPhoneForm &&
-                      window.qamqorPhoneForm.getState()==='form' &&
-                      window.qamqorPhoneForm.isOpen() &&
-                      document.getElementById('qamqor-phone-form-overlay') &&
-                      !document.getElementById('qamqor-phone-form-overlay').hidden &&
-                      document.getElementById('qamqor-phone-form-overlay').contains(document.getElementById('repair'))
-                    """,timeout=10000)
+                  if not hit:
+                    raise RuntimeError(
+                      "Closed Duo outer display was not detected by model-viewer ray casting."
+                    )
+                  page.mouse.click(hit["x"],hit["y"])
+                  page.wait_for_function("""() =>
+                    window.qamqorPhoneForm &&
+                    window.qamqorPhoneForm.getState()==='form' &&
+                    window.qamqorPhoneForm.isOpen() &&
+                    document.getElementById('qamqor-phone-form-overlay') &&
+                    !document.getElementById('qamqor-phone-form-overlay').hidden &&
+                    document.getElementById('qamqor-phone-form-overlay').contains(document.getElementById('repair'))
+                  """,timeout=10000)
 
                   opened = page.evaluate("""() => {
                     const v=document.querySelector('.qamqor-phone-model');
