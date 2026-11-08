@@ -2172,7 +2172,7 @@ main [data-app-page]:not([hidden]){
       camera-orbit="0deg 75deg 100%"
       field-of-view="30deg"
       tabindex="0">
-      <a slot="hotspot-apply" class="model-hotspot-apply" href="#repair" data-position="0 -0.02 0.03" data-normal="0 0 1" data-visibility-attribute="visible" aria-label="Өтінім беру">Өтінім беру</a>
+      <a slot="hotspot-apply" class="model-hotspot-apply" href="#repair" data-position="0 0.055 0.00442" data-normal="0 0 1" data-visibility-attribute="visible" data-ready="true" aria-label="Өтінім беру">Өтінім беру</a>
     </model-viewer>
   </div>
 </section>
@@ -3434,86 +3434,7 @@ body.qamqor-home-clean .hero#top{
   }
 }
 </style>
-<script id="qamqor-model-screen-request-hotspot">
-/* Anchor the request button to the visible front-glass point of the 3D phone. */
-(() => {
-  const viewer = document.querySelector(".qamqor-phone-model");
-  if (!viewer) return;
-  const button = viewer.querySelector('[slot="hotspot-apply"]');
-  if (!button) return;
+<!-- Hotspot uses exact front-glass GLB coordinates from qamqor-3d-report.json. -->
 
-  let placed = false;
-  let attempts = 0;
-
-  const placeOnScreen = () => {
-    if (placed || !viewer.loaded ||
-        typeof viewer.positionAndNormalFromPoint !== "function" ||
-        typeof viewer.updateHotspot !== "function") return false;
-
-    const rect = viewer.getBoundingClientRect();
-    if (rect.width < 20 || rect.height < 20) return false;
-
-    // The API uses coordinates relative to the model-viewer canvas.
-    // Probe the lower-middle glass area, then choose the hit closest to the button target.
-    const targetX = 0.50;
-    const targetY = 0.68;
-    const xs = [0.44,0.47,0.50,0.53,0.56];
-    const ys = [0.54,0.58,0.62,0.66,0.70,0.74];
-    let best = null;
-
-    for (const y of ys) {
-      for (const x of xs) {
-        const hit = viewer.positionAndNormalFromPoint(rect.width*x,rect.height*y);
-        if (!hit?.position || !hit?.normal) continue;
-        // A ray hit is already the visible surface; do not compare model-space
-        // normals with world-space camera directions (that moves the button off target).
-        const score = Math.hypot((x-targetX)*1.0,(y-targetY)*0.8);
-        if (!best || score < best.score) {
-          best = {hit,x,y,score};
-        }
-      }
-    }
-
-    if (!best) return false;
-
-    const position = best.hit.position.toString();
-    const normal = best.hit.normal.toString();
-    let surface;
-    if (typeof viewer.surfaceFromPoint === "function") {
-      surface = viewer.surfaceFromPoint(rect.width*best.x,rect.height*best.y) || undefined;
-    }
-
-    viewer.updateHotspot({
-      name:"hotspot-apply",
-      position,
-      normal,
-      ...(surface ? {surface} : {})
-    });
-    button.dataset.position = position;
-    button.dataset.normal = normal;
-    if (surface) button.dataset.surface = surface;
-    button.dataset.ready = "true";
-    placed = true;
-    return true;
-  };
-
-  const retry = () => {
-    if (placed || attempts++ >= 60) return;
-    if (!placeOnScreen()) requestAnimationFrame(retry);
-  };
-
-  viewer.addEventListener("load", () => {
-    attempts = 0;
-    requestAnimationFrame(() => requestAnimationFrame(retry));
-  });
-  viewer.addEventListener("camera-change", () => {
-    if (!placed) retry();
-  });
-  window.addEventListener("resize", () => {
-    if (!placed) retry();
-  }, {passive:true});
-  if (viewer.loaded) retry();
-})();
-</script>
 </body>
 </html>
