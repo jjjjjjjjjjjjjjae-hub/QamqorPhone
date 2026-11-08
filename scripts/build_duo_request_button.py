@@ -279,7 +279,7 @@ def main():
         "texture_bytes": len(png_bytes),
         "lock_screen_artwork": True,
         "lock_screen_time": "9:41",
-        "physical_request_button_box_px": [82, 835, width - 82, 965],
+        "physical_request_button_box_px": [82, 835, TEXTURE_SIZE[0] - 82, 965],
         "animations_preserved": True,
         "animations_count": len(animations_after),
         "animations": [
