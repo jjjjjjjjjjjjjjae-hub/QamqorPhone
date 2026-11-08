@@ -2195,46 +2195,7 @@ main [data-app-page]:not([hidden]){
   opacity:0!important;
   pointer-events:none!important;
 }
-body.qamqor-phone-form-open .wrap{
-  width:100vw!important;
-  height:100dvh!important;
-  max-height:100dvh!important;
-  grid-template-rows:0 minmax(0,1fr) 0!important;
-  margin:0!important;
-}
-body.qamqor-phone-form-open .site-header,
-body.qamqor-phone-form-open footer,
-body.qamqor-phone-form-open .page-context{
-  display:none!important;
-}
-body.qamqor-phone-form-open main{
-  grid-template-rows:minmax(0,1fr)!important;
-  height:100dvh!important;
-  min-height:0!important;
-  overflow:hidden!important;
-}
-body.qamqor-phone-form-open .hero#top{
-  width:100vw!important;
-  height:100dvh!important;
-  min-height:100dvh!important;
-  margin:0!important;
-  padding:0!important;
-}
-body.qamqor-phone-form-open .hero#top .premium-art{
-  width:100vw!important;
-  height:100dvh!important;
-  min-height:100dvh!important;
-  max-height:100dvh!important;
-  overflow:visible!important;
-}
-body.qamqor-phone-form-open .hero#top .qamqor-phone-model{
-  width:min(100vw,760px)!important;
-  height:100dvh!important;
-  min-height:100dvh!important;
-  max-height:100dvh!important;
-  flex:1 1 auto!important;
-  touch-action:none!important;
-}
+/* No page, background, or 3D viewer sizing changes when the request form opens. */
 .qamqor-phone-form-overlay[hidden]{display:none!important}
 .qamqor-phone-form-overlay{
   position:fixed!important;
@@ -3652,14 +3613,6 @@ verifyButton.addEventListener("click", async () => {
   const repair = document.getElementById("repair");
   if (!viewer || !repair) return;
 
-  const screen = {
-    minX: -0.0365150012,
-    maxX:  0.0365150012,
-    minY:  0.0023910000,
-    maxY:  0.1608780026,
-    z: 0.004502,
-    centerY: 0.0816345013
-  };
   const button = {
     x: 0,
     y: 0.04201275,
@@ -3680,12 +3633,10 @@ verifyButton.addEventListener("click", async () => {
   const closeButton = overlay.querySelector(".qamqor-phone-form-close");
   const content = overlay.querySelector(".qamqor-phone-form-content");
   let placeholder = null;
-  let savedView = null;
   let opening = false;
   let opened = false;
   let lastScreenRect = null;
 
-  const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
   const nextFrame = () => new Promise(resolve =>
     requestAnimationFrame(() => requestAnimationFrame(resolve))
   );
@@ -3729,24 +3680,6 @@ verifyButton.addEventListener("click", async () => {
     return true;
   }
 
-  function restoreView() {
-    document.body.classList.remove("qamqor-phone-form-open");
-    if (savedView) {
-      const view = savedView;
-      savedView = null;
-      nextFrame().then(() => {
-        viewer.cameraTarget =
-          view.target.x + "m " + view.target.y + "m " + view.target.z + "m";
-        viewer.cameraOrbit =
-          view.orbit.theta + "rad " + view.orbit.phi + "rad " + view.orbit.radius + "m";
-        if (typeof viewer.jumpCameraToGoal === "function") viewer.jumpCameraToGoal();
-        if (view.cameraControls) viewer.setAttribute("camera-controls", "");
-      });
-    } else {
-      viewer.setAttribute("camera-controls", "");
-    }
-  }
-
   async function closePhoneForm() {
     if (!opened && !opening) return;
     opened = false;
@@ -3763,7 +3696,6 @@ verifyButton.addEventListener("click", async () => {
     repair.classList.remove("qamqor-phone-form-card");
 
     try { sessionStorage.removeItem("qamqorPhoneFormOpen"); } catch (_) {}
-    restoreView();
   }
 
   async function openPhoneForm(event) {
@@ -3782,30 +3714,14 @@ verifyButton.addEventListener("click", async () => {
       window.qamqorShowPage("top", {updateHistory:false, scroll:false});
     }
 
-    const orbit = viewer.getCameraOrbit();
-    const target = viewer.getCameraTarget();
-    savedView = {
-      orbit: {theta:orbit.theta, phi:orbit.phi, radius:orbit.radius},
-      target: {x:Number(target.x), y:Number(target.y), z:Number(target.z)},
-      cameraControls: viewer.hasAttribute("camera-controls")
-    };
-
-    document.body.classList.add("qamqor-phone-form-open");
-    viewer.removeAttribute("camera-controls");
-    viewer.cameraTarget = "0m " + screen.centerY + "m " + screen.z + "m";
-    viewer.cameraOrbit = "0rad " + (Math.PI / 2) + "rad " + orbit.radius + "m";
-    if (typeof viewer.jumpCameraToGoal === "function") viewer.jumpCameraToGoal();
-
-    await nextFrame();
-    await wait(180);
-    if (typeof viewer.jumpCameraToGoal === "function") viewer.jumpCameraToGoal();
+    // Keep the original 3D camera, phone size, and page background untouched.
+    // Only measure the phone screen at its current on-screen position.
     await nextFrame();
 
     const projected = getProjectedScreenRect();
     if (!projected) {
-      restoreView();
       opening = false;
-      alert("Телефон экранының шекарасын анықтай алмадым. Камера бастапқы қалпына қайтарылды.");
+      alert("Телефон экраны көрінбей тұр. Телефонды бастапқы қалпында қалдырдым.");
       return;
     }
 
