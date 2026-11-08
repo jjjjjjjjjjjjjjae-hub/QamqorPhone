@@ -143,15 +143,11 @@ jobs:
                     path="diagnostics/duo/duo-outer-lock-screen.png"
                   )
 
-                  # Swipe UP on the folded outer display: only now should Duo unfold
-                  # and the request form attach to the inner display.
-                  swipe_x=lock_box["x"]+lock_box["width"]*0.5
-                  swipe_start_y=lock_box["y"]+lock_box["height"]*0.82
-                  swipe_end_y=lock_box["y"]+lock_box["height"]*0.18
-                  page.mouse.move(swipe_x,swipe_start_y)
-                  page.mouse.down()
-                  page.mouse.move(swipe_x,swipe_end_y,steps=8)
-                  page.mouse.up()
+                  # Press the explicit request button on the folded outer lock screen.
+                  request_button=page.locator(".qamqor-lock-cta")
+                  if not request_button.is_visible():
+                    raise RuntimeError("The lock-screen Өтінім беру button is not visible.")
+                  request_button.click()
                   page.wait_for_function("""() => {
                     const o=document.getElementById('qamqor-phone-form-overlay');
                     const f=document.getElementById('repair');
@@ -177,7 +173,7 @@ jobs:
                     };
                   }""")
                   result["opened_state"]=opened
-                  result["checks"]["swipe_up_unlocks_then_opens_duo_and_form"]=(
+                  result["checks"]["request_button_opens_duo_and_then_form"]=(
                     opened["state"]=="form" and opened["currentTime"]<0.08 and
                     opened["formInsideOverlay"] and opened["lockScreenGone"] and
                     opened["innerScreenRect"] is not None
