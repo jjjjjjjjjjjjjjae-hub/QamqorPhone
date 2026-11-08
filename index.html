@@ -3456,9 +3456,10 @@ body.qamqor-home-clean .hero#top{
     // Probe the lower-middle area of the visible phone screen, avoiding the bezel.
     [0.62,0.66,0.58,0.70,0.54].forEach(yRatio => {
       [0.50,0.47,0.53].forEach(xRatio => {
+        // positionAndNormalFromPoint expects viewport (client) coordinates.
         const hit = viewer.positionAndNormalFromPoint(
-          rect.width*xRatio,
-          rect.height*yRatio
+          rect.left + rect.width*xRatio,
+          rect.top + rect.height*yRatio
         );
         if (!hit || !hit.position || !hit.normal) return;
         const n=hit.normal;
