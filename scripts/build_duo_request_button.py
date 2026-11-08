@@ -1,205 +1,259 @@
 #!/usr/bin/env python3
-"""Build a real request button on the measured inner display of the iPhone Duo GLB."""
+"""Add the closed-state Qamqor screen artwork to the Duo GLB without dropping animations."""
 from pathlib import Path
+import io
 import json
-import numpy as np
-import trimesh
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+import struct
+from PIL import Image, ImageDraw, ImageFont, ImageOps, ImageFilter
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "iPhone duo.glb"
+LOGO = ROOT / "QamqorPhone.png"
 OUTPUT = ROOT / "QAMQOR-iPhone-Duo.glb"
 REPORT = ROOT / "qamqor-duo-button-build.json"
-TEXTURE_SIZE = (1200, 320)
-SCREEN_MATERIAL = "C_StarWhite_Screen_Inner"
+MATERIAL_NAME = "C_SW_Screen_Outer"
+OUTPUT_MATERIAL_NAME = "QAMQOR_Duo_Closed_Display"
+TEXTURE_SIZE = (768, 1120)
 
 
 def load_font(size: int):
-    for path in (
+    candidates = [
         "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
         "/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf",
-    ):
+    ]
+    for path in candidates:
         if Path(path).exists():
             return ImageFont.truetype(path, size=size)
     return ImageFont.load_default()
 
 
-def make_button_texture() -> Image.Image:
+def make_screen_artwork() -> bytes:
+    """Create the very short closed-screen state requested: logo + one CTA."""
     width, height = TEXTURE_SIZE
-    image = Image.new("RGBA", (width, height), (0, 0, 0, 0))
-
-    shadow = Image.new("RGBA", (width, height), (0, 0, 0, 0))
-    ImageDraw.Draw(shadow).rounded_rectangle(
-        (36, 42, width - 36, height - 28),
-        radius=118,
-        fill=(0, 70, 170, 90),
-    )
-    image.alpha_composite(shadow.filter(ImageFilter.GaussianBlur(18)))
-
-    mask = Image.new("L", (width, height), 0)
-    ImageDraw.Draw(mask).rounded_rectangle(
-        (30, 20, width - 30, height - 42), radius=118, fill=255
-    )
-
-    gradient = Image.new("RGBA", (width, height), (0, 0, 0, 0))
-    px = gradient.load()
-    start = (39, 135, 255)
-    end = (5, 91, 205)
-    for x in range(width):
-        t = x / max(1, width - 1)
-        color = tuple(round(start[i] * (1 - t) + end[i] * t) for i in range(3))
-        for y in range(height):
-            px[x, y] = (*color, 255)
-    gradient.putalpha(mask)
-    image.alpha_composite(gradient)
-
+    image = Image.new("RGB", (width, height), (3, 5, 10))
     draw = ImageDraw.Draw(image)
+
+    # Subtle OLED-black vignette.
+    glow = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    glow_draw = ImageDraw.Draw(glow)
+    glow_draw.ellipse(
+        (90, 180, width - 90, 800),
+        fill=(9, 33, 68, 75),
+    )
+    glow = glow.filter(ImageFilter.GaussianBlur(95))
+    image = Image.alpha_composite(image.convert("RGBA"), glow).convert("RGB")
+    draw = ImageDraw.Draw(image)
+
+    if LOGO.exists():
+        logo = Image.open(LOGO).convert("RGBA")
+        logo.thumbnail((260, 260), Image.Resampling.LANCZOS)
+        # Keep the supplied logo itself; do not redraw or replace it.
+        x = (width - logo.width) // 2
+        y = 315 + (260 - logo.height) // 2
+        image_rgba = image.convert("RGBA")
+        image_rgba.alpha_composite(logo, (x, y))
+        image = image_rgba.convert("RGB")
+        draw = ImageDraw.Draw(image)
+    else:
+        raise FileNotFoundError(f"QamqorPhone logo not found: {LOGO}")
+
+    # One restrained label beneath the logo.
+    brand = "QAMQOR PHONE"
+    font_brand = load_font(26)
+    box = draw.textbbox((0, 0), brand, font=font_brand)
+    draw.text(((width - (box[2]-box[0]))/2, 595), brand, font=font_brand, fill=(199, 214, 236))
+
+    # Single clear, tactile CTA near the lower part of the outer screen.
+    button_box = (82, 835, width - 82, 965)
     draw.rounded_rectangle(
-        (30, 20, width - 30, height - 42),
-        radius=118,
-        outline=(154, 203, 255, 245),
-        width=4,
+        button_box,
+        radius=64,
+        fill=(17, 112, 225),
+        outline=(122, 186, 255),
+        width=3,
     )
-
-    highlight = Image.new("RGBA", (width, height), (0, 0, 0, 0))
-    ImageDraw.Draw(highlight).rounded_rectangle(
-        (48, 30, width - 48, 118),
-        radius=72,
-        fill=(255, 255, 255, 42),
-    )
-    image.alpha_composite(highlight)
-
-    draw = ImageDraw.Draw(image)
+    font_cta = load_font(39)
     label = "Өтінім беру"
-    font = load_font(126)
-    bounds = draw.textbbox((0, 0), label, font=font)
-    text_w, text_h = bounds[2] - bounds[0], bounds[3] - bounds[1]
-    x = (width - text_w) / 2 - bounds[0]
-    y = (height - text_h) / 2 - bounds[1] - 4
-    draw.text((x, y), label, font=font, fill=(255, 255, 255, 255))
-    return image
+    box = draw.textbbox((0, 0), label, font=font_cta)
+    text_w, text_h = box[2] - box[0], box[3] - box[1]
+    text_x = (width - text_w) / 2 - box[0]
+    text_y = (button_box[1] + button_box[3] - text_h) / 2 - box[1] - 2
+    draw.text((text_x, text_y), label, font=font_cta, fill=(255, 255, 255))
+
+    out = io.BytesIO()
+    image.save(out, format="PNG", optimize=True)
+    return out.getvalue()
+
+
+def parse_glb(path: Path):
+    data = path.read_bytes()
+    if len(data) < 20:
+        raise RuntimeError("Source GLB is too small")
+    magic, version, total_length = struct.unpack_from("<4sII", data, 0)
+    if magic != b"glTF" or version != 2 or total_length != len(data):
+        raise RuntimeError("Source must be a valid GLB 2.0 file")
+    offset = 12
+    document = None
+    binary = b""
+    while offset + 8 <= total_length:
+        chunk_len, chunk_type = struct.unpack_from("<II", data, offset)
+        offset += 8
+        chunk = data[offset:offset + chunk_len]
+        offset += chunk_len
+        if chunk_type == 0x4E4F534A:
+            document = json.loads(chunk.decode("utf-8").rstrip(" \\0"))
+        elif chunk_type == 0x004E4942:
+            binary = chunk
+    if document is None:
+        raise RuntimeError("Source GLB has no JSON chunk")
+    return document, binary
+
+
+def pack_glb(document, binary: bytes) -> bytes:
+    json_bytes = json.dumps(
+        document, ensure_ascii=False, separators=(",", ":")
+    ).encode("utf-8")
+    json_bytes += b" " * ((-len(json_bytes)) % 4)
+    binary += b"\\0" * ((-len(binary)) % 4)
+    json_chunk = struct.pack("<II", len(json_bytes), 0x4E4F534A) + json_bytes
+    bin_chunk = struct.pack("<II", len(binary), 0x004E4942) + binary
+    total = 12 + len(json_chunk) + len(bin_chunk)
+    return struct.pack("<4sII", b"glTF", 2, total) + json_chunk + bin_chunk
 
 
 def main():
     if not SOURCE.is_file():
-        raise FileNotFoundError(f"Source Duo GLB not found: {SOURCE}")
+        raise FileNotFoundError(SOURCE)
+    document, binary = parse_glb(SOURCE)
 
-    scene = trimesh.load(str(SOURCE), force="scene", process=False)
-    candidates = []
-    for node_name in list(scene.graph.nodes_geometry):
-        transform, geometry_name = scene.graph.get(node_name)
-        geom = scene.geometry[geometry_name]
-        material = getattr(getattr(geom, "visual", None), "material", None)
-        material_name = getattr(material, "name", "") if material else ""
-        if material_name == SCREEN_MATERIAL:
-            world_vertices = trimesh.transform_points(
-                np.asarray(geom.vertices, dtype=float), transform
-            )
-            if len(world_vertices):
-                candidates.append((node_name, geometry_name, world_vertices))
-
-    if not candidates:
+    animations_before = json.loads(json.dumps(document.get("animations", [])))
+    materials = document.setdefault("materials", [])
+    matches = [
+        i for i, material in enumerate(materials)
+        if material.get("name") == MATERIAL_NAME
+    ]
+    if len(matches) != 1:
         raise RuntimeError(
-            f"Could not find the inner display material {SCREEN_MATERIAL!r}"
+            f"Expected one {MATERIAL_NAME!r} material, found {len(matches)}"
         )
+    material_index = matches[0]
 
-    # This exported model has one large, flat inner screen spanning both halves.
-    screen_node, screen_mesh, vertices = max(
-        candidates, key=lambda item: len(item[2])
+    # Ensure the external display material is actually referenced by a mesh primitive
+    # with UV coordinates. No model-space coordinates or animation channels are changed.
+    mesh_indices = []
+    for mesh_index, mesh in enumerate(document.get("meshes", [])):
+        for primitive in mesh.get("primitives", []):
+            if primitive.get("material") == material_index:
+                if "TEXCOORD_0" not in primitive.get("attributes", {}):
+                    raise RuntimeError(
+                        f"Outer screen mesh {mesh_index} has no TEXCOORD_0"
+                    )
+                mesh_indices.append(mesh_index)
+                break
+    if not mesh_indices:
+        raise RuntimeError("No mesh primitive uses the external screen material")
+
+    png_bytes = make_screen_artwork()
+    buffers = document.setdefault("buffers", [])
+    if len(buffers) != 1:
+        raise RuntimeError("Expected one embedded GLB buffer")
+    buffer_length = int(buffers[0].get("byteLength", 0))
+    if buffer_length > len(binary):
+        raise RuntimeError("GLB buffer length exceeds the binary chunk")
+    binary = binary[:buffer_length]
+    binary += b"\\0" * ((-len(binary)) % 4)
+    image_offset = len(binary)
+    binary += png_bytes
+    binary += b"\\0" * ((-len(binary)) % 4)
+    buffers[0]["byteLength"] = image_offset + len(png_bytes)
+
+    buffer_views = document.setdefault("bufferViews", [])
+    image_view_index = len(buffer_views)
+    buffer_views.append({
+        "buffer": 0,
+        "byteOffset": image_offset,
+        "byteLength": len(png_bytes),
+        "name": "QAMQOR_Duo_Closed_Screen_Image",
+    })
+
+    images = document.setdefault("images", [])
+    image_index = len(images)
+    images.append({
+        "bufferView": image_view_index,
+        "mimeType": "image/png",
+        "name": "QAMQOR_Duo_Closed_Screen",
+    })
+
+    samplers = document.setdefault("samplers", [])
+    sampler_index = len(samplers)
+    samplers.append({
+        "magFilter": 9729,
+        "minFilter": 9729,
+        "wrapS": 33071,
+        "wrapT": 33071,
+    })
+
+    textures = document.setdefault("textures", [])
+    texture_index = len(textures)
+    textures.append({
+        "sampler": sampler_index,
+        "source": image_index,
+        "name": "QAMQOR_Duo_Closed_Screen_Texture",
+    })
+
+    material = materials[material_index]
+    material["name"] = OUTPUT_MATERIAL_NAME
+    pbr = material.setdefault("pbrMetallicRoughness", {})
+    pbr["baseColorFactor"] = [1, 1, 1, 1]
+    pbr["baseColorTexture"] = {"index": texture_index, "texCoord": 0}
+    pbr["metallicFactor"] = 0.0
+    pbr["roughnessFactor"] = 0.75
+    material["emissiveFactor"] = [0.72, 0.72, 0.72]
+    material["emissiveTexture"] = {"index": texture_index, "texCoord": 0}
+    material["alphaMode"] = "OPAQUE"
+
+    # Preserve every source animation clip and every channel byte-for-byte in JSON.
+    if document.get("animations", []) != animations_before:
+        raise RuntimeError("Animation data unexpectedly changed while patching the screen")
+    output_bytes = pack_glb(document, binary)
+    OUTPUT.write_bytes(output_bytes)
+
+    # Re-open the newly packed GLB and verify its clip is still present.
+    check_document, _ = parse_glb(OUTPUT)
+    animations_after = check_document.get("animations", [])
+    if animations_after != animations_before:
+        raise RuntimeError("Output GLB lost or changed source animations")
+    output_material = next(
+        (m for m in check_document.get("materials", [])
+         if m.get("name") == OUTPUT_MATERIAL_NAME),
+        None,
     )
-    screen_min = vertices.min(axis=0)
-    screen_max = vertices.max(axis=0)
-    screen_size = screen_max - screen_min
-    screen_width = float(screen_size[0])
-    screen_height = float(screen_size[1])
-    screen_front_z = float(screen_max[2])
-
-    if screen_width < 0.08 or screen_height < 0.05:
-        raise RuntimeError(
-            "Measured inner screen bounds are unexpectedly small; refusing to add a misaligned button"
-        )
-    if float(screen_size[2]) > 0.00002:
-        raise RuntimeError(
-            f"Inner display is not sufficiently planar (Z thickness {screen_size[2]:.8f} m)"
-        )
-
-    # Button is centred across the inner screen, 20% up from its lower edge.
-    button_width = screen_width * 0.50
-    button_height = screen_width * 0.085
-    button_center_x = float((screen_min[0] + screen_max[0]) / 2)
-    button_center_y = float(screen_min[1] + screen_height * 0.20)
-    button_z = screen_front_z + 0.00020
-
-    half_w, half_h = button_width / 2, button_height / 2
-    button_vertices = np.array([
-        [button_center_x - half_w, button_center_y - half_h, button_z],
-        [button_center_x + half_w, button_center_y - half_h, button_z],
-        [button_center_x + half_w, button_center_y + half_h, button_z],
-        [button_center_x - half_w, button_center_y + half_h, button_z],
-    ], dtype=np.float64)
-    faces = np.array([[0, 1, 2], [0, 2, 3]], dtype=np.int64)
-    uv = np.array([
-        [0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0]
-    ], dtype=np.float64)
-
-    material = trimesh.visual.material.PBRMaterial(
-        name="QAMQOR_Duo_Request_Button_Material",
-        baseColorTexture=make_button_texture(),
-        metallicFactor=0.0,
-        roughnessFactor=0.30,
-        alphaMode="OPAQUE",
-        doubleSided=False,
-    )
-    mesh = trimesh.Trimesh(
-        vertices=button_vertices,
-        faces=faces,
-        visual=trimesh.visual.texture.TextureVisuals(uv=uv, material=material),
-        process=False,
-    )
-    scene.add_geometry(
-        mesh,
-        geom_name="QAMQOR_Duo_Request_Button_Mesh",
-        node_name="QAMQOR_Duo_Request_Button",
-    )
-    OUTPUT.write_bytes(scene.export(file_type="glb"))
-
-    check = trimesh.load(str(OUTPUT), force="scene", process=False)
-    button_found = any(
-        "QAMQOR_Duo_Request_Button" in str(node)
-        or "QAMQOR_Duo_Request_Button" in str(check.graph.get(node)[1])
-        for node in list(check.graph.nodes_geometry)
-    )
-    if not button_found:
-        raise RuntimeError("Request button was not found in the exported Duo GLB")
+    if not output_material:
+        raise RuntimeError("Output GLB does not contain the Qamqor external-screen material")
 
     report = {
         "source": SOURCE.name,
         "output": OUTPUT.name,
         "source_size_bytes": SOURCE.stat().st_size,
         "output_size_bytes": OUTPUT.stat().st_size,
-        "screen_material": SCREEN_MATERIAL,
-        "screen_node": str(screen_node),
-        "screen_mesh": str(screen_mesh),
-        "screen_bounds_min": [float(x) for x in screen_min],
-        "screen_bounds_max": [float(x) for x in screen_max],
-        "screen_width": screen_width,
-        "screen_height": screen_height,
-        "screen_front_z": screen_front_z,
-        "button": {
-            "center": [button_center_x, button_center_y, button_z],
-            "size": [button_width, button_height],
-            "bounds_min": [button_center_x-half_w, button_center_y-half_h, button_z],
-            "bounds_max": [button_center_x+half_w, button_center_y+half_h, button_z],
-            "normal": [0, 0, 1],
-            "physical_glb_mesh": True,
-            "texture_size": list(TEXTURE_SIZE),
-        },
-        "geometry_count_after_export": len(check.geometry),
-        "button_mesh_found_after_export": button_found,
+        "closed_screen_material_source": MATERIAL_NAME,
+        "closed_screen_material_output": OUTPUT_MATERIAL_NAME,
+        "screen_mesh_indices": mesh_indices,
+        "texture_size": list(TEXTURE_SIZE),
+        "texture_bytes": len(png_bytes),
+        "animations_preserved": True,
+        "animations_count": len(animations_after),
+        "animations": [
+            {"name": a.get("name"), "channels": len(a.get("channels", []))}
+            for a in animations_after
+        ],
         "source_asset_modified": False,
     }
-    REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
-    print("QAMQOR_DUO_BUTTON_BUILD=" + json.dumps(report, ensure_ascii=False))
+    REPORT.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    print("QAMQOR_DUO_BUILD=" + json.dumps(report, ensure_ascii=False))
 
 
 if __name__ == "__main__":
