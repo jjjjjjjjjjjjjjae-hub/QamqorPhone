@@ -1383,149 +1383,6 @@ input:focus,select:focus,textarea:focus{
 </style>
 
 
-<style id="qamqor-fixed-phone-position">
-/* The phone stays still: no vertical float, approach, zoom or pointer tilt. */
-.device{
-  animation:none!important;
-  transition:none!important;
-  transform:rotate(-8deg)!important;
-  translate:0 0!important;
-  scale:1!important;
-}
-.premium-art{
-  --device-tilt-x:0deg!important;
-  --device-tilt-y:0deg!important;
-}
-</style>
-
-
-<style id="qamqor-phone-no-motion-final">
-/* Prevent the entire phone illustration and phone from shifting vertically. */
-.premium-art.qamqor-reveal,
-.premium-art.qamqor-reveal.qamqor-visible,
-.premium-art{
-  opacity:1!important;
-  transform:none!important;
-  translate:none!important;
-  animation:none!important;
-  transition:none!important;
-  will-change:auto!important;
-}
-.premium-art .device,
-.device{
-  animation:none!important;
-  transition:none!important;
-  transform:rotate(-8deg)!important;
-  translate:none!important;
-  scale:none!important;
-  will-change:auto!important;
-}
-</style>
-
-
-<style id="qamqor-phone-motion-hard-lock">
-/* Hard lock the decorative phone in place. Background video remains animated. */
-main .hero[data-app-page]{
-  animation:none!important;
-}
-main .hero .premium-art,
-main .hero .premium-art.qamqor-reveal,
-main .hero .premium-art.qamqor-visible{
-  position:relative!important;
-  top:auto!important;
-  bottom:auto!important;
-  transform:none!important;
-  translate:none!important;
-  animation:none!important;
-  transition:none!important;
-  opacity:1!important;
-  will-change:auto!important;
-}
-main .hero .premium-art .device,
-main .hero .premium-art .device:hover,
-main .hero .premium-art .device:focus,
-main .hero .premium-art .device:active{
-  position:relative!important;
-  top:0!important;
-  bottom:auto!important;
-  margin-top:0!important;
-  margin-bottom:0!important;
-  transform:translate3d(0,0,0) rotate(-8deg) scale(1)!important;
-  translate:none!important;
-  rotate:none!important;
-  scale:none!important;
-  animation-name:none!important;
-  animation-duration:0s!important;
-  animation-iteration-count:1!important;
-  animation-play-state:paused!important;
-  transition-property:none!important;
-  will-change:auto!important;
-}
-</style>
-
-
-<style id="qamqor-phone-absolute-still">
-/* Final stationary phone: no floating, zooming, tilting or reveal movement. */
-main .hero .premium-art,
-main .hero .premium-art.qamqor-reveal,
-main .hero .premium-art.qamqor-visible{
-  position:relative!important;
-  top:auto!important;
-  bottom:auto!important;
-  left:auto!important;
-  right:auto!important;
-  opacity:1!important;
-  transform:none!important;
-  translate:none!important;
-  rotate:none!important;
-  scale:none!important;
-  zoom:1!important;
-  animation:none!important;
-  transition:none!important;
-  filter:none!important;
-  perspective:none!important;
-  will-change:auto!important;
-}
-main .hero .premium-art .device,
-main .hero .premium-art .device:hover,
-main .hero .premium-art .device:focus,
-main .hero .premium-art .device:active{
-  position:relative!important;
-  top:auto!important;
-  bottom:auto!important;
-  left:auto!important;
-  right:auto!important;
-  margin:0!important;
-  transform:none!important;
-  translate:none!important;
-  rotate:none!important;
-  scale:none!important;
-  zoom:1!important;
-  animation:none!important;
-  animation-name:none!important;
-  animation-duration:0s!important;
-  animation-delay:0s!important;
-  animation-iteration-count:1!important;
-  animation-play-state:paused!important;
-  transition:none!important;
-  filter:none!important;
-  will-change:auto!important;
-}
-main .hero .premium-art .device *,
-main .hero .premium-art .device *::before,
-main .hero .premium-art .device *::after{
-  animation:none!important;
-  transition:none!important;
-}
-@media(prefers-reduced-motion:no-preference){
-  main .hero .premium-art,
-  main .hero .premium-art .device{
-    scroll-behavior:auto!important;
-  }
-}
-</style>
-
-
 <style id="qamqor-one-screen-layout">
 /* One-screen app layout: the page itself never zooms or scrolls vertically. */
 html,body{
@@ -1829,6 +1686,136 @@ footer{
 }
 </style>
 
+
+<style id="qamqor-home-phone-only-final">
+/* Homepage: keep only the brand and a centred, animated 3D phone. */
+.site-header .header-right,
+footer{display:none!important}
+.site-header{
+  display:flex!important;
+  justify-content:flex-start!important;
+  align-items:center!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+.hero#top{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:minmax(0,1fr)!important;
+  place-items:center!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  gap:0!important;
+  overflow:visible!important;
+}
+.hero#top .premium-art{
+  display:grid!important;
+  place-items:center!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  max-height:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:visible!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  perspective:1100px!important;
+}
+.hero#top .device{
+  display:flex!important;
+  align-self:center!important;
+  justify-self:center!important;
+  flex:0 0 auto!important;
+  width:clamp(178px,14vw,218px)!important;
+  height:clamp(310px,48vh,410px)!important;
+  margin:0!important;
+  transform-style:preserve-3d!important;
+  transform-origin:center center!important;
+  animation:qamqorPhone3D 6s ease-in-out infinite!important;
+  transition:none!important;
+  will-change:transform!important;
+}
+.hero#top .device-screen{
+  gap:11px!important;
+  padding:16px 10px!important;
+}
+.hero#top .device-logo{
+  width:clamp(72px,6vw,90px)!important;
+  height:clamp(72px,6vw,90px)!important;
+  margin:5px 0 0!important;
+}
+.hero#top .device-screen>strong{font-size:14px!important}
+.hero#top .device-screen>span{font-size:8px!important}
+.device-apply{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:122px!important;
+  min-height:42px!important;
+  margin-top:8px!important;
+  padding:10px 13px!important;
+  border:1px solid rgba(255,255,255,.3)!important;
+  border-radius:999px!important;
+  color:#fff!important;
+  background:linear-gradient(135deg,#239aff,#075fc8)!important;
+  box-shadow:0 8px 22px rgba(0,91,190,.30),inset 0 1px rgba(255,255,255,.24)!important;
+  font:800 12px/1.1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+  letter-spacing:0!important;
+  text-decoration:none!important;
+  white-space:nowrap!important;
+  cursor:pointer!important;
+  text-shadow:none!important;
+}
+.device-apply:hover{background:linear-gradient(135deg,#55b5ff,#0872df)!important}
+@keyframes qamqorPhone3D{
+  0%,100%{transform:translateY(0) perspective(1100px) rotateX(2deg) rotateY(-7deg) rotateZ(-5deg)}
+  50%{transform:translateY(-11px) perspective(1100px) rotateX(-2deg) rotateY(7deg) rotateZ(-3deg)}
+}
+@media(min-width:901px){
+  .hero#top .premium-art{height:100%!important}
+}
+@media(max-width:900px){
+  .hero#top{
+    grid-template-columns:1fr!important;
+    grid-template-rows:minmax(0,1fr)!important;
+  }
+  .hero#top .premium-art{height:100%!important}
+  .hero#top .device{
+    width:clamp(154px,25vw,190px)!important;
+    height:clamp(265px,39vh,330px)!important;
+  }
+  .hero#top .device-logo{width:64px!important;height:64px!important}
+  .hero#top .device-screen{gap:8px!important;padding:12px 8px!important}
+  .hero#top .device-apply{width:108px!important;min-height:38px!important;font-size:11px!important}
+}
+@media(max-width:620px){
+  .hero#top .premium-art{height:100%!important}
+  .hero#top .device{
+    width:clamp(142px,42vw,170px)!important;
+    height:clamp(245px,38vh,300px)!important;
+  }
+  .hero#top .device-logo{width:58px!important;height:58px!important}
+  .hero#top .device-screen{gap:7px!important;padding:10px 7px!important}
+  .hero#top .device-screen>strong{font-size:11px!important}
+  .hero#top .device-screen>span{font-size:6px!important}
+  .hero#top .device-apply{width:98px!important;min-height:34px!important;font-size:10px!important}
+}
+@media(max-height:650px) and (min-width:901px){
+  .hero#top .device{height:clamp(240px,42vh,290px)!important;width:clamp(138px,12vw,168px)!important}
+  .hero#top .device-logo{width:64px!important;height:64px!important}
+  .hero#top .device-screen{gap:7px!important;padding:9px 7px!important}
+  .hero#top .device-apply{min-height:34px!important}
+}
+</style>
+
 </head>
 <body>
 <div id="qamqor-video-background" aria-hidden="true">
@@ -1839,42 +1826,21 @@ footer{
 </div>
 
 <div class="wrap">
-<header class="site-header"><a class="brand" href="#top" aria-label="QAMQOR PHONE басты беті"><div class="mark"><img src="QamqorPhone.png" alt="QAMQOR PHONE логотипі" width="46" height="46"></div><div>QAMQOR PHONE<small>PHONE REPAIR SERVICE</small></div></a><div class="header-right"><span class="topnote"><i></i> Онлайн өтінім қабылдаймыз</span></div></header>
+<header class="site-header"><a class="brand" href="#top" aria-label="QAMQOR PHONE басты беті"><div class="mark"><img src="QamqorPhone.png" alt="QAMQOR PHONE логотипі" width="46" height="46"></div><div>QAMQOR PHONE<small>PHONE REPAIR SERVICE</small></div></a></header>
 <main>
 
 <section class="hero" id="top" data-app-page="home">
-  <div class="hero-copy">
-    
-    
-    <p class="lead">Телефон жөндеуді оңай бастаңыз. Қажетті қызметті таңдаңыз, мекенжайыңызды белгілеңіз — маман өтініміңізді алып, сізбен байланысады.</p>
-    <div class="hero-actions">
-      <a class="hero-cta" href="#repair">Өтінім қалдыру <span>↗</span></a>
-      <a class="hero-secondary" href="#services">Қызметтерді көру <span>↓</span></a>
-    </div>
-    <div class="hero-points">
-      <span><i>✓</i> Ыңғайлы онлайн өтінім</span>
-      <span><i>✓</i> Картадан мекенжай белгілеу</span>
-      <span><i>✓</i> Менеджермен тікелей байланыс</span>
-    </div>
-  </div>
-  <div class="art premium-art" aria-label="QAMQOR PHONE жөндеу қызметінің иллюстрациясы">
-    <div class="art-grid"></div>
-    <div class="art-orbit orbit-one"></div>
-    <div class="art-orbit orbit-two"></div>
-    <div class="art-glow"></div>
-    <div class="hero-float hero-float-top"><span class="float-icon">✦</span><span><strong>QAMQOR CARE</strong><small>Сізге ыңғайлы сервис</small></span></div>
+  <div class="art premium-art" aria-label="QAMQOR PHONE 3D телефоны">
     <div class="device">
       <div class="device-camera"></div>
       <div class="device-screen">
-        <div class="device-logo"><img src="QamqorPhone.png" alt=""></div>
+        <div class="device-logo"><img src="QamqorPhone.png" alt="QAMQOR PHONE"></div>
         <strong>QAMQOR</strong>
         <span>PHONE SERVICE</span>
-        <div class="device-check">✓</div>
+        <a class="device-apply" href="#repair">Өтінім беру</a>
       </div>
       <span class="device-shine"></span>
     </div>
-    <div class="hero-float hero-float-bottom"><span class="float-check">✓</span><span><strong>Өтінім онлайн</strong><small>Бірнеше қадам ғана</small></span></div>
-    
   </div>
 </section>
 
