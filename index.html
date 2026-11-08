@@ -2199,15 +2199,19 @@ main [data-app-page]:not([hidden]){
 .qamqor-phone-form-overlay[hidden]{display:none!important}
 .qamqor-phone-form-overlay{
   position:fixed!important;
+  left:0!important;
+  top:0!important;
   z-index:20000!important;
   box-sizing:border-box!important;
   overflow:hidden!important;
-  border:1px solid rgba(206,228,255,.55)!important;
-  border-radius:clamp(20px,5.5vw,42px)!important;
-  background:#101a29!important;
-  box-shadow:0 0 0 1px rgba(3,8,16,.9),0 12px 45px rgba(0,0,0,.42),inset 0 0 0 1px rgba(255,255,255,.12)!important;
+  border:0!important;
+  border-radius:9% / 3.5%!important;
+  background:transparent!important;
+  box-shadow:none!important;
   color:#f5f8ff!important;
   pointer-events:auto!important;
+  transform-origin:0 0!important;
+  will-change:transform,width,height;
 }
 .qamqor-phone-form-content{
   position:absolute!important;
@@ -2215,6 +2219,8 @@ main [data-app-page]:not([hidden]){
   min-width:0!important;
   min-height:0!important;
   overflow:hidden!important;
+  border-radius:inherit!important;
+  background:transparent!important;
 }
 .qamqor-phone-form-close{
   position:absolute!important;
@@ -2240,6 +2246,7 @@ main [data-app-page]:not([hidden]){
 #repair.qamqor-phone-form-card{
   position:absolute!important;
   inset:0!important;
+  border-radius:inherit!important;
   display:flex!important;
   flex-direction:column!important;
   width:100%!important;
@@ -3643,29 +3650,70 @@ verifyButton.addEventListener("click", async () => {
 
   function getProjectedScreenRect() {
     if (typeof viewer.queryHotspot !== "function") return null;
-    const rect = viewer.getBoundingClientRect();
+    const viewerRect = viewer.getBoundingClientRect();
     const names = [
       "hotspot-screen-top-left",
       "hotspot-screen-top-right",
       "hotspot-screen-bottom-right",
       "hotspot-screen-bottom-left"
     ];
-    const points = names.map(name => viewer.queryHotspot(name));
-    if (points.some(point =>
+    const hotspots = names.map(name => viewer.queryHotspot(name));
+    if (hotspots.some(point =>
       !point || !point.facingCamera || !point.canvasPosition ||
       !Number.isFinite(point.canvasPosition.x) ||
       !Number.isFinite(point.canvasPosition.y)
     )) return null;
 
-    const xs = points.map(point => point.canvasPosition.x);
-    const ys = points.map(point => point.canvasPosition.y);
-    const left = rect.left + Math.min(...xs);
-    const top = rect.top + Math.min(...ys);
-    const width = Math.max(...xs) - Math.min(...xs);
-    const height = Math.max(...ys) - Math.min(...ys);
-    if (width < 120 || height < 220) return null;
+    // Convert the four real GLB screen corners into viewport coordinates.
+    const p = hotspots.map(point => ({
+      x: viewerRect.left + point.canvasPosition.x,
+      y: viewerRect.top + point.canvasPosition.y
+    }));
+    const distance = (a,b) => Math.hypot(b.x-a.x,b.y-a.y);
+    const width = (distance(p[0],p[1]) + distance(p[3],p[2])) / 2;
+    const height = (distance(p[0],p[3]) + distance(p[1],p[2])) / 2;
+    if (width < 90 || height < 180) return null;
 
-    return {left, top, width, height};
+    // Homography: map the form's rectangle onto the four projected screen corners.
+    const [p0,p1,p2,p3] = p;
+    const dx1 = p1.x-p2.x, dx2 = p3.x-p2.x;
+    const dx3 = p0.x-p1.x+p2.x-p3.x;
+    const dy1 = p1.y-p2.y, dy2 = p3.y-p2.y;
+    const dy3 = p0.y-p1.y+p2.y-p3.y;
+    const denominator = dx1*dy2-dx2*dy1;
+    let g = 0, h = 0;
+    if (Math.abs(dx3)+Math.abs(dy3) > 1e-7) {
+      if (Math.abs(denominator) < 1e-8) return null;
+      g = (dx3*dy2-dx2*dy3)/denominator;
+      h = (dx1*dy3-dx3*dy1)/denominator;
+    }
+
+    const a = p1.x-p0.x+g*p1.x;
+    const b = p3.x-p0.x+h*p3.x;
+    const c = p0.x;
+    const d = p1.y-p0.y+g*p1.y;
+    const e = p3.y-p0.y+h*p3.y;
+    const f = p0.y;
+
+    // CSS matrix3d is column-major. Source dimensions are real CSS pixels,
+    // so the form's text and controls retain their natural readable size.
+    const values = [
+      a/width, d/width, 0, g/width,
+      b/height, e/height, 0, h/height,
+      0, 0, 1, 0,
+      c, f, 0, 1
+    ];
+    const matrix = "matrix3d(" + values.map(v => Number(v.toFixed(8))).join(",") + ")";
+    const xs = p.map(point => point.x);
+    const ys = p.map(point => point.y);
+    return {
+      points:p,
+      left:Math.min(...xs),
+      top:Math.min(...ys),
+      width,
+      height,
+      matrix
+    };
   }
 
   function placeOverlay() {
@@ -3673,10 +3721,11 @@ verifyButton.addEventListener("click", async () => {
     const screenRect = getProjectedScreenRect();
     if (!screenRect) return false;
     lastScreenRect = screenRect;
-    overlay.style.left = screenRect.left + "px";
-    overlay.style.top = screenRect.top + "px";
+    overlay.style.left = "0px";
+    overlay.style.top = "0px";
     overlay.style.width = screenRect.width + "px";
     overlay.style.height = screenRect.height + "px";
+    overlay.style.transform = screenRect.matrix;
     return true;
   }
 
