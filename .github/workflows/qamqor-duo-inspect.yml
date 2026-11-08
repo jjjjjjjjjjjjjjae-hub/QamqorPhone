@@ -170,14 +170,17 @@ jobs:
                     path="diagnostics/duo/duo-inner-request-form.png"
                   )
 
-                  # Drag the empty heading area: the phone should rotate and the
-                  # form's projective overlay must follow the measured screen.
+                  # Drag the non-interactive heading area and capture diagnostics.
                   heading=page.locator("#repair .cardhead").bounding_box()
                   if not heading:
                     raise RuntimeError("The attached request form heading is not visible.")
                   before_drag=page.evaluate("""() => {
                     const v=document.querySelector('.qamqor-phone-model');
-                    return {theta:v.getCameraOrbit().theta, matrix:window.qamqorPhoneForm.getScreenRect()?.matrix};
+                    return {
+                      theta:v.getCameraOrbit().theta,
+                      matrix:window.qamqorPhoneForm.getScreenRect()?.matrix,
+                      overlayRect:document.getElementById('qamqor-phone-form-overlay').getBoundingClientRect().toJSON()
+                    };
                   }""")
                   page.evaluate("theta => window.__qamqorBeforeDragTheta=theta",before_drag["theta"])
                   start_x=heading["x"]+heading["width"]*0.52
@@ -186,20 +189,35 @@ jobs:
                   page.mouse.down()
                   page.mouse.move(start_x+62,start_y+4,steps=5)
                   page.mouse.up()
-                  page.wait_for_function("""() => {
-                    const v=document.querySelector('.qamqor-phone-model');
-                    const o=document.getElementById('qamqor-phone-form-overlay');
-                    const r=window.qamqorPhoneForm.getScreenRect();
-                    return v && o && !o.hidden && r && o.style.transform===r.matrix &&
-                      Math.abs(v.getCameraOrbit().theta-window.__qamqorBeforeDragTheta)>0.05;
-                  }""",arg=None,timeout=10000)
+                  drag_wait_error=None
+                  try:
+                    page.wait_for_function("""() => {
+                      const v=document.querySelector('.qamqor-phone-model');
+                      const o=document.getElementById('qamqor-phone-form-overlay');
+                      const r=window.qamqorPhoneForm.getScreenRect();
+                      return v && o && !o.hidden && r && o.style.transform===r.matrix &&
+                        Math.abs(v.getCameraOrbit().theta-window.__qamqorBeforeDragTheta)>0.05;
+                    }""",timeout=4000)
+                  except Exception as exc:
+                    drag_wait_error=str(exc)
+
                   after_drag=page.evaluate("""() => {
                     const v=document.querySelector('.qamqor-phone-model');
                     const o=document.getElementById('qamqor-phone-form-overlay');
                     const r=window.qamqorPhoneForm.getScreenRect();
-                    return {theta:v.getCameraOrbit().theta,matrix:r && r.matrix,overlayTransform:o.style.transform};
+                    return {
+                      theta:v.getCameraOrbit().theta,
+                      matrix:r && r.matrix,
+                      overlayTransform:o.style.transform,
+                      debug:window.qamqorPhoneForm.getRotationDebug()
+                    };
                   }""")
-                  result["rotation_drag"]={"before":before_drag,"after":after_drag}
+                  result["rotation_drag"]={
+                    "before":before_drag,
+                    "after":after_drag,
+                    "wait_error":drag_wait_error,
+                    "heading_box":heading
+                  }
                   result["checks"]["drag_rotates_phone_and_form_follows"] = (
                     abs(after_drag["theta"]-before_drag["theta"])>0.05 and
                     after_drag["matrix"] is not None and
