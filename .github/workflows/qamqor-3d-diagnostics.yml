@@ -288,27 +288,74 @@ jobs:
                       path="diagnostics/screenshots/mobile-front.png"
                   )
 
-                  # Verify a real touchscreen tap on the 3D-attached hitbox opens the request page.
+                  # Verify a real touchscreen tap opens the existing wizard on the physical display.
                   mobile_hitbox = mobile.locator(".qamqor-apply-hitbox")
                   mobile_box = mobile_hitbox.bounding_box()
-                  if mobile_box:
-                      mobile.touchscreen.tap(
-                          mobile_box["x"] + mobile_box["width"] / 2,
-                          mobile_box["y"] + mobile_box["height"] / 2
-                      )
-                      mobile.wait_for_function(
-                          """() => {
-                            const p=document.getElementById('repair');
-                            return location.hash==='#repair' && p && !p.hidden;
-                          }""",
-                          timeout=5000
-                      )
+                  if not mobile_box:
+                      raise RuntimeError("Mobile 3D request-button hitbox has no projected bounds")
+                  mobile.touchscreen.tap(
+                      mobile_box["x"] + mobile_box["width"] / 2,
+                      mobile_box["y"] + mobile_box["height"] / 2
+                  )
+                  mobile.wait_for_function(
+                      """() => {
+                        const overlay=document.getElementById('qamqor-phone-form-overlay');
+                        const repair=document.getElementById('repair');
+                        return document.body.classList.contains('qamqor-phone-form-open') &&
+                          overlay && !overlay.hidden && repair &&
+                          overlay.contains(repair) && !repair.hidden &&
+                          window.qamqorPhoneForm && window.qamqorPhoneForm.isOpen();
+                      }""",
+                      timeout=10000
+                  )
+                  mobile_form_state = mobile.evaluate(
+                      """() => {
+                        const v=document.querySelector('.qamqor-phone-model');
+                        const overlay=document.getElementById('qamqor-phone-form-overlay');
+                        const repair=document.getElementById('repair');
+                        const r=overlay.getBoundingClientRect();
+                        const viewer=v.getBoundingClientRect();
+                        const projected=window.qamqorPhoneForm.getScreenRect();
+                        return {
+                          open:window.qamqorPhoneForm.isOpen(),
+                          formInsideOverlay:overlay.contains(repair),
+                          cameraControlsLocked:!v.hasAttribute('camera-controls'),
+                          overlayRect:{left:r.left,top:r.top,width:r.width,height:r.height},
+                          projectedScreenRect:projected,
+                          viewerRect:{left:viewer.left,top:viewer.top,width:viewer.width,height:viewer.height},
+                          overlayMatchesProjection:!!projected &&
+                            Math.abs(r.left-projected.left)<2 &&
+                            Math.abs(r.top-projected.top)<2 &&
+                            Math.abs(r.width-projected.width)<2 &&
+                            Math.abs(r.height-projected.height)<2
+                        };
+                      }"""
+                  )
+                  mobile.locator("#qamqor-phone-form-overlay").screenshot(
+                      path="diagnostics/screenshots/mobile-phone-form.png"
+                  )
+                  # Verify wizard navigation keeps the form attached to the phone.
+                  mobile.locator("#brand").fill("iPhone 13")
+                  mobile.locator("[data-wizard-next]").first.click()
+                  mobile.wait_for_function(
+                      """() => {
+                        const step=document.querySelector('#repair [data-wizard-step="1"]');
+                        const overlay=document.getElementById('qamqor-phone-form-overlay');
+                        return step && !step.hidden && overlay && overlay.contains(document.getElementById('repair'));
+                      }""",
+                      timeout=5000
+                  )
+                  mobile_wizard_stays_on_phone = mobile.evaluate(
+                      """() => !!window.qamqorPhoneForm.isOpen() &&
+                        document.body.classList.contains('qamqor-phone-form-open') &&
+                        !document.querySelector('#repair [data-wizard-step="1"]').hidden"""
+                  )
                   mobile_click_hash = mobile.evaluate("() => location.hash")
                   mobile_repair_visible = mobile.evaluate(
                       "() => { const p=document.getElementById('repair'); return !!p && !p.hidden; }"
                   )
 
-                  # A real click on the projected 3D button center must navigate to the request form.
+                  # The desktop click must also open the 3D display overlay, not navigate to another page.
                   page.evaluate(
                       """async () => {
                         const v=document.querySelector('.qamqor-phone-model');
@@ -327,15 +374,34 @@ jobs:
                   )
                   if center:
                       page.mouse.click(center["x"], center["y"])
-                      page.wait_for_timeout(500)
-                  click_test = page.evaluate("() => location.hash")
+                      page.wait_for_function(
+                          """() => {
+                            const o=document.getElementById('qamqor-phone-form-overlay');
+                            return o && !o.hidden && o.contains(document.getElementById('repair'));
+                          }""",
+                          timeout=10000
+                      )
+                  desktop_form_state = page.evaluate(
+                      """() => {
+                        const v=document.querySelector('.qamqor-phone-model');
+                        const o=document.getElementById('qamqor-phone-form-overlay');
+                        return {
+                          open:!!(window.qamqorPhoneForm && window.qamqorPhoneForm.isOpen()),
+                          formInsideOverlay:!!o && o.contains(document.getElementById('repair')),
+                          cameraControlsLocked:!v.hasAttribute('camera-controls'),
+                          locationHash:location.hash
+                        };
+                      }"""
+                  )
 
                   report["visual_rotation_test"] = {
                       "angles": tests,
                       "mobile_front": mobile_state,
                       "mobile_button_click_hash": mobile_click_hash,
                       "mobile_repair_page_visible": mobile_repair_visible,
-                      "front_button_click_hash": click_test,
+                      "mobile_phone_form": mobile_form_state,
+                      "mobile_wizard_stays_on_phone": mobile_wizard_stays_on_phone,
+                      "desktop_phone_form": desktop_form_state,
                       "screenshots": sorted(str(p) for p in pathlib.Path("diagnostics/screenshots").glob("*.png")),
                       "interpretation": {
                           "button_is_real_glb_mesh": len(report["glb_geometry"].get("button_meshes", [])) > 0,
@@ -343,8 +409,10 @@ jobs:
                           "back_hidden": next((not x["facingCamera"] for x in tests if x["angle"] == 180), None),
                           "projected_width_at_front": next((x["projectedButtonWidthPx"] for x in tests if x["angle"] == 0), None),
                           "projected_width_at_side": next((x["projectedButtonWidthPx"] for x in tests if x["angle"] == 89), None),
-                          "click_reached_request_form": click_test == "#repair",
-                          "mobile_touch_reached_request_form": mobile_click_hash == "#repair" and mobile_repair_visible
+                          "click_reached_request_form": bool(desktop_form_state and desktop_form_state["open"] and desktop_form_state["formInsideOverlay"]),
+                          "mobile_touch_reached_request_form": bool(mobile_form_state and mobile_form_state["open"] and mobile_form_state["formInsideOverlay"]),
+                          "screen_overlay_matches_projection": bool(mobile_form_state and mobile_form_state["overlayMatchesProjection"]),
+                          "camera_stays_locked_on_phone": bool(mobile_form_state and mobile_form_state["cameraControlsLocked"] and mobile_wizard_stays_on_phone)
                       }
                   }
                   browser.close()
@@ -368,6 +436,9 @@ jobs:
               "projected_width_at_front": report.get("visual_rotation_test", {}).get("interpretation", {}).get("projected_width_at_front"),
               "projected_width_at_side": report.get("visual_rotation_test", {}).get("interpretation", {}).get("projected_width_at_side"),
               "click_reached_request_form": report.get("visual_rotation_test", {}).get("interpretation", {}).get("click_reached_request_form"),
+              "mobile_touch_reached_request_form": report.get("visual_rotation_test", {}).get("interpretation", {}).get("mobile_touch_reached_request_form"),
+              "screen_overlay_matches_projection": report.get("visual_rotation_test", {}).get("interpretation", {}).get("screen_overlay_matches_projection"),
+              "camera_stays_locked_on_phone": report.get("visual_rotation_test", {}).get("interpretation", {}).get("camera_stays_locked_on_phone"),
               "browser_errors": report["browser_errors"]
           }
           print("QAMQOR_3D_QA_SUMMARY=" + json.dumps(summary, ensure_ascii=False))
