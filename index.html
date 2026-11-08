@@ -1874,7 +1874,7 @@ footer{
       <span class="device-shine"></span>
     </div>
     <div class="hero-float hero-float-bottom"><span class="float-check">✓</span><span><strong>Өтінім онлайн</strong><small>Бірнеше қадам ғана</small></span></div>
-    <div class="art-caption">ЖӨНДЕУ · ҚОЛДАУ · ҚАМҚОРЛЫҚ</div>
+    
   </div>
 </section>
 
@@ -2924,11 +2924,7 @@ verifyButton.addEventListener("click", async () => {
   const navLinks = Array.from(document.querySelectorAll(".main-nav a"));
   const label = document.getElementById("pageContextLabel");
   const index = document.getElementById("pageContextIndex");
-  const pageInfo = [
-    {id:"top",label:"БАСТЫ БЕТ"},
-    {id:"services",label:"ҚЫЗМЕТТЕР"},
-    {id:"repair",label:"ӨТІНІМ ҚАЛДЫРУ"}
-  ];
+  const pageInfo = [{id:"top"},{id:"services"},{id:"repair"}];
   if (!pages.length) return;
 
   const reduceMotion = window.matchMedia &&
