@@ -577,17 +577,27 @@
     }
   });
 
-  viewer.addEventListener("pointerup", event => {
+  function eventBelongsToViewer(event) {
+    const path = typeof event.composedPath === "function" ? event.composedPath() : [];
+    return path.includes(viewer) ||
+      (event.target instanceof Node && viewer.contains(event.target));
+  }
+
+  // Capture at document level so the fallback also works through model-viewer's
+  // shadow canvas on browsers that retarget pointer events.
+  document.addEventListener("pointerup", event => {
+    if (!eventBelongsToViewer(event)) return;
     if (event.pointerType === "touch" || event.pointerType === "pen") {
       tryDirectModelActivation(event);
     }
-  });
-  viewer.addEventListener("click", event => {
+  }, true);
+  document.addEventListener("click", event => {
+    if (!eventBelongsToViewer(event)) return;
     // detail===0 covers keyboard activation; pointer clicks are also checked.
     if (event.detail === 0 || event.pointerType === "mouse") {
       tryDirectModelActivation(event);
     }
-  });
+  }, true);
 
   closeButton.addEventListener("click", closePhoneForm);
   document.addEventListener("keydown", event => {
