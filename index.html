@@ -3700,6 +3700,8 @@ verifyButton.addEventListener("click", async () => {
 
   // Fallback: the actual textured GLB button remains independently tappable.
   viewer.addEventListener("click", event => {
+    // Form controls projected on the screen must receive their own clicks.
+    if (document.body.classList.contains("qamqor-phone-app-open")) return;
     if (!viewer.loaded ||
         typeof viewer.positionAndNormalFromPoint !== "function") return;
 
