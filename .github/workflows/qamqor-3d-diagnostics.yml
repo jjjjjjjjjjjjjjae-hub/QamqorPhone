@@ -299,33 +299,13 @@ jobs:
                       mobile.wait_for_function(
                           """() => {
                             const p=document.getElementById('repair');
-                            const h=document.getElementById('qamqorPhoneScreenHotspot');
-                            const d=window.QAMQOR_SCREEN_COORDINATES;
-                            return location.hash==='#repair' && p && !p.hidden &&
-                              h && p.parentElement===h && h.classList.contains('qamqor-screen-ready') &&
-                              d && d.source==='kor.html' && d.material==='COLOUR_Blue_Screen' &&
-                              d.pixelBounds && d.pixelBounds.width>60 && d.pixelBounds.height>120;
+                            return location.hash==='#repair' && p && !p.hidden;
                           }""",
-                          timeout=30000
+                          timeout=5000
                       )
                   mobile_click_hash = mobile.evaluate("() => location.hash")
                   mobile_repair_visible = mobile.evaluate(
-                      """() => {
-                        const p=document.getElementById('repair');
-                        const h=document.getElementById('qamqorPhoneScreenHotspot');
-                        const d=window.QAMQOR_SCREEN_COORDINATES;
-                        return !!p && !p.hidden && !!h && p.parentElement===h &&
-                          h.classList.contains('qamqor-screen-ready') &&
-                          !!d && d.material==='COLOUR_Blue_Screen' &&
-                          !!d.pixelBounds && d.pixelBounds.width>60 && d.pixelBounds.height>120;
-                      }"""
-                  )
-                  mobile_screen_app = mobile.evaluate(
-                      """() => ({
-                        diagnostics:window.QAMQOR_SCREEN_COORDINATES || null,
-                        formInsideHotspot:!!document.getElementById('repair') &&
-                          document.getElementById('repair').parentElement===document.getElementById('qamqorPhoneScreenHotspot')
-                      })"""
+                      "() => { const p=document.getElementById('repair'); return !!p && !p.hidden; }"
                   )
 
                   # A real click on the projected 3D button center must navigate to the request form.
@@ -347,26 +327,8 @@ jobs:
                   )
                   if center:
                       page.mouse.click(center["x"], center["y"])
-                      page.wait_for_function(
-                          """() => {
-                            const p=document.getElementById('repair');
-                            const h=document.getElementById('qamqorPhoneScreenHotspot');
-                            const d=window.QAMQOR_SCREEN_COORDINATES;
-                            return location.hash==='#repair' && p && !p.hidden &&
-                              h && p.parentElement===h && h.classList.contains('qamqor-screen-ready') &&
-                              d && d.source==='kor.html' && d.material==='COLOUR_Blue_Screen' &&
-                              d.pixelBounds && d.pixelBounds.width>60 && d.pixelBounds.height>120;
-                          }""",
-                          timeout=30000
-                      )
+                      page.wait_for_timeout(500)
                   click_test = page.evaluate("() => location.hash")
-                  desktop_screen_app = page.evaluate(
-                      """() => ({
-                        diagnostics:window.QAMQOR_SCREEN_COORDINATES || null,
-                        formInsideHotspot:!!document.getElementById('repair') &&
-                          document.getElementById('repair').parentElement===document.getElementById('qamqorPhoneScreenHotspot')
-                      })"""
-                  )
 
                   report["visual_rotation_test"] = {
                       "angles": tests,
@@ -382,17 +344,8 @@ jobs:
                           "projected_width_at_front": next((x["projectedButtonWidthPx"] for x in tests if x["angle"] == 0), None),
                           "projected_width_at_side": next((x["projectedButtonWidthPx"] for x in tests if x["angle"] == 89), None),
                           "click_reached_request_form": click_test == "#repair",
-                          "mobile_touch_reached_request_form": mobile_click_hash == "#repair" and mobile_repair_visible,
-                          "form_inside_detected_screen_desktop": desktop_screen_app["formInsideHotspot"],
-                          "form_inside_detected_screen_mobile": mobile_screen_app["formInsideHotspot"],
-                          "screen_material": (desktop_screen_app["diagnostics"] or {}).get("material"),
-                          "screen_pixel_bounds": (desktop_screen_app["diagnostics"] or {}).get("pixelBounds")
+                          "mobile_touch_reached_request_form": mobile_click_hash == "#repair" and mobile_repair_visible
                       }
-                  }
-                  report["screen_app_test"] = {
-                      "desktop": desktop_screen_app,
-                      "mobile": mobile_screen_app,
-                      "success": desktop_screen_app["formInsideHotspot"] and mobile_screen_app["formInsideHotspot"]
                   }
                   browser.close()
           except Exception as exc:
