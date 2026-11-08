@@ -3680,6 +3680,15 @@ verifyButton.addEventListener("click", async () => {
   const repair = document.getElementById("repair");
   if (!viewer || !repair) return;
 
+  // Allow model-viewer to reduce 3D render resolution a little further on
+  // devices whose GPU is struggling, while keeping full resolution when idle.
+  if (window.customElements?.whenDefined) {
+    customElements.whenDefined("model-viewer").then(() => {
+      const ModelViewerElement = customElements.get("model-viewer");
+      if (ModelViewerElement) ModelViewerElement.minimumRenderScale = 0.4;
+    }).catch(() => {});
+  }
+
   const overlay = document.createElement("div");
   overlay.id = "qamqor-phone-form-overlay";
   overlay.className = "qamqor-phone-form-overlay";
