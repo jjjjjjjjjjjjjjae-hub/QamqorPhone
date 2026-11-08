@@ -163,7 +163,70 @@ jobs:
                     opened["formInsideOverlay"] and
                     opened["innerScreenRect"] is not None
                   )
-                  result["checks"]["camera_stays_locked_for_form"]=not opened["cameraControls"]
+                  result["checks"]["camera_controls_enabled_for_form"]=opened["cameraControls"]
+
+                  # Drag the empty heading area: the phone should rotate and the
+                  # form's projective overlay must follow the measured screen.
+                  heading=page.locator("#repair .cardhead").bounding_box()
+                  if not heading:
+                    raise RuntimeError("The attached request form heading is not visible.")
+                  before_drag=page.evaluate("""() => {
+                    const v=document.querySelector('.qamqor-phone-model');
+                    return {theta:v.getCameraOrbit().theta, matrix:window.qamqorPhoneForm.getScreenRect()?.matrix};
+                  }""")
+                  page.evaluate("theta => window.__qamqorBeforeDragTheta=theta",before_drag["theta"])
+                  start_x=heading["x"]+heading["width"]*0.52
+                  start_y=heading["y"]+heading["height"]*0.52
+                  page.mouse.move(start_x,start_y)
+                  page.mouse.down()
+                  page.mouse.move(start_x+62,start_y+4,steps=5)
+                  page.mouse.up()
+                  page.wait_for_function("""() => {
+                    const v=document.querySelector('.qamqor-phone-model');
+                    const o=document.getElementById('qamqor-phone-form-overlay');
+                    const r=window.qamqorPhoneForm.getScreenRect();
+                    return v && o && !o.hidden && r && o.style.transform===r.matrix &&
+                      Math.abs(v.getCameraOrbit().theta-window.__qamqorBeforeDragTheta)>0.05;
+                  }""",arg=None,timeout=10000)
+                  after_drag=page.evaluate("""() => {
+                    const v=document.querySelector('.qamqor-phone-model');
+                    const o=document.getElementById('qamqor-phone-form-overlay');
+                    const r=window.qamqorPhoneForm.getScreenRect();
+                    return {theta:v.getCameraOrbit().theta,matrix:r && r.matrix,overlayTransform:o.style.transform};
+                  }""")
+                  result["rotation_drag"]={"before":before_drag,"after":after_drag}
+                  result["checks"]["drag_rotates_phone_and_form_follows"] = (
+                    abs(after_drag["theta"]-before_drag["theta"])>0.05 and
+                    after_drag["matrix"] is not None and
+                    after_drag["matrix"]==after_drag["overlayTransform"]
+                  )
+
+                  # Turn the inner display away: the projected form must disappear,
+                  # then return to precisely the screen when the phone faces front again.
+                  current_orbit=page.evaluate("""() => {
+                    const o=document.querySelector('.qamqor-phone-model').getCameraOrbit();
+                    return {theta:o.theta,phi:o.phi,radius:o.radius};
+                  }""")
+                  page.evaluate("""o => {
+                    const v=document.querySelector('.qamqor-phone-model');
+                    v.cameraOrbit=(o.theta+Math.PI)+'rad '+o.phi+'rad '+o.radius+'m';
+                  }""",current_orbit)
+                  page.wait_for_function("""() => {
+                    const o=document.getElementById('qamqor-phone-form-overlay');
+                    return o && o.hidden;
+                  }""",timeout=10000)
+                  result["checks"]["form_hides_when_screen_faces_away"]=True
+                  page.evaluate("""o => {
+                    const v=document.querySelector('.qamqor-phone-model');
+                    v.cameraOrbit=o.theta+'rad '+o.phi+'rad '+o.radius+'m';
+                  }""",current_orbit)
+                  page.wait_for_function("""() => {
+                    const o=document.getElementById('qamqor-phone-form-overlay');
+                    const r=window.qamqorPhoneForm.getScreenRect();
+                    return o && !o.hidden && r && o.style.transform===r.matrix;
+                  }""",timeout=10000)
+                  result["checks"]["form_returns_when_screen_faces_camera"]=True
+
                   page.locator("#repair").screenshot(
                     path="diagnostics/duo/duo-open-form.png"
                   )
