@@ -2181,226 +2181,7 @@ main [data-app-page]:not([hidden]){
 }
 </style>
 
-<style id="qamqor-phone-app-screen">
-/* The existing repair wizard is projected onto the screen of the real GLB phone. */
-.qamqor-phone-app-hotspot{
-  position:relative;
-  display:block;
-  width:min(72vw,350px);
-  height:min(78dvh,690px);
-  min-width:230px;
-  min-height:390px;
-  overflow:hidden;
-  border:2px solid rgba(225,235,248,.88);
-  border-radius:clamp(24px,5vw,42px);
-  background:#080a0e;
-  box-shadow:0 0 0 2px rgba(0,0,0,.76),0 18px 60px rgba(0,0,0,.56);
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-}
-.qamqor-phone-app-open .qamqor-phone-app-hotspot{
-  opacity:1;
-  visibility:visible;
-  pointer-events:auto;
-}
-.qamqor-phone-app-close{
-  position:absolute;
-  z-index:20;
-  top:8px;
-  right:9px;
-  display:grid;
-  place-items:center;
-  width:28px;
-  height:28px;
-  min-height:28px;
-  padding:0;
-  border:1px solid rgba(255,255,255,.17);
-  border-radius:50%;
-  color:#fff;
-  background:rgba(22,24,30,.94);
-  font:600 20px/1 system-ui,sans-serif;
-  cursor:pointer;
-}
-.qamqor-phone-app-close:hover{background:#34465b}
-.qamqor-phone-app-open{
-  overflow:hidden!important;
-}
-.qamqor-phone-app-open .site-header{
-  position:fixed!important;
-  inset:0 0 auto 0!important;
-  z-index:1600!important;
-  width:100%!important;
-  background:rgba(7,10,15,.58)!important;
-  -webkit-backdrop-filter:blur(16px)!important;
-  backdrop-filter:blur(16px)!important;
-}
-.qamqor-phone-app-open .hero#top{
-  position:fixed!important;
-  inset:0!important;
-  z-index:1500!important;
-  display:grid!important;
-  place-items:center!important;
-  width:100vw!important;
-  height:100dvh!important;
-  min-height:100dvh!important;
-  margin:0!important;
-  padding:0!important;
-  overflow:hidden!important;
-  background:
-    radial-gradient(ellipse at 50% 48%,rgba(27,105,190,.22),transparent 42%),
-    rgba(4,7,12,.97)!important;
-}
-.qamqor-phone-app-open .hero#top .premium-art{
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  width:100vw!important;
-  height:100dvh!important;
-  min-height:100dvh!important;
-  max-height:100dvh!important;
-  margin:0!important;
-  padding:0!important;
-  overflow:visible!important;
-}
-.qamqor-phone-app-open .hero#top .qamqor-phone-model{
-  width:100vw!important;
-  height:100dvh!important;
-  min-height:100dvh!important;
-  max-height:100dvh!important;
-  flex:none!important;
-  touch-action:pan-y!important;
-}
-.qamqor-phone-app-open .qamqor-apply-hitbox{
-  opacity:0!important;
-  visibility:hidden!important;
-  pointer-events:none!important;
-}
-.qamqor-phone-app-open #repair.qamqor-phone-app-content{
-  display:block!important;
-  width:100%!important;
-  height:100%!important;
-  min-width:0!important;
-  min-height:0!important;
-  max-width:none!important;
-  max-height:100%!important;
-  margin:0!important;
-  padding:43px 12px 14px!important;
-  overflow-x:hidden!important;
-  overflow-y:auto!important;
-  overscroll-behavior:contain;
-  border:0!important;
-  border-radius:inherit!important;
-  background:linear-gradient(155deg,#171b23,#090b10 72%)!important;
-  box-shadow:none!important;
-  transform:none!important;
-  scrollbar-width:thin;
-  scrollbar-color:#51647b transparent;
-  -webkit-overflow-scrolling:touch;
-}
-.qamqor-phone-app-open #repair .cardhead{
-  display:block!important;
-  margin:0 0 12px!important;
-  padding:0 24px 10px 0!important;
-  border-bottom:1px solid rgba(255,255,255,.1);
-}
-.qamqor-phone-app-open #repair .cardhead h2{
-  margin:6px 0!important;
-  font-size:clamp(17px,5vw,22px)!important;
-  line-height:1.12!important;
-}
-.qamqor-phone-app-open #repair .cardhead .sub{font-size:10px!important;line-height:1.45!important}
-.qamqor-phone-app-open #repair .step{
-  display:inline-flex!important;
-  margin-top:6px;
-  padding:6px 9px!important;
-  font-size:9px!important;
-}
-.qamqor-phone-app-open #repair form{gap:9px!important}
-.qamqor-phone-app-open #repair .wizard-progress{
-  margin:0!important;
-  padding:9px 10px!important;
-  border-radius:12px!important;
-}
-.qamqor-phone-app-open #repair .wizard-progress-line{font-size:10px!important}
-.qamqor-phone-app-open #repair .wizard-progress-track{height:4px!important;margin-top:8px!important}
-.qamqor-phone-app-open #repair .wizard-step{
-  gap:10px!important;
-  padding:12px 10px!important;
-  border-radius:14px!important;
-}
-.qamqor-phone-app-open #repair .wizard-step-heading{
-  gap:8px!important;
-  padding-bottom:9px!important;
-}
-.qamqor-phone-app-open #repair .wizard-step-number{
-  width:31px!important;
-  height:31px!important;
-  flex-basis:31px!important;
-  border-radius:10px!important;
-  font-size:10px!important;
-}
-.qamqor-phone-app-open #repair .wizard-step-heading h3{font-size:13px!important}
-.qamqor-phone-app-open #repair .wizard-step-heading p{font-size:9px!important;line-height:1.4!important}
-.qamqor-phone-app-open #repair label{margin-bottom:5px!important;font-size:10px!important}
-.qamqor-phone-app-open #repair input,
-.qamqor-phone-app-open #repair select,
-.qamqor-phone-app-open #repair textarea{
-  min-height:37px!important;
-  padding:9px 10px!important;
-  border-radius:10px!important;
-  font-size:11px!important;
-}
-.qamqor-phone-app-open #repair textarea{min-height:76px!important}
-.qamqor-phone-app-open #repair .phone-model-option img{width:42px!important;height:48px!important;flex-basis:42px!important}
-.qamqor-phone-app-open #repair .phone-model-preview{gap:8px!important;padding:8px!important}
-.qamqor-phone-app-open #repair .phone-model-preview img{width:48px!important;height:55px!important;flex-basis:48px!important}
-.qamqor-phone-app-open #repair .wizard-nav{gap:7px!important;flex-wrap:wrap!important}
-.qamqor-phone-app-open #repair .wizard-next,
-.qamqor-phone-app-open #repair .wizard-back{
-  min-height:36px!important;
-  padding:8px 10px!important;
-  border-radius:999px!important;
-  font-size:10px!important;
-}
-.qamqor-phone-app-open #repair .map-field{gap:7px!important;padding:9px!important}
-.qamqor-phone-app-open #repair #serviceMap{height:145px!important}
-.qamqor-phone-app-open #repair .map-actions{gap:6px!important}
-.qamqor-phone-app-open #repair .map-button,
-.qamqor-phone-app-open #repair .map-direction{
-  min-height:32px!important;
-  padding:7px 9px!important;
-  font-size:9px!important;
-}
-.qamqor-phone-app-open #repair .map-help,
-.qamqor-phone-app-open #repair .map-status{font-size:9px!important}
-.qamqor-phone-app-open #repair #telegramVerifyBox{padding:10px!important;border-radius:12px!important}
-.qamqor-phone-app-open #repair #telegramVerifyButton{min-height:40px!important;font-size:10px!important}
-.qamqor-phone-app-open #repair .fine{font-size:9px!important;line-height:1.45!important}
-.qamqor-phone-app-open #repair .quote-panel{padding:11px!important;border-radius:13px!important}
-.qamqor-phone-app-open #repair .quote-panel h3{font-size:15px!important}
-.qamqor-phone-app-open #repair .quote-line{padding:7px 0!important;font-size:10px!important}
-.qamqor-phone-app-open #repair .quote-total strong{font-size:16px!important}
-.qamqor-phone-app-open #repair .notice{font-size:10px!important}
-@media(max-width:620px){
-  .qamqor-phone-app-hotspot{
-    width:min(74vw,320px);
-    height:min(76dvh,620px);
-    min-width:220px;
-    min-height:370px;
-    border-radius:30px;
-  }
-  .qamqor-phone-app-open .site-header{height:56px!important}
-  .qamqor-phone-app-open .hero#top .qamqor-phone-model{touch-action:pan-y!important}
-}
-@media(max-height:620px){
-  .qamqor-phone-app-hotspot{height:78dvh;min-height:0}
-  .qamqor-phone-app-open #repair.qamqor-phone-app-content{padding-top:35px!important}
-}
-@media(prefers-reduced-motion:reduce){
-  .qamqor-phone-app-open .hero#top{animation:none!important}
-}
-</style>
+
 
 </head>
 <body>
@@ -2433,16 +2214,6 @@ main [data-app-page]:not([hidden]){
       camera-orbit="0deg 75deg 100%"
       field-of-view="30deg"
       tabindex="0">
-      <div
-        slot="hotspot-screen"
-        id="qamqorPhoneAppHotspot"
-        class="qamqor-phone-app-hotspot"
-        data-position="0 0.04201275 0.004502"
-        data-normal="0 0 1"
-        data-visibility-attribute="visible"
-        aria-label="QAMQOR PHONE өтінім формасы">
-        <button id="qamqorPhoneAppClose" class="qamqor-phone-app-close" type="button" aria-label="Басты экранға қайту">×</button>
-      </div>
       <span slot="hotspot-probe" class="qamqor-button-probe" data-position="0 0.04201275 0.004502" data-normal="0 0 1" data-visibility-attribute="visible" aria-hidden="true"></span>
       <button slot="hotspot-apply" class="qamqor-apply-hitbox" data-position="0 0.04201275 0.004502" data-normal="0 0 1" data-visibility-attribute="visible" type="button" aria-label="Өтінім беру"></button>
     </model-viewer>
@@ -3547,10 +3318,6 @@ verifyButton.addEventListener("click", async () => {
     const id = link.getAttribute("href").slice(1);
     if (!pages.some(page => page.id === id)) return;
     event.preventDefault();
-    if (id === "repair" && typeof window.qamqorOpenPhoneApp === "function") {
-      window.qamqorOpenPhoneApp({updateHistory:true});
-      return;
-    }
     showPage(id,{updateHistory:true});
   });
 
@@ -3677,9 +3444,7 @@ verifyButton.addEventListener("click", async () => {
       event.preventDefault();
       event.stopPropagation();
     }
-    if (typeof window.qamqorOpenPhoneApp === "function") {
-      window.qamqorOpenPhoneApp({updateHistory:true});
-    } else if (typeof window.qamqorShowPage === "function") {
+    if (typeof window.qamqorShowPage === "function") {
       window.qamqorShowPage("repair", {updateHistory:true, scroll:true});
     } else {
       window.location.hash = "repair";
@@ -3700,8 +3465,6 @@ verifyButton.addEventListener("click", async () => {
 
   // Fallback: the actual textured GLB button remains independently tappable.
   viewer.addEventListener("click", event => {
-    // Form controls projected on the screen must receive their own clicks.
-    if (document.body.classList.contains("qamqor-phone-app-open")) return;
     if (!viewer.loaded ||
         typeof viewer.positionAndNormalFromPoint !== "function") return;
 
@@ -3722,95 +3485,7 @@ verifyButton.addEventListener("click", async () => {
 })();
 </script>
 
-<script id="qamqor-phone-app-controller">
-(() => {
-  const viewer = document.querySelector(".qamqor-phone-model");
-  const hotspot = document.getElementById("qamqorPhoneAppHotspot");
-  const repair = document.getElementById("repair");
-  const closeButton = document.getElementById("qamqorPhoneAppClose");
-  if (!viewer || !hotspot || !repair || !closeButton) return;
 
-  const originalParent = repair.parentNode;
-  const placeholder = document.createComment(" QAMQOR repair form original position ");
-  originalParent.insertBefore(placeholder, repair);
-
-  let appOpen = false;
-  const originalOrbit = viewer.getAttribute("camera-orbit") || "0deg 75deg 100%";
-  const originalFov = viewer.getAttribute("field-of-view") || "30deg";
-
-  function openPhoneApp(options = {}) {
-    if (appOpen) return;
-
-    if (typeof window.qamqorShowPage === "function") {
-      window.qamqorShowPage("top", {updateHistory:false, scroll:false});
-    }
-
-    document.body.classList.add("qamqor-phone-app-open");
-    hotspot.appendChild(repair);
-    repair.hidden = false;
-    repair.setAttribute("aria-hidden", "false");
-    repair.classList.add("qamqor-phone-app-content");
-
-    viewer.setAttribute("camera-orbit", "0deg 90deg 45%");
-    viewer.setAttribute("field-of-view", "24deg");
-    document.documentElement.style.overflow = "hidden";
-    document.body.style.overflow = "hidden";
-    appOpen = true;
-
-    if (options.updateHistory && window.location.hash !== "#repair") {
-      window.history.pushState({qamqorPhoneApp:true}, "", "#repair");
-    }
-
-    requestAnimationFrame(() => {
-      if (typeof serviceMap !== "undefined" && serviceMap) {
-        serviceMap.invalidateSize();
-      }
-    });
-  }
-
-  function closePhoneApp() {
-    if (!appOpen) return;
-
-    placeholder.parentNode.insertBefore(repair, placeholder.nextSibling);
-    repair.hidden = true;
-    repair.setAttribute("aria-hidden", "true");
-    repair.classList.remove("qamqor-phone-app-content");
-    document.body.classList.remove("qamqor-phone-app-open");
-    document.documentElement.style.overflow = "";
-    document.body.style.overflow = "";
-    viewer.setAttribute("camera-orbit", originalOrbit);
-    viewer.setAttribute("field-of-view", originalFov);
-    appOpen = false;
-
-    if (window.location.hash !== "#top") {
-      window.history.replaceState({qamqorPage:"top"}, "", "#top");
-    }
-    if (typeof window.qamqorShowPage === "function") {
-      window.qamqorShowPage("top", {updateHistory:false, scroll:false});
-    }
-  }
-
-  window.qamqorOpenPhoneApp = openPhoneApp;
-  window.qamqorClosePhoneApp = closePhoneApp;
-
-  closeButton.addEventListener("click", event => {
-    event.preventDefault();
-    event.stopPropagation();
-    closePhoneApp();
-  });
-
-  document.addEventListener("keydown", event => {
-    if (event.key === "Escape" && appOpen) closePhoneApp();
-  });
-
-  if (window.location.hash === "#repair" ||
-      sessionStorage.getItem("qamqorPendingRequest") ||
-      sessionStorage.getItem("qamqorQuoteRequest") ||
-      new URLSearchParams(window.location.search).has("code")) {
-    openPhoneApp({updateHistory:false});
-  }
-})();
-</script>
 
 </body>
 </html>
