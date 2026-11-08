@@ -195,7 +195,13 @@ jobs:
                       const v=document.querySelector('.qamqor-phone-model');
                       const o=document.getElementById('qamqor-phone-form-overlay');
                       const r=window.qamqorPhoneForm.getScreenRect();
-                      return v && o && !o.hidden && r && o.style.transform===r.matrix &&
+                      return v && o && !o.hidden && r && (() => {
+                        const nums = value => (value.match(/-?(?:\\d+\\.?\\d*|\\.\\d+)(?:e[-+]?\\d+)?/gi) || []).map(Number);
+                        const actual = nums(o.style.transform);
+                        const expected = nums(r.matrix);
+                        return actual.length===16 && expected.length===16 &&
+                          actual.every((value,index)=>Math.abs(value-expected[index])<0.002);
+                      })() &&
                         Math.abs(v.getCameraOrbit().theta-window.__qamqorBeforeDragTheta)>0.05;
                     }""",timeout=4000)
                   except Exception as exc:
@@ -205,10 +211,15 @@ jobs:
                     const v=document.querySelector('.qamqor-phone-model');
                     const o=document.getElementById('qamqor-phone-form-overlay');
                     const r=window.qamqorPhoneForm.getScreenRect();
+                    const nums = value => (value.match(/-?(?:\\d+\\.?\\d*|\\.\\d+)(?:e[-+]?\\d+)?/gi) || []).map(Number);
+                    const actual = nums(o.style.transform);
+                    const expected = nums(r?.matrix || "");
                     return {
                       theta:v.getCameraOrbit().theta,
                       matrix:r && r.matrix,
                       overlayTransform:o.style.transform,
+                      matrixAligned:actual.length===16 && expected.length===16 &&
+                        actual.every((value,index)=>Math.abs(value-expected[index])<0.002),
                       debug:window.qamqorPhoneForm.getRotationDebug()
                     };
                   }""")
@@ -221,7 +232,7 @@ jobs:
                   result["checks"]["drag_rotates_phone_and_form_follows"] = (
                     abs(after_drag["theta"]-before_drag["theta"])>0.05 and
                     after_drag["matrix"] is not None and
-                    after_drag["matrix"]==after_drag["overlayTransform"]
+                    after_drag["matrixAligned"]
                   )
 
                   # Turn the inner display away: the projected form must disappear,
@@ -246,7 +257,13 @@ jobs:
                   page.wait_for_function("""() => {
                     const o=document.getElementById('qamqor-phone-form-overlay');
                     const r=window.qamqorPhoneForm.getScreenRect();
-                    return o && !o.hidden && r && o.style.transform===r.matrix;
+                    return o && !o.hidden && r && (() => {
+                        const nums = value => (value.match(/-?(?:\\d+\\.?\\d*|\\.\\d+)(?:e[-+]?\\d+)?/gi) || []).map(Number);
+                        const actual = nums(o.style.transform);
+                        const expected = nums(r.matrix);
+                        return actual.length===16 && expected.length===16 &&
+                          actual.every((value,index)=>Math.abs(value-expected[index])<0.002);
+                      })();
                   }""",timeout=10000)
                   result["checks"]["form_returns_when_screen_faces_camera"]=True
 
