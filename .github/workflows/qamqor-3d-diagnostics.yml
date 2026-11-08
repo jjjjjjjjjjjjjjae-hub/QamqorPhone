@@ -162,11 +162,11 @@ jobs:
                       """() => {
                         const v = document.querySelector('.qamqor-phone-model');
                         const points = {
-                          'hotspot-button-center': [0, 0.0531068, 0.004502],
-                          'hotspot-button-left': [-0.02629, 0.0531068, 0.004502],
-                          'hotspot-button-right': [0.02629, 0.0531068, 0.004502],
-                          'hotspot-button-top': [0, 0.0596795, 0.004502],
-                          'hotspot-button-bottom': [0, 0.0465341, 0.004502]
+                          'hotspot-button-center': [0, 0.04201275, 0.004502],
+                          'hotspot-button-left': [-0.02629, 0.04201275, 0.004502],
+                          'hotspot-button-right': [0.02629, 0.04201275, 0.004502],
+                          'hotspot-button-top': [0, 0.04858545, 0.004502],
+                          'hotspot-button-bottom': [0, 0.03544005, 0.004502]
                         };
                         for (const [slot, p] of Object.entries(points)) {
                           const el = document.createElement('span');
