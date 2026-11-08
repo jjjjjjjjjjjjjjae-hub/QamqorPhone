@@ -12,7 +12,8 @@
     "form_hides_when_screen_faces_away": true,
     "form_returns_when_screen_faces_camera": true,
     "wizard_works_inside_open_duo": true,
-    "close_returns_to_folded_lock_screen": true
+    "close_returns_to_folded_lock_screen": true,
+    "mobile_touch_opens_form_inside_duo": true
   },
   "browser_errors": [],
   "initial_state": {
@@ -109,5 +110,45 @@
     "cameraControls": true,
     "formHidden": true,
     "overlayHidden": true
+  },
+  "ray_probe": {
+    "hit": null,
+    "material": null
+  },
+  "ray_hit_fallback": {
+    "opened": false,
+    "diagnostics": {
+      "phase": "closed",
+      "homeVisible": true,
+      "busy": false,
+      "viewerLoaded": true,
+      "animations": [
+        "open-close"
+      ],
+      "buttonTargetVisible": false,
+      "rayHits": 0,
+      "rayMisses": 1,
+      "lastRayHit": null,
+      "lastError": ""
+    }
+  },
+  "mobile_state": {
+    "state": "form",
+    "formInsideOverlay": true,
+    "buttonVisible": false,
+    "diagnostics": {
+      "phase": "form",
+      "homeVisible": true,
+      "busy": false,
+      "viewerLoaded": true,
+      "animations": [
+        "open-close"
+      ],
+      "buttonTargetVisible": false,
+      "rayHits": 0,
+      "rayMisses": 0,
+      "lastRayHit": null,
+      "lastError": ""
+    }
   }
 }
