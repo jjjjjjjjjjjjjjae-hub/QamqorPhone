@@ -3714,7 +3714,7 @@ verifyButton.addEventListener("click", async () => {
   const animationName = "open-close";
   let placeholder = null;
   let state = "loading"; // loading | closed | opening | open | form | closing
-  let homeVisible = !document.querySelector('[data-app-page="top"]')?.hidden;
+  let homeVisible = !document.querySelector('[data-app-page="home"]')?.hidden;
   let busy = false;
   let opened = false;
   let lastScreenRect = null;
@@ -3875,9 +3875,22 @@ verifyButton.addEventListener("click", async () => {
     return true;
   }
 
+  let lockRetryTimer = 0;
+  function scheduleLockButtonRetry() {
+    if (lockRetryTimer || !homeVisible || state !== "closed" || busy || opened) return;
+    lockRetryTimer = window.setTimeout(() => {
+      lockRetryTimer = 0;
+      placeLockScreenButton();
+    }, 180);
+  }
+
   function placeLockScreenButton() {
     if (!homeVisible || state !== "closed" || busy || opened) {
       lockPlane.hidden = true;
+      if (lockRetryTimer) {
+        clearTimeout(lockRetryTimer);
+        lockRetryTimer = 0;
+      }
       return false;
     }
     const candidateSets = [
@@ -3904,7 +3917,14 @@ verifyButton.addEventListener("click", async () => {
     }
     if (!rect) {
       lockPlane.hidden = true;
+      // Hotspot coordinates can arrive a few frames after the GLB load event.
+      // Retry until the projected outer-screen hit target is actually available.
+      scheduleLockButtonRetry();
       return false;
+    }
+    if (lockRetryTimer) {
+      clearTimeout(lockRetryTimer);
+      lockRetryTimer = 0;
     }
     lockPlane.style.left = "0px";
     lockPlane.style.top = "0px";
@@ -3924,6 +3944,13 @@ verifyButton.addEventListener("click", async () => {
       if (opened) placeOverlay();
       else if (state === "closed") placeLockScreenButton();
     });
+  }
+
+  // Recalculate when the responsive 3D viewer changes size, not only on window resize.
+  let viewerResizeObserver = null;
+  if (typeof ResizeObserver === "function") {
+    viewerResizeObserver = new ResizeObserver(scheduleOverlayUpdate);
+    viewerResizeObserver.observe(viewer);
   }
 
   let rotationDrag = null;
@@ -4058,6 +4085,10 @@ verifyButton.addEventListener("click", async () => {
 
   async function openDuoFromPhysicalButton() {
     if (state !== "closed" || busy || !viewer.loaded) return false;
+    if (lockRetryTimer) {
+      clearTimeout(lockRetryTimer);
+      lockRetryTimer = 0;
+    }
     busy = true;
     state = "opening";
     lockPlane.hidden = true;
@@ -4197,8 +4228,15 @@ verifyButton.addEventListener("click", async () => {
     open:requestOpenDuoForm,
     setHomeVisible: visible => {
       homeVisible = !!visible;
-      if (!homeVisible) lockPlane.hidden = true;
-      else if (state === "closed" && !busy && !opened) placeLockScreenButton();
+      if (!homeVisible) {
+        lockPlane.hidden = true;
+        if (lockRetryTimer) {
+          clearTimeout(lockRetryTimer);
+          lockRetryTimer = 0;
+        }
+      } else if (state === "closed" && !busy && !opened) {
+        placeLockScreenButton();
+      }
     },
     close:closePhoneForm,
     isOpen:()=>opened,
