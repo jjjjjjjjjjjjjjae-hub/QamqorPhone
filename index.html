@@ -2183,6 +2183,222 @@ main [data-app-page]:not([hidden]){
 
 
 
+
+<style id="qamqor-screen-material-app">
+/* Form overlay is placed using the live GLB material scan from kor.html. */
+body.qamqor-phone-app-open{
+  overflow:hidden!important;
+  background:#05080d!important;
+}
+.qamqor-phone-app-open .site-header,
+.qamqor-phone-app-open footer{display:none!important}
+.qamqor-phone-app-open .hero#top{
+  position:fixed!important;
+  inset:0!important;
+  z-index:1500!important;
+  display:grid!important;
+  place-items:center!important;
+  width:100vw!important;
+  height:100dvh!important;
+  min-height:100dvh!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  background:
+    radial-gradient(ellipse at 50% 48%,rgba(25,107,198,.2),transparent 48%),
+    #05080d!important;
+}
+.qamqor-phone-app-open .hero#top .premium-art{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100vw!important;
+  height:100dvh!important;
+  min-height:100dvh!important;
+  max-height:100dvh!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:visible!important;
+}
+.qamqor-phone-app-open .hero#top .qamqor-phone-model{
+  width:100vw!important;
+  height:100dvh!important;
+  min-height:100dvh!important;
+  max-height:100dvh!important;
+  flex:none!important;
+  background:transparent!important;
+  touch-action:pan-y!important;
+}
+.qamqor-phone-app-open .qamqor-apply-hitbox{
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+.qamqor-phone-app-detecting .hero#top .qamqor-phone-model{
+  opacity:.16!important;
+  pointer-events:none!important;
+}
+.qamqor-phone-screen-hotspot{
+  position:relative;
+  display:block;
+  box-sizing:border-box;
+  overflow:hidden;
+  border:1px solid rgba(220,232,247,.72);
+  border-radius:clamp(18px,4vw,34px);
+  background:#080b11;
+  box-shadow:0 0 0 2px rgba(0,0,0,.82),0 12px 38px rgba(0,0,0,.34);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+.qamqor-phone-app-open .qamqor-phone-screen-hotspot.qamqor-screen-ready{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+.qamqor-phone-screen-close{
+  position:absolute;
+  z-index:30;
+  top:7px;
+  right:8px;
+  display:grid;
+  place-items:center;
+  width:27px;
+  height:27px;
+  min-height:27px;
+  padding:0;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:50%;
+  color:#fff;
+  background:rgba(10,13,19,.9);
+  font:600 19px/1 system-ui,sans-serif;
+  cursor:pointer;
+}
+.qamqor-phone-screen-close:hover{background:#30445a}
+.qamqor-phone-app-open #repair.qamqor-phone-screen-form{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  max-width:none!important;
+  max-height:100%!important;
+  margin:0!important;
+  padding:42px 11px 12px!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overscroll-behavior:contain;
+  border:0!important;
+  border-radius:inherit!important;
+  background:linear-gradient(155deg,#171b23,#090b10 76%)!important;
+  box-shadow:none!important;
+  transform:none!important;
+  scrollbar-width:thin;
+  scrollbar-color:#51647b transparent;
+  -webkit-overflow-scrolling:touch;
+  touch-action:pan-y;
+}
+.qamqor-phone-app-open #repair .cardhead{
+  display:block!important;
+  margin:0 0 10px!important;
+  padding:0 23px 9px 0!important;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+.qamqor-phone-app-open #repair .cardhead h2{
+  margin:5px 0!important;
+  font-size:clamp(16px,4.4vw,22px)!important;
+  line-height:1.12!important;
+}
+.qamqor-phone-app-open #repair .cardhead .sub{font-size:10px!important;line-height:1.4!important}
+.qamqor-phone-app-open #repair .step{
+  display:inline-flex!important;
+  margin-top:5px;
+  padding:5px 8px!important;
+  font-size:9px!important;
+}
+.qamqor-phone-app-open #repair form{gap:8px!important}
+.qamqor-phone-app-open #repair .wizard-progress{
+  margin:0!important;
+  padding:8px 9px!important;
+  border-radius:11px!important;
+}
+.qamqor-phone-app-open #repair .wizard-progress-line{font-size:10px!important}
+.qamqor-phone-app-open #repair .wizard-progress-track{height:4px!important;margin-top:7px!important}
+.qamqor-phone-app-open #repair .wizard-step{
+  gap:9px!important;
+  padding:10px 9px!important;
+  border-radius:13px!important;
+}
+.qamqor-phone-app-open #repair .wizard-step-heading{
+  gap:8px!important;
+  padding-bottom:8px!important;
+}
+.qamqor-phone-app-open #repair .wizard-step-number{
+  width:29px!important;height:29px!important;flex-basis:29px!important;
+  border-radius:9px!important;font-size:10px!important;
+}
+.qamqor-phone-app-open #repair .wizard-step-heading h3{font-size:12px!important}
+.qamqor-phone-app-open #repair .wizard-step-heading p{font-size:9px!important;line-height:1.35!important}
+.qamqor-phone-app-open #repair label{margin-bottom:4px!important;font-size:10px!important}
+.qamqor-phone-app-open #repair input,
+.qamqor-phone-app-open #repair select,
+.qamqor-phone-app-open #repair textarea{
+  min-height:35px!important;
+  padding:8px 9px!important;
+  border-radius:9px!important;
+  font-size:11px!important;
+}
+.qamqor-phone-app-open #repair textarea{min-height:68px!important}
+.qamqor-phone-app-open #repair .phone-model-option img{width:40px!important;height:46px!important;flex-basis:40px!important}
+.qamqor-phone-app-open #repair .phone-model-preview{gap:7px!important;padding:7px!important}
+.qamqor-phone-app-open #repair .phone-model-preview img{width:45px!important;height:52px!important;flex-basis:45px!important}
+.qamqor-phone-app-open #repair .wizard-nav{gap:6px!important;flex-wrap:wrap!important}
+.qamqor-phone-app-open #repair .wizard-next,
+.qamqor-phone-app-open #repair .wizard-back{
+  min-height:34px!important;padding:7px 9px!important;border-radius:999px!important;font-size:10px!important;
+}
+.qamqor-phone-app-open #repair .map-field{gap:6px!important;padding:8px!important}
+.qamqor-phone-app-open #repair #serviceMap{height:135px!important}
+.qamqor-phone-app-open #repair .map-actions{gap:5px!important}
+.qamqor-phone-app-open #repair .map-button,
+.qamqor-phone-app-open #repair .map-direction{min-height:30px!important;padding:6px 8px!important;font-size:9px!important}
+.qamqor-phone-app-open #repair .map-help,
+.qamqor-phone-app-open #repair .map-status{font-size:9px!important}
+.qamqor-phone-app-open #repair #telegramVerifyBox{padding:9px!important;border-radius:11px!important}
+.qamqor-phone-app-open #repair #telegramVerifyButton{min-height:38px!important;font-size:10px!important}
+.qamqor-phone-app-open #repair .fine{font-size:9px!important;line-height:1.4!important}
+.qamqor-phone-app-open #repair .quote-panel{padding:10px!important;border-radius:12px!important}
+.qamqor-phone-app-open #repair .quote-panel h3{font-size:14px!important}
+.qamqor-phone-app-open #repair .quote-line{padding:6px 0!important;font-size:10px!important}
+.qamqor-phone-app-open #repair .quote-total strong{font-size:15px!important}
+.qamqor-phone-app-open #repair .notice{font-size:10px!important}
+#qamqorPhoneAppStatus{
+  position:fixed;
+  z-index:2200;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:min(86vw,320px);
+  padding:16px 18px;
+  border:1px solid rgba(125,178,232,.35);
+  border-radius:16px;
+  background:rgba(12,20,31,.96);
+  color:#e8f3ff;
+  box-shadow:0 18px 60px #0009;
+  text-align:center;
+  font:600 13px/1.55 system-ui,sans-serif;
+}
+#qamqorPhoneAppStatus[hidden]{display:none!important}
+.qamqor-phone-app-detecting #qamqorPhoneAppStatus{display:block}
+@media(max-width:620px){
+  .qamqor-phone-screen-hotspot{border-radius:25px}
+  .qamqor-phone-app-open #repair.qamqor-phone-screen-form{padding-top:38px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .qamqor-phone-app-open .hero#top{animation:none!important}
+}
+</style>
+
 </head>
 <body>
 <div id="qamqor-video-background" aria-hidden="true">
@@ -2214,6 +2430,14 @@ main [data-app-page]:not([hidden]){
       camera-orbit="0deg 75deg 100%"
       field-of-view="30deg"
       tabindex="0">
+      <div
+        slot="hotspot-screen"
+        id="qamqorPhoneScreenHotspot"
+        class="qamqor-phone-screen-hotspot"
+        data-visibility-attribute="visible"
+        aria-label="QAMQOR PHONE өтінім формасы">
+        <button id="qamqorPhoneScreenClose" class="qamqor-phone-screen-close" type="button" aria-label="Телефонның басты экранына қайту">×</button>
+      </div>
       <span slot="hotspot-probe" class="qamqor-button-probe" data-position="0 0.04201275 0.004502" data-normal="0 0 1" data-visibility-attribute="visible" aria-hidden="true"></span>
       <button slot="hotspot-apply" class="qamqor-apply-hitbox" data-position="0 0.04201275 0.004502" data-normal="0 0 1" data-visibility-attribute="visible" type="button" aria-label="Өтінім беру"></button>
     </model-viewer>
@@ -2360,6 +2584,9 @@ main [data-app-page]:not([hidden]){
 
 
 </main>
+
+<div id="qamqorPhoneAppStatus" role="status" aria-live="polite" hidden>3D телефон экраны анықталуда…</div>
+
 <footer><div><strong>QAMQOR PHONE</strong> · Телефон жөндеу қызметі</div><div>© <span id="year"></span> Барлық құқық қорғалған</div></footer>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
@@ -3318,6 +3545,10 @@ verifyButton.addEventListener("click", async () => {
     const id = link.getAttribute("href").slice(1);
     if (!pages.some(page => page.id === id)) return;
     event.preventDefault();
+    if (id === "repair" && typeof window.qamqorOpenPhoneApp === "function") {
+      window.qamqorOpenPhoneApp({updateHistory:true});
+      return;
+    }
     showPage(id,{updateHistory:true});
   });
 
@@ -3444,7 +3675,9 @@ verifyButton.addEventListener("click", async () => {
       event.preventDefault();
       event.stopPropagation();
     }
-    if (typeof window.qamqorShowPage === "function") {
+    if (typeof window.qamqorOpenPhoneApp === "function") {
+      window.qamqorOpenPhoneApp({updateHistory:true});
+    } else if (typeof window.qamqorShowPage === "function") {
       window.qamqorShowPage("repair", {updateHistory:true, scroll:true});
     } else {
       window.location.hash = "repair";
@@ -3465,6 +3698,7 @@ verifyButton.addEventListener("click", async () => {
 
   // Fallback: the actual textured GLB button remains independently tappable.
   viewer.addEventListener("click", event => {
+    if (document.body.classList.contains("qamqor-phone-app-open")) return;
     if (!viewer.loaded ||
         typeof viewer.positionAndNormalFromPoint !== "function") return;
 
@@ -3486,6 +3720,326 @@ verifyButton.addEventListener("click", async () => {
 </script>
 
 
+
+
+<script id="qamqor-phone-screen-app-controller">
+(() => {
+  const viewer = document.querySelector(".qamqor-phone-model");
+  const hotspot = document.getElementById("qamqorPhoneScreenHotspot");
+  const repair = document.getElementById("repair");
+  const status = document.getElementById("qamqorPhoneAppStatus");
+  const closeButton = document.getElementById("qamqorPhoneScreenClose");
+  if (!viewer || !hotspot || !repair || !status || !closeButton) return;
+
+  const SCREEN_MATERIAL = "COLOUR_Blue_Screen";
+  const waitFrame = () => new Promise(resolve =>
+    requestAnimationFrame(() => requestAnimationFrame(resolve))
+  );
+  const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+  const round = n => Math.round(Number(n) * 1000000) / 1000000;
+
+  const originalParent = repair.parentNode;
+  const placeholder = document.createComment(" QAMQOR repair form original position ");
+  originalParent.insertBefore(placeholder, repair);
+
+  let appOpen = false;
+  let appBusy = false;
+  let originalState = null;
+
+  function readOrbit() {
+    const orbit = viewer.getCameraOrbit();
+    return {theta:orbit.theta, phi:orbit.phi, radius:orbit.radius};
+  }
+
+  function materialNameAt(x, y) {
+    try {
+      const material = viewer.materialFromPoint(x, y);
+      return material && material.name ? material.name : "";
+    } catch (_) {
+      return "";
+    }
+  }
+
+  function sampleMaterialRect(rect, stepX, stepY) {
+    const points = [];
+    const left = Math.max(1, rect.left);
+    const top = Math.max(1, rect.top);
+    const right = Math.min(viewer.clientWidth - 1, rect.right);
+    const bottom = Math.min(viewer.clientHeight - 1, rect.bottom);
+
+    for (let y = top; y <= bottom; y += stepY) {
+      for (let x = left; x <= right; x += stepX) {
+        if (materialNameAt(x, y) !== SCREEN_MATERIAL) continue;
+
+        let hit = null;
+        try { hit = viewer.positionAndNormalFromPoint(x, y); } catch (_) {}
+        if (!hit || !hit.position || !hit.normal) continue;
+
+        points.push({
+          px:x, py:y,
+          x:Number(hit.position.x),
+          y:Number(hit.position.y),
+          z:Number(hit.position.z),
+          nx:Number(hit.normal.x),
+          ny:Number(hit.normal.y),
+          nz:Number(hit.normal.z)
+        });
+      }
+    }
+    return points;
+  }
+
+  function boundsFromPoints(points) {
+    if (!points.length) return null;
+    const xs=points.map(p=>p.x), ys=points.map(p=>p.y), zs=points.map(p=>p.z);
+    const pxs=points.map(p=>p.px), pys=points.map(p=>p.py);
+    const min=(a)=>Math.min(...a), max=(a)=>Math.max(...a);
+    const avg=(a)=>a.reduce((s,v)=>s+v,0)/a.length;
+    let nx=avg(points.map(p=>p.nx)), ny=avg(points.map(p=>p.ny)), nz=avg(points.map(p=>p.nz));
+    const nl=Math.hypot(nx,ny,nz)||1;
+    nx/=nl; ny/=nl; nz/=nl;
+    return {
+      center:{x:(min(xs)+max(xs))/2,y:(min(ys)+max(ys))/2,z:avg(zs)},
+      normal:{x:nx,y:ny,z:nz},
+      world:{min:{x:min(xs),y:min(ys),z:min(zs)},max:{x:max(xs),y:max(ys),z:max(zs)}},
+      pixels:{left:min(pxs),top:min(pys),right:max(pxs),bottom:max(pys),
+        width:max(pxs)-min(pxs),height:max(pys)-min(pys)}
+    };
+  }
+
+  async function detectScreenWithKorDiagnostics() {
+    if (!viewer.loaded) throw new Error("3D модель әлі жүктелмеді.");
+    if (typeof viewer.positionAndNormalFromPoint !== "function" ||
+        typeof viewer.materialFromPoint !== "function" ||
+        typeof viewer.surfaceFromPoint !== "function") {
+      throw new Error("kor.html диагностикалық әдістері қолжетімсіз.");
+    }
+
+    const orbit = readOrbit();
+    const angles = [0, Math.PI/2, Math.PI, Math.PI*1.5];
+    let best = null;
+
+    // Same four-angle material/raycast scan used by kor.html.
+    for (const offset of angles) {
+      viewer.cameraOrbit = `${orbit.theta+offset}rad ${orbit.phi}rad ${orbit.radius}m`;
+      await wait(210);
+      await waitFrame();
+
+      const coarse = sampleMaterialRect({
+        left:viewer.clientWidth*.07,
+        top:viewer.clientHeight*.06,
+        right:viewer.clientWidth*.93,
+        bottom:viewer.clientHeight*.94
+      }, Math.max(12,viewer.clientWidth/18), Math.max(12,viewer.clientHeight/28));
+
+      if (!best || coarse.length > best.points.length) {
+        best = {theta:orbit.theta+offset,points:coarse};
+      }
+    }
+
+    if (!best || best.points.length < 8) {
+      viewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${orbit.radius}m`;
+      throw new Error("COLOUR_Blue_Screen материалы табылмады.");
+    }
+
+    const coarseBounds = boundsFromPoints(best.points);
+    if (!coarseBounds) throw new Error("Экран шекарасын оқу мүмкін болмады.");
+
+    // Center the camera on the screen mesh discovered by materialFromPoint().
+    viewer.cameraTarget =
+      `${coarseBounds.center.x}m ${coarseBounds.center.y}m ${coarseBounds.center.z}m`;
+    viewer.cameraOrbit = `${best.theta}rad ${orbit.phi}rad ${orbit.radius}m`;
+    viewer.fieldOfView = "24deg";
+    await wait(260);
+    await waitFrame();
+
+    // kor.html's pixel/material scan, followed by a denser pass inside the
+    // detected screen rectangle. No hand-written GLB coordinates are used.
+    const currentCoarse = sampleMaterialRect({
+      left:viewer.clientWidth*.04,
+      top:viewer.clientHeight*.04,
+      right:viewer.clientWidth*.96,
+      bottom:viewer.clientHeight*.96
+    }, Math.max(10,viewer.clientWidth/24), Math.max(10,viewer.clientHeight/36));
+    const currentBounds = boundsFromPoints(currentCoarse);
+    if (!currentBounds || currentCoarse.length < 8) {
+      throw new Error("Үлкейтілген экран беті анықталмады.");
+    }
+
+    const marginX=viewer.clientWidth/24;
+    const marginY=viewer.clientHeight/36;
+    const step=Math.max(3,Math.round(Math.max(viewer.clientWidth,viewer.clientHeight)/220));
+    const finePoints=sampleMaterialRect({
+      left:currentBounds.pixels.left-marginX,
+      top:currentBounds.pixels.top-marginY,
+      right:currentBounds.pixels.right+marginX,
+      bottom:currentBounds.pixels.bottom+marginY
+    },step,step);
+    const bounds=boundsFromPoints(finePoints);
+    if (!bounds || bounds.pixels.width < 60 || bounds.pixels.height < 120) {
+      throw new Error("Экранның нақты шекарасы жеткілікті дәлдікпен табылмады.");
+    }
+
+    // surfaceFromPoint() is also used, as in kor.html, for a final center check.
+    const surfaceX=(bounds.pixels.left+bounds.pixels.right)/2;
+    const surfaceY=(bounds.pixels.top+bounds.pixels.bottom)/2;
+    let surface=null;
+    try { surface=viewer.surfaceFromPoint(surfaceX,surfaceY); } catch (_) {}
+
+    return {
+      material:SCREEN_MATERIAL,
+      sampleCount:finePoints.length,
+      theta:best.theta,
+      center:bounds.center,
+      normal:bounds.normal,
+      worldBounds:bounds.world,
+      pixelBounds:bounds.pixels,
+      surface
+    };
+  }
+
+  function setStatus(message, visible=true) {
+    status.textContent=message;
+    status.hidden=!visible;
+  }
+
+  function restoreViewer() {
+    if (!originalState) return;
+    if (originalState.cameraOrbit===null) viewer.removeAttribute("camera-orbit");
+    else viewer.setAttribute("camera-orbit",originalState.cameraOrbit);
+    if (originalState.cameraTarget===null) viewer.removeAttribute("camera-target");
+    else viewer.setAttribute("camera-target",originalState.cameraTarget);
+    if (originalState.fieldOfView===null) viewer.removeAttribute("field-of-view");
+    else viewer.setAttribute("field-of-view",originalState.fieldOfView);
+    if (originalState.cameraControls) viewer.setAttribute("camera-controls","");
+    else viewer.removeAttribute("camera-controls");
+    document.documentElement.style.overflow=originalState.htmlOverflow;
+    document.body.style.overflow=originalState.bodyOverflow;
+    document.body.classList.remove("qamqor-phone-app-open","qamqor-phone-app-detecting");
+    originalState=null;
+  }
+
+  async function openPhoneApp(options={}) {
+    if (appOpen || appBusy) return;
+    appBusy=true;
+    originalState={
+      cameraOrbit:viewer.getAttribute("camera-orbit"),
+      cameraTarget:viewer.getAttribute("camera-target"),
+      fieldOfView:viewer.getAttribute("field-of-view"),
+      cameraControls:viewer.hasAttribute("camera-controls"),
+      htmlOverflow:document.documentElement.style.overflow,
+      bodyOverflow:document.body.style.overflow
+    };
+
+    document.body.classList.add("qamqor-phone-app-open","qamqor-phone-app-detecting");
+    document.documentElement.style.overflow="hidden";
+    document.body.style.overflow="hidden";
+    if (typeof window.qamqorShowPage==="function") {
+      window.qamqorShowPage("top",{updateHistory:false,scroll:false});
+    }
+    viewer.removeAttribute("camera-controls");
+    setStatus("kor.html жүйесі 3D экранның нақты шекарасын анықтап жатыр…");
+
+    try {
+      await waitFrame();
+      const screen=await detectScreenWithKorDiagnostics();
+
+      hotspot.setAttribute("data-position",
+        `${round(screen.center.x)} ${round(screen.center.y)} ${round(screen.center.z)}`);
+      hotspot.setAttribute("data-normal",
+        `${round(screen.normal.x)} ${round(screen.normal.y)} ${round(screen.normal.z)}`);
+      hotspot.style.width=`${Math.ceil(screen.pixelBounds.width+4)}px`;
+      hotspot.style.height=`${Math.ceil(screen.pixelBounds.height+4)}px`;
+      hotspot.style.borderRadius=`${Math.min(34,Math.max(16,screen.pixelBounds.width*.075))}px`;
+
+      hotspot.appendChild(repair);
+      repair.hidden=false;
+      repair.setAttribute("aria-hidden","false");
+      repair.classList.add("qamqor-phone-screen-form");
+
+      document.body.classList.remove("qamqor-phone-app-detecting");
+      hotspot.classList.add("qamqor-screen-ready");
+      setStatus("",false);
+      appOpen=true;
+      appBusy=false;
+
+      window.QAMQOR_SCREEN_COORDINATES={
+        source:"kor.html",
+        detector:"positionAndNormalFromPoint + materialFromPoint + surfaceFromPoint",
+        material:screen.material,
+        samples:screen.sampleCount,
+        center:screen.center,
+        normal:screen.normal,
+        worldBounds:screen.worldBounds,
+        pixelBounds:screen.pixelBounds,
+        theta:screen.theta
+      };
+
+      if (options.updateHistory && window.location.hash!=="#repair") {
+        window.history.pushState({qamqorPhoneApp:true},"","#repair");
+      }
+
+      requestAnimationFrame(()=>{
+        if (typeof serviceMap!=="undefined" && serviceMap) serviceMap.invalidateSize();
+      });
+    } catch(error) {
+      hotspot.classList.remove("qamqor-screen-ready");
+      if (repair.parentNode===hotspot) {
+        placeholder.parentNode.insertBefore(repair,placeholder.nextSibling);
+        repair.hidden=true;
+        repair.classList.remove("qamqor-phone-screen-form");
+      }
+      restoreViewer();
+      appBusy=false;
+      setStatus("3D экранды анықтау мүмкін болмады: "+(error.message||"Қате"),true);
+      await wait(2600);
+      setStatus("",false);
+    }
+  }
+
+  function closePhoneApp(options={}) {
+    if (!appOpen) return;
+    hotspot.classList.remove("qamqor-screen-ready");
+    placeholder.parentNode.insertBefore(repair,placeholder.nextSibling);
+    repair.hidden=true;
+    repair.setAttribute("aria-hidden","true");
+    repair.classList.remove("qamqor-phone-screen-form");
+    restoreViewer();
+    appOpen=false;
+    appBusy=false;
+
+    if (options.updateHistory!==false && window.location.hash==="#repair") {
+      window.history.replaceState({qamqorPage:"top"},"","#top");
+    }
+    if (typeof window.qamqorShowPage==="function") {
+      window.qamqorShowPage("top",{updateHistory:false,scroll:false});
+    }
+  }
+
+  window.qamqorOpenPhoneApp=openPhoneApp;
+  window.qamqorClosePhoneApp=closePhoneApp;
+
+  closeButton.addEventListener("click",event=>{
+    event.preventDefault();
+    event.stopPropagation();
+    closePhoneApp();
+  });
+
+  document.addEventListener("keydown",event=>{
+    if(event.key==="Escape" && appOpen) closePhoneApp();
+  });
+  window.addEventListener("popstate",()=>{
+    if(appOpen && window.location.hash!=="#repair") closePhoneApp({updateHistory:false});
+  });
+
+  if (window.location.hash==="#repair" ||
+      sessionStorage.getItem("qamqorPendingRequest") ||
+      sessionStorage.getItem("qamqorQuoteRequest") ||
+      new URLSearchParams(window.location.search).has("code")) {
+    openPhoneApp({updateHistory:false});
+  }
+})();
+</script>
 
 </body>
 </html>
