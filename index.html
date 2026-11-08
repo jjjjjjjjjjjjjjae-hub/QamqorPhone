@@ -1478,7 +1478,7 @@ main [data-app-page]:not([hidden]){
   line-height:1.55!important;
 }
 .hero-actions{margin-top:16px!important;gap:10px!important;flex-wrap:wrap!important}
-.hero-cta,.hero-secondary{min-height:46px!important;padding:12px 19px!important;font-size:12px!important}
+.hero-cta,.hero-secondary{min-height:36px!important;padding:12px 19px!important;font-size:12px!important}
 .hero-points{gap:7px!important;margin-top:14px!important;font-size:10px!important}
 .hero-points span{line-height:1.35!important}
 .art,.premium-art{
@@ -2145,9 +2145,9 @@ main [data-app-page]:not([hidden]){
 /* Transparent front-facing touch target attached to the physical GLB button. */
 .hero#top .qamqor-phone-model .qamqor-apply-hitbox {
   display:block!important;
-  width:min(48vw,260px)!important;
-  height:50px!important;
-  min-height:50px!important;
+  width:min(34vw,190px)!important;
+  height:40px!important;
+  min-height:40px!important;
   margin:0!important;
   padding:0!important;
   border:0!important;
@@ -2164,9 +2164,9 @@ main [data-app-page]:not([hidden]){
 }
 @media(max-width:620px) {
   .hero#top .qamqor-phone-model .qamqor-apply-hitbox {
-    width:min(48vw,220px)!important;
+    width:min(34vw,150px)!important;
     height:46px!important;
-    min-height:46px!important;
+    min-height:36px!important;
   }
 }
 
@@ -2420,7 +2420,7 @@ main [data-app-page]:not([hidden]){
   <div class="art premium-art" aria-label="QAMQOR PHONE нақты 3D телефоны">
     <model-viewer
       class="qamqor-phone-model"
-      src="./QAMQOR-iPhone-Duo.glb?v=duo-animation-20261108"
+      src="./QAMQOR-iPhone-Duo.glb?v=duo-apply-hitbox-20261108"
       alt="QAMQOR PHONE Duo 3D моделі"
       animation-name="open-close"
       camera-controls
@@ -2439,6 +2439,14 @@ main [data-app-page]:not([hidden]){
       <span slot="hotspot-screen-top-right" class="qamqor-screen-probe" data-position="0.0792842135 0.1143482625 0.0024460158" data-normal="0 0 1" aria-hidden="true"></span>
       <span slot="hotspot-screen-bottom-right" class="qamqor-screen-probe" data-position="0.0792842135 0.0034348741 0.0024460158" data-normal="0 0 1" aria-hidden="true"></span>
       <span slot="hotspot-screen-bottom-left" class="qamqor-screen-probe" data-position="-0.0792842135 0.0034348741 0.0024460158" data-normal="0 0 1" aria-hidden="true"></span>
+      <button
+        type="button"
+        slot="hotspot-duo-apply"
+        class="qamqor-apply-hitbox"
+        data-position="-0.0411862 0.0255 -0.00295"
+        data-normal="0 0 -1"
+        aria-label="Өтінім беру"
+        title="Өтінім беру"></button>
     </model-viewer>
   </div>
 </section>
@@ -3977,6 +3985,16 @@ verifyButton.addEventListener("click", async () => {
 
     state = "closed";
     if (shouldRestore) openDuoAndForm();
+  }
+
+  const applyHitbox = viewer.querySelector(".qamqor-apply-hitbox");
+  if (applyHitbox) {
+    applyHitbox.addEventListener("click", event => {
+      if (state !== "closed" || busy) return;
+      event.preventDefault();
+      event.stopPropagation();
+      openDuoAndForm();
+    });
   }
 
   viewer.addEventListener("pointerup",handleClosedDisplayPress,{passive:false});
