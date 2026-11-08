@@ -2246,7 +2246,6 @@ main [data-app-page]:not([hidden]){
 #repair.qamqor-phone-form-card{
   position:absolute!important;
   inset:0!important;
-  border-radius:inherit!important;
   display:flex!important;
   flex-direction:column!important;
   width:100%!important;
@@ -3827,6 +3826,12 @@ verifyButton.addEventListener("click", async () => {
     if (event.key === "Escape" && opened) closePhoneForm();
   });
   window.addEventListener("resize", () => {
+    if (opened) requestAnimationFrame(placeOverlay);
+  });
+  window.addEventListener("scroll", () => {
+    if (opened) requestAnimationFrame(placeOverlay);
+  }, {passive:true});
+  viewer.addEventListener("camera-change", () => {
     if (opened) requestAnimationFrame(placeOverlay);
   });
 
