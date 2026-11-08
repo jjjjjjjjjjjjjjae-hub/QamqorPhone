@@ -5,7 +5,9 @@ on:
     branches: [main]
     paths:
       - "kor.html"
+      - "index.html"
       - "*.glb"
+      - ".github/workflows/qamqor-3d-diagnostics.yml"
   workflow_dispatch:
 
 permissions:
@@ -188,6 +190,59 @@ jobs:
                       "() => window.QAMQOR_DIAGNOSTICS.collect()"
                   )
                   report["browser_diagnostics"] = browser_data
+
+                  # Verify the actual site's hotspot on the front glass and after a 180-degree turn.
+                  try:
+                      page.goto(
+                          "http://127.0.0.1:8765/index.html",
+                          wait_until="domcontentloaded",
+                          timeout=90000
+                      )
+                      page.wait_for_function(
+                          """() => {
+                            const v = document.querySelector('.qamqor-phone-model');
+                            return v && v.loaded && typeof v.queryHotspot === 'function';
+                          }""",
+                          timeout=120000
+                      )
+                      hotspot_test = page.evaluate(
+                          """async () => {
+                            const v = document.querySelector('.qamqor-phone-model');
+                            const initial = v.getCameraOrbit();
+                            const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
+                            const inspect = async theta => {
+                              v.cameraOrbit = theta + "rad " + initial.phi + "rad " + initial.radius + "m";
+                              await pause(450);
+                              const h = v.queryHotspot('hotspot-apply');
+                              return h ? {
+                                found: true,
+                                facingCamera: h.facingCamera,
+                                position: h.position,
+                                normal: h.normal,
+                                canvasPosition: h.canvasPosition
+                              } : {found: false};
+                            };
+                            const front = await inspect(0);
+                            const back = await inspect(Math.PI);
+                            v.cameraOrbit = initial.theta + "rad " + initial.phi + "rad " + initial.radius + "m";
+                            await pause(250);
+                            return {
+                              frontAtZeroDegrees: front,
+                              backAt180Degrees: back,
+                              expected: {
+                                frontFacingCamera: true,
+                                backFacingCamera: false
+                              }
+                            };
+                          }"""
+                      )
+                      report["index_hotspot_rotation_test"] = hotspot_test
+                  except Exception as test_exc:
+                      report["index_hotspot_rotation_test"] = {
+                          "error": str(test_exc),
+                          "traceback": traceback.format_exc()
+                      }
+
                   browser.close()
           except Exception as exc:
               report["browser_diagnostics"] = {
@@ -202,8 +257,9 @@ jobs:
               "generated_at_utc": report["generated_at_utc"],
               "glb_file": report.get("glb_geometry", {}).get("file"),
               "geometry_count": report.get("glb_geometry", {}).get("geometry_count"),
-              "browser_sample_count": len(report.get("browser_diagnostics", {}).get("samples", [])),
-              "browser_error": report.get("browser_diagnostics", {}).get("error")
+              "browser_sample_count": report.get("browser_diagnostics", {}).get("totalSamples"),
+              "browser_error": report.get("browser_diagnostics", {}).get("error"),
+              "index_hotspot_rotation_test": report.get("index_hotspot_rotation_test")
           }, ensure_ascii=False))
           print("QAMQOR_DIAGNOSTIC_REPORT_END")
           PY
