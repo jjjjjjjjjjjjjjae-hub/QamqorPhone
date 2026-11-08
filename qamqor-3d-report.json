@@ -1,12 +1,12 @@
 {
   "repository": "jjjjjjjjjjjjjjae-hub/QamqorPhone",
-  "commit": "184d8b509543015d087ce3d9c32c24feda22c57e",
+  "commit": "8cc4837345d82d4340dc540ec81c68e529003876",
   "branch": "main",
-  "generated_at_utc": "2026-11-08T02:46:32Z",
+  "generated_at_utc": "2026-11-08T02:51:46Z",
   "button_build": {
     "source": "iPhone 18 pro max.glb",
     "output": "QAMQOR-iPhone-18-Pro-Max.glb",
-    "output_size_bytes": 2877448,
+    "output_size_bytes": 2879016,
     "screen_bounds_min": [
       -0.0365150012075901,
       0.002391000045463443,
@@ -23,7 +23,7 @@
     "button": {
       "center": [
         0.0,
-        0.05627658092882484,
+        0.04518249074695632,
         0.004501999847888946
       ],
       "size": [
@@ -46,7 +46,7 @@
   },
   "glb_geometry": {
     "file": "QAMQOR-iPhone-18-Pro-Max.glb",
-    "file_size_bytes": 2877448,
+    "file_size_bytes": 2879016,
     "geometry_count": 44,
     "button_mesh_count": 1,
     "button_meshes": [
@@ -58,12 +58,12 @@
         "face_count": 2,
         "bounds_min": [
           -0.02629080042243004,
-          0.04970388114452362,
+          0.03860979154706001,
           0.004501999821513891
         ],
         "bounds_max": [
           0.02629080042243004,
-          0.06284928321838379,
+          0.05175518989562988,
           0.004501999821513891
         ]
       }
@@ -77,12 +77,12 @@
         "face_count": 2,
         "bounds_min": [
           -0.02629080042243004,
-          0.04970388114452362,
+          0.03860979154706001,
           0.004501999821513891
         ],
         "bounds_max": [
           0.02629080042243004,
-          0.06284928321838379,
+          0.05175518989562988,
           0.004501999821513891
         ]
       },
@@ -823,213 +823,2112 @@
     "angles": [
       {
         "angle": 0,
-        "facingCamera": null,
-        "center": null,
-        "projectedButtonWidthPx": null,
-        "probes": {
-          "hotspot-button-center": null,
-          "hotspot-button-left": null,
-          "hotspot-button-right": null,
-          "hotspot-button-top": null,
-          "hotspot-button-bottom": null
+        "facingCamera": true,
+        "center": {
+          "facingCamera": true,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 279.8989107067843,
+            "y": 613.1469046371831,
+            "z": 0.997832885610899
+          }
         },
-        "rayHits": null
+        "projectedButtonWidthPx": 253.09237754287187,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 279.8989107067843,
+              "y": 613.1469046371831,
+              "z": 0.997832885610899
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": true,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 153.35272193534837,
+              "y": 613.1469046371831,
+              "z": 0.997832885610899
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": true,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 406.44509947822024,
+              "y": 613.1469046371831,
+              "z": 0.997832885610899
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 279.8983982432859,
+              "y": 583.3355985036308,
+              "z": 0.9978117506330687
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 279.8994180266536,
+              "y": 642.658992773457,
+              "z": 0.9978538084555972
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": -1.1845088305388954e-14,
+              "y": 0.04518249993054706,
+              "z": 0.004501999821513891
+            },
+            "normal": {
+              "x": 0,
+              "y": 0,
+              "z": 1
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
+      },
+      {
+        "angle": 15,
+        "facingCamera": true,
+        "center": {
+          "facingCamera": true,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 271.387143751482,
+            "y": 612.7296689982751,
+            "z": 0.9978357226209662
+          }
+        },
+        "projectedButtonWidthPx": 245.2691974325073,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 271.387143751482,
+              "y": 612.7296689982751,
+              "z": 0.9978357226209662
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": true,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 151.70132456273788,
+              "y": 601.059195903831,
+              "z": 0.9979150764598292
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": true,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 395.8127554695801,
+              "y": 624.8623156531462,
+              "z": 0.9977532262148785
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 271.3435114775502,
+              "y": 582.936638006483,
+              "z": 0.9978146164701164
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 271.43033838198943,
+              "y": 642.2238678887859,
+              "z": 0.9978566170714552
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": -4.8758261317338736e-11,
+              "y": 0.045182499928057285,
+              "z": 0.004501999821513891
+            },
+            "normal": {
+              "x": 0,
+              "y": 0,
+              "z": 1
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
       },
       {
         "angle": 30,
-        "facingCamera": null,
-        "center": null,
-        "projectedButtonWidthPx": null,
-        "probes": {
-          "hotspot-button-center": null,
-          "hotspot-button-left": null,
-          "hotspot-button-right": null,
-          "hotspot-button-top": null,
-          "hotspot-button-bottom": null
+        "facingCamera": true,
+        "center": {
+          "facingCamera": true,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 263.44631353960744,
+            "y": 611.5188995537658,
+            "z": 0.9978439552952221
+          }
         },
-        "rayHits": null
+        "projectedButtonWidthPx": 222.47087156526007,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 263.44631353960744,
+              "y": 611.5188995537658,
+              "z": 0.9978439552952221
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": true,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 158.69951350329166,
+              "y": 589.3892958949257,
+              "z": 0.9979944264019747
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": true,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 376.36575549306036,
+              "y": 635.3751175474513,
+              "z": 0.9976817440066794
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 263.3626199875831,
+              "y": 581.7789164873827,
+              "z": 0.9978229326849893
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 263.52916927333933,
+              "y": 640.9611691018899,
+              "z": 0.997864767457613
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": -1.056529030929454e-10,
+              "y": 0.0451824999195328,
+              "z": 0.004501999821513891
+            },
+            "normal": {
+              "x": 0,
+              "y": 0,
+              "z": 1
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
       },
       {
         "angle": 45,
-        "facingCamera": null,
-        "center": null,
-        "projectedButtonWidthPx": null,
-        "probes": {
-          "hotspot-button-center": null,
-          "hotspot-button-left": null,
-          "hotspot-button-right": null,
-          "hotspot-button-top": null,
-          "hotspot-button-bottom": null
+        "facingCamera": true,
+        "center": {
+          "facingCamera": true,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 256.7145395610357,
+            "y": 609.6130298060039,
+            "z": 0.9978569143312128
+          }
         },
-        "rayHits": null
+        "projectedButtonWidthPx": 187.48444338863985,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 256.7145395610357,
+              "y": 609.6130298060039,
+              "z": 0.9978569143312128
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": true,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 173.39174894935343,
+              "y": 578.9663072038497,
+              "z": 0.9980652979217812
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": true,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 349.3514984863248,
+              "y": 643.685570608453,
+              "z": 0.9976252367556241
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 256.5971796912799,
+              "y": 579.9565963296097,
+              "z": 0.9978360228847908
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 256.83072823746517,
+              "y": 638.9735067766397,
+              "z": 0.997877597291355
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": -1.8403098489550018e-10,
+              "y": 0.04518249990088717,
+              "z": 0.0045019998215138635
+            },
+            "normal": {
+              "x": 0,
+              "y": 0,
+              "z": 1
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
       },
       {
         "angle": 60,
-        "facingCamera": null,
-        "center": null,
-        "projectedButtonWidthPx": null,
-        "probes": {
-          "hotspot-button-center": null,
-          "hotspot-button-left": null,
-          "hotspot-button-right": null,
-          "hotspot-button-top": null,
-          "hotspot-button-bottom": null
+        "facingCamera": true,
+        "center": {
+          "facingCamera": true,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 251.63306811274484,
+            "y": 607.1510225202426,
+            "z": 0.9978736548461732
+          }
         },
-        "rayHits": null
+        "projectedButtonWidthPx": 145.32984931582953,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 251.63306811274484,
+              "y": 607.1510225202426,
+              "z": 0.9978736548461732
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": true,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 194.4993390548697,
+              "y": 570.3260784253218,
+              "z": 0.9981240474957429
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": true,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 316.6541145279908,
+              "y": 649.0596540539765,
+              "z": 0.9975886954647679
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 251.49067768173674,
+              "y": 577.602603620843,
+              "z": 0.9978529322268499
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 251.77404326816227,
+              "y": 636.405747835631,
+              "z": 0.9978941714950736
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": -3.2288394180568503e-10,
+              "y": 0.04518249985801279,
+              "z": 0.004501999821513891
+            },
+            "normal": {
+              "x": 0,
+              "y": 0,
+              "z": 1
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
       },
       {
         "angle": 75,
-        "facingCamera": null,
-        "center": null,
-        "projectedButtonWidthPx": null,
-        "probes": {
-          "hotspot-button-center": null,
-          "hotspot-button-left": null,
-          "hotspot-button-right": null,
-          "hotspot-button-top": null,
-          "hotspot-button-bottom": null
+        "facingCamera": true,
+        "center": {
+          "facingCamera": true,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 248.5385213659802,
+            "y": 604.3119510183157,
+            "z": 0.9978929592240388
+          }
         },
-        "rayHits": null
+        "projectedButtonWidthPx": 105.95569572346565,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 248.5385213659802,
+              "y": 604.3119510183157,
+              "z": 0.9978929592240388
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": true,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 220.5213129667042,
+              "y": 563.8922939800252,
+              "z": 0.9981677942650489
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": true,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 280.8823970053438,
+              "y": 650.9735720478391,
+              "z": 0.9975756817044128
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 248.38133972183067,
+              "y": 574.8882084352356,
+              "z": 0.9978724304336651
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 248.69414798796424,
+              "y": 633.4445999933935,
+              "z": 0.9979132849199338
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": -7.257036083174739e-10,
+              "y": 0.04518249971387621,
+              "z": 0.004501999821513877
+            },
+            "normal": {
+              "x": 0,
+              "y": 0,
+              "z": 1
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
+      },
+      {
+        "angle": 85,
+        "facingCamera": true,
+        "center": {
+          "facingCamera": true,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 247.67803249704818,
+            "y": 602.3087835859724,
+            "z": 0.9979065798394462
+          }
+        },
+        "projectedButtonWidthPx": 90.84614601632146,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 247.67803249704818,
+              "y": 602.3087835859724,
+              "z": 0.9979065798394462
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": true,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 239.80533929634635,
+              "y": 560.9755963886905,
+              "z": 0.9981876264645493
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": true,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 256.80313888056827,
+              "y": 650.217386236908,
+              "z": 0.9975808234194492
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 247.51708978768374,
+              "y": 572.9730857042675,
+              "z": 0.9978861872584942
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": true,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 247.83738822734125,
+              "y": 631.3552161833675,
+              "z": 0.9979267713389122
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": -2.697436385368235e-09,
+              "y": 0.045182498968792464,
+              "z": 0.004501999821513895
+            },
+            "normal": {
+              "x": 0,
+              "y": 0,
+              "z": 1
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
       },
       {
         "angle": 89,
-        "facingCamera": null,
-        "center": null,
-        "projectedButtonWidthPx": null,
-        "probes": {
-          "hotspot-button-center": null,
-          "hotspot-button-left": null,
-          "hotspot-button-right": null,
-          "hotspot-button-top": null,
-          "hotspot-button-bottom": null
+        "facingCamera": false,
+        "center": {
+          "facingCamera": false,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 247.6100419347562,
+            "y": 601.4994962607807,
+            "z": 0.9979120826203084
+          }
         },
-        "rayHits": null
+        "projectedButtonWidthPx": 89.33191366534024,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 247.6100419347562,
+              "y": 601.4994962607807,
+              "z": 0.9979120826203084
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": false,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 247.82000781638504,
+              "y": 560.1327300766288,
+              "z": 0.9981933575670479
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": false,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 247.36659039625494,
+              "y": 649.4634930407664,
+              "z": 0.9975859495457615
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 247.4489784577616,
+              "y": 572.1993867655981,
+              "z": 0.9978917449392618
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 247.76951936527246,
+              "y": 630.5110776778025,
+              "z": 0.997932220029338
+            }
+          }
+        },
+        "rayHits": {
+          "global": null,
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
+      },
+      {
+        "angle": 90,
+        "facingCamera": false,
+        "center": {
+          "facingCamera": false,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 247.61773171055845,
+            "y": 601.2972332678337,
+            "z": 0.9979134579154504
+          }
+        },
+        "projectedButtonWidthPx": 89.41349338071385,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 247.61773171055845,
+              "y": 601.2972332678337,
+              "z": 0.9979134579154504
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": false,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 249.84436733578644,
+              "y": 559.9514625213865,
+              "z": 0.9981945901028887
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": false,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 245.0360596190647,
+              "y": 649.2355763123867,
+              "z": 0.9975874992744821
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 247.4567608882728,
+              "y": 572.0060198989183,
+              "z": 0.9978931339437729
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 247.77711792916892,
+              "y": 630.3001026766746,
+              "z": 0.9979335818170794
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": 0.03856670098138426,
+              "y": 0.05987013181540099,
+              "z": 0.003683109071297596
+            },
+            "normal": {
+              "x": 0.8124634385328992,
+              "y": 0,
+              "z": 0.5830121448540314
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
       },
       {
         "angle": 91,
-        "facingCamera": null,
-        "center": null,
-        "projectedButtonWidthPx": null,
-        "probes": {
-          "hotspot-button-center": null,
-          "hotspot-button-left": null,
-          "hotspot-button-right": null,
-          "hotspot-button-top": null,
-          "hotspot-button-bottom": null
+        "facingCamera": false,
+        "center": {
+          "facingCamera": false,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 247.63527637202452,
+            "y": 601.0951170533017,
+            "z": 0.9979148322125666
+          }
         },
-        "rayHits": null
+        "projectedButtonWidthPx": 89.6787950062279,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 247.63527637202452,
+              "y": 601.0951170533017,
+              "z": 0.9979148322125666
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": false,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 251.87601043365106,
+              "y": 559.7820425962892,
+              "z": 0.9981957420803046
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": false,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 242.71871493091513,
+              "y": 648.9920768572658,
+              "z": 0.9975891549585635
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 247.47444711059433,
+              "y": 571.8127940008637,
+              "z": 0.9978945219356697
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 247.79452295286237,
+              "y": 630.0892800782547,
+              "z": 0.9979349426211012
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": 0.038855540845610825,
+              "y": 0.05998238670897825,
+              "z": 0.0029986685425833198
+            },
+            "normal": {
+              "x": 0.9599718345408325,
+              "y": 0,
+              "z": 0.2800965492259922
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
+      },
+      {
+        "angle": 95,
+        "facingCamera": false,
+        "center": {
+          "facingCamera": false,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 247.80045668475276,
+            "y": 600.2997949503964,
+            "z": 0.9979202400363529
+          }
+        },
+        "projectedButtonWidthPx": 92.45405201932134,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 247.80045668475276,
+              "y": 600.2997949503964,
+              "z": 0.9979202400363529
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": false,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 259.95830379462143,
+              "y": 559.2294537908388,
+              "z": 0.9981994994295285
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": false,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 233.71529838264271,
+              "y": 647.8807730237652,
+              "z": 0.997596711312502
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 247.6406610112847,
+              "y": 571.0524613341205,
+              "z": 0.9978999836030286
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 247.95868191930694,
+              "y": 629.2596918054603,
+              "z": 0.9979402973936293
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": 0.03854273362688737,
+              "y": 0.059915904741572934,
+              "z": 0.00034401454860001277
+            },
+            "normal": {
+              "x": 0,
+              "y": 0.9731054275177728,
+              "z": 0.23036021126803258
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
       },
       {
         "angle": 105,
-        "facingCamera": null,
-        "center": null,
-        "projectedButtonWidthPx": null,
-        "probes": {
-          "hotspot-button-center": null,
-          "hotspot-button-left": null,
-          "hotspot-button-right": null,
-          "hotspot-button-top": null,
-          "hotspot-button-bottom": null
+        "facingCamera": false,
+        "center": {
+          "facingCamera": false,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 248.90180282561144,
+            "y": 598.3148382199556,
+            "z": 0.9979337368273795
+          }
         },
-        "rayHits": null
+        "projectedButtonWidthPx": 109.55409919814997,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 248.90180282561144,
+              "y": 598.3148382199556,
+              "z": 0.9979337368273795
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": false,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 280.8049534950132,
+              "y": 558.6671226573569,
+              "z": 0.9982033230220935
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": false,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 212.12451054993934,
+              "y": 644.0199047326153,
+              "z": 0.997622963437653
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 248.7479856016707,
+              "y": 569.1548744942578,
+              "z": 0.9979136144629895
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 249.05411333967325,
+              "y": 627.1891667983697,
+              "z": 0.9979536620840307
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": 0.030619505295549743,
+              "y": 0.05725487402843252,
+              "z": -0.004375000018626465
+            },
+            "normal": {
+              "x": 0,
+              "y": 0,
+              "z": -1
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
       },
       {
         "angle": 120,
-        "facingCamera": null,
-        "center": null,
-        "projectedButtonWidthPx": null,
-        "probes": {
-          "hotspot-button-center": null,
-          "hotspot-button-left": null,
-          "hotspot-button-right": null,
-          "hotspot-button-top": null,
-          "hotspot-button-bottom": null
+        "facingCamera": false,
+        "center": {
+          "facingCamera": false,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 252.27259379280062,
+            "y": 595.5645665210878,
+            "z": 0.9979524374075065
+          }
         },
-        "rayHits": null
+        "projectedButtonWidthPx": 147.82026347421404,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 252.27259379280062,
+              "y": 595.5645665210878,
+              "z": 0.9979524374075065
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": false,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 311.7221408614758,
+              "y": 560.0906369901089,
+              "z": 0.9981936437806381
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": false,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 184.78323779933214,
+              "y": 635.8359020762234,
+              "z": 0.9976786108842299
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 252.1360826177978,
+              "y": 566.5257617225664,
+              "z": 0.997932500064038
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 252.40777389525485,
+              "y": 624.3202241273707,
+              "z": 0.9979721803489373
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": 0.01475014560637572,
+              "y": 0.05166885322376903,
+              "z": -0.0043750000186264515
+            },
+            "normal": {
+              "x": 0,
+              "y": 0,
+              "z": -1
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
       },
       {
         "angle": 135,
-        "facingCamera": null,
-        "center": null,
-        "projectedButtonWidthPx": null,
-        "probes": {
-          "hotspot-button-center": null,
-          "hotspot-button-left": null,
-          "hotspot-button-right": null,
-          "hotspot-button-top": null,
-          "hotspot-button-bottom": null
+        "facingCamera": false,
+        "center": {
+          "facingCamera": false,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 257.478813740549,
+            "y": 593.2254783364892,
+            "z": 0.9979683421292247
+          }
         },
-        "rayHits": null
+        "projectedButtonWidthPx": 186.30160287262768,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 257.478813740549,
+              "y": 593.2254783364892,
+              "z": 0.9979683421292247
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": false,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 340.9153948840632,
+              "y": 564.1650202450165,
+              "z": 0.9981659398521289
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": false,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 164.97968504610935,
+              "y": 625.4423670929798,
+              "z": 0.9977492821323966
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 257.36837212049033,
+              "y": 564.2898124902016,
+              "z": 0.997948561469095
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 257.58818269205034,
+              "y": 621.8801053957303,
+              "z": 0.9979879306689187
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": 0.008618987066991574,
+              "y": 0.04982443249135503,
+              "z": -0.004375000018626424
+            },
+            "normal": {
+              "x": 0,
+              "y": 0,
+              "z": -1
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
       },
       {
         "angle": 150,
-        "facingCamera": null,
-        "center": null,
-        "projectedButtonWidthPx": null,
-        "probes": {
-          "hotspot-button-center": null,
-          "hotspot-button-left": null,
-          "hotspot-button-right": null,
-          "hotspot-button-top": null,
-          "hotspot-button-bottom": null
+        "facingCamera": false,
+        "center": {
+          "facingCamera": false,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 264.1585781235086,
+            "y": 591.4459761507624,
+            "z": 0.9979804419240281
+          }
         },
-        "rayHits": null
+        "projectedButtonWidthPx": 217.16045217270874,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 264.1585781235086,
+              "y": 591.4459761507624,
+              "z": 0.9979804419240281
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": false,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 366.72275887604167,
+              "y": 570.7207051625181,
+              "z": 0.9981213642157883
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": false,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 153.86462251211753,
+              "y": 613.7332123148849,
+              "z": 0.9978288989888825
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 264.0811275632137,
+              "y": 562.588832976812,
+              "z": 0.997960780047479
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 264.2352786877837,
+              "y": 620.0236798675647,
+              "z": 0.9979999134039024
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": 0.005003130561193336,
+              "y": 0.048993008097833204,
+              "z": -0.0043750000186264515
+            },
+            "normal": {
+              "x": 0,
+              "y": 0,
+              "z": -1
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
       },
       {
         "angle": 165,
-        "facingCamera": null,
-        "center": null,
-        "projectedButtonWidthPx": null,
-        "probes": {
-          "hotspot-button-center": null,
-          "hotspot-button-left": null,
-          "hotspot-button-right": null,
-          "hotspot-button-top": null,
-          "hotspot-button-bottom": null
+        "facingCamera": false,
+        "center": {
+          "facingCamera": false,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 271.8656388225156,
+            "y": 590.3365832458742,
+            "z": 0.9979879852845327
+          }
         },
-        "rayHits": null
+        "projectedButtonWidthPx": 236.80112486479354,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 271.8656388225156,
+              "y": 590.3365832458742,
+              "z": 0.9979879852845327
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": false,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 387.53489852498956,
+              "y": 579.4644632150445,
+              "z": 0.9980619106904735
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": false,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 151.77292850401716,
+              "y": 601.6244774086692,
+              "z": 0.9979112328060985
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 271.8259439429235,
+              "y": 561.5284186907975,
+              "z": 0.9979683972791805
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 271.90495003245957,
+              "y": 618.8663033650043,
+              "z": 0.9980073839626167
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": 0.0023280045873745464,
+              "y": 0.04860738545550722,
+              "z": -0.0043750000186264515
+            },
+            "normal": {
+              "x": 0,
+              "y": 0,
+              "z": -1
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
       },
       {
         "angle": 180,
-        "facingCamera": null,
-        "center": null,
-        "projectedButtonWidthPx": null,
-        "probes": {
-          "hotspot-button-center": null,
-          "hotspot-button-left": null,
-          "hotspot-button-right": null,
-          "hotspot-button-top": null,
-          "hotspot-button-bottom": null
+        "facingCamera": false,
+        "center": {
+          "facingCamera": false,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 280.09726732947314,
+            "y": 589.9651693235495,
+            "z": 0.9979905107280436
+          }
         },
-        "rayHits": null
+        "projectedButtonWidthPx": 243.5235116451164,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 280.09726732947314,
+              "y": 589.9651693235495,
+              "z": 0.9979905107280436
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": false,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 401.85902315203134,
+              "y": 589.9651693235495,
+              "z": 0.9979905107280436
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": false,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 158.33551150691494,
+              "y": 589.9651693235495,
+              "z": 0.9979905107280436
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 280.0977416843511,
+              "y": 561.1734066779511,
+              "z": 0.9979709474228315
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 280.09679755658715,
+              "y": 618.4788203050484,
+              "z": 0.9980098850631173
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": 5.650737171327319e-07,
+              "y": 0.0484931118549959,
+              "z": -0.0043750000186264515
+            },
+            "normal": {
+              "x": 0,
+              "y": 0,
+              "z": -1
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
       },
       {
-        "angle": 225,
-        "facingCamera": null,
-        "center": null,
-        "projectedButtonWidthPx": null,
-        "probes": {
-          "hotspot-button-center": null,
-          "hotspot-button-left": null,
-          "hotspot-button-right": null,
-          "hotspot-button-top": null,
-          "hotspot-button-bottom": null
+        "angle": 210,
+        "facingCamera": false,
+        "center": {
+          "facingCamera": false,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 296.01124563630583,
+            "y": 591.4802926481651,
+            "z": 0.9979802085876602
+          }
         },
-        "rayHits": null
+        "projectedButtonWidthPx": 217.18568607183914,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 296.01124563630583,
+              "y": 591.4802926481651,
+              "z": 0.9979802085876602
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": false,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 406.3182416035512,
+              "y": 613.7701638931403,
+              "z": 0.9978286477351789
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": false,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 193.43537126671282,
+              "y": 570.7526587162438,
+              "z": 0.9981211469463483
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 296.0895310489499,
+              "y": 562.6216347443121,
+              "z": 0.9979605444238491
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 295.9337183477842,
+              "y": 620.0594802911176,
+              "z": 0.9979996823216526
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": -0.005001829763593257,
+              "y": 0.048993008097832635,
+              "z": -0.0043750000186264515
+            },
+            "normal": {
+              "x": 0,
+              "y": 0,
+              "z": -1
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
+      },
+      {
+        "angle": 240,
+        "facingCamera": false,
+        "center": {
+          "facingCamera": false,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 307.82841266080567,
+            "y": 595.6248377257324,
+            "z": 0.99795202759109
+          }
+        },
+        "projectedButtonWidthPx": 147.85030437657326,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 307.82841266080567,
+              "y": 595.6248377257324,
+              "z": 0.99795202759109
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": false,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 375.33189113516914,
+              "y": 635.9046002566276,
+              "z": 0.9976781437682619
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": false,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 248.3671908034032,
+              "y": 560.1439417727534,
+              "z": 0.9981932813326809
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 307.96543505746996,
+              "y": 566.583376492132,
+              "z": 0.9979320862021588
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 307.6927264559828,
+              "y": 624.3830973477046,
+              "z": 0.9979717745189564
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": -0.014747931352400212,
+              "y": 0.051668853223769406,
+              "z": -0.0043750000186264515
+            },
+            "normal": {
+              "x": 0,
+              "y": 0,
+              "z": -1
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
       },
       {
         "angle": 270,
-        "facingCamera": null,
-        "center": null,
-        "projectedButtonWidthPx": null,
-        "probes": {
-          "hotspot-button-center": null,
-          "hotspot-button-left": null,
-          "hotspot-button-right": null,
-          "hotspot-button-top": null,
-          "hotspot-button-bottom": null
+        "facingCamera": false,
+        "center": {
+          "facingCamera": false,
+          "position": {
+            "x": 0,
+            "y": 0.0451825,
+            "z": 0.004502
+          },
+          "canvasPosition": {
+            "x": 312.3860888342506,
+            "y": 601.3681758899622,
+            "z": 0.9979129755383127
+          }
         },
-        "rayHits": null
+        "projectedButtonWidthPx": 89.4347087967392,
+        "probes": {
+          "hotspot-button-center": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 312.3860888342506,
+              "y": 601.3681758899622,
+              "z": 0.9979129755383127
+            }
+          },
+          "hotspot-button-left": {
+            "facingCamera": false,
+            "position": {
+              "x": -0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 314.96839443609906,
+              "y": 649.3182824101345,
+              "z": 0.9975869369111313
+            }
+          },
+          "hotspot-button-right": {
+            "facingCamera": false,
+            "position": {
+              "x": 0.02629,
+              "y": 0.0451825,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 310.1589458373389,
+              "y": 560.0129839014043,
+              "z": 0.998194171785856
+            }
+          },
+          "hotspot-button-top": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0517552,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 312.5470977367247,
+              "y": 572.073842180506,
+              "z": 0.9978926467586793
+            }
+          },
+          "hotspot-button-bottom": {
+            "facingCamera": false,
+            "position": {
+              "x": 0,
+              "y": 0.0386098,
+              "z": 0.004502
+            },
+            "canvasPosition": {
+              "x": 312.226665096394,
+              "y": 630.3741010668613,
+              "z": 0.9979331041770739
+            }
+          }
+        },
+        "rayHits": {
+          "global": {
+            "position": {
+              "x": -0.03855592895095389,
+              "y": 0.05986793863334805,
+              "z": 0.0036832313494778203
+            },
+            "normal": {
+              "x": -0.8124658497882341,
+              "y": -1.5495298428738928e-05,
+              "z": 0.5830087844001826
+            }
+          },
+          "local": null,
+          "rect": {
+            "left": 440,
+            "top": 99,
+            "width": 560,
+            "height": 870
+          }
+        }
       }
     ],
     "mobile_front": null,
@@ -1048,10 +2947,10 @@
     ],
     "interpretation": {
       "button_is_real_glb_mesh": true,
-      "front_visible": null,
+      "front_visible": true,
       "back_hidden": true,
-      "projected_width_at_front": null,
-      "projected_width_at_side": null,
+      "projected_width_at_front": 253.09237754287187,
+      "projected_width_at_side": 89.33191366534024,
       "click_reached_request_form": false
     }
   },

@@ -1,7 +1,7 @@
 {
   "source": "iPhone 18 pro max.glb",
   "output": "QAMQOR-iPhone-18-Pro-Max.glb",
-  "output_size_bytes": 2877448,
+  "output_size_bytes": 2879016,
   "screen_bounds_min": [
     -0.0365150012075901,
     0.002391000045463443,
@@ -18,7 +18,7 @@
   "button": {
     "center": [
       0.0,
-      0.05627658092882484,
+      0.04518249074695632,
       0.004501999847888946
     ],
     "size": [
