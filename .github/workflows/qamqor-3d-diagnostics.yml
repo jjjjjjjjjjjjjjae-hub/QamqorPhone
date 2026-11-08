@@ -274,7 +274,7 @@ jobs:
                         const o=v.getCameraOrbit();
                         v.cameraOrbit='0rad '+o.phi+'rad '+o.radius+'m';
                         await new Promise(r=>setTimeout(r,400));
-                        const h=v.queryHotspot('hotspot-button-center');
+                        const h=v.queryHotspot('hotspot-probe');
                         return h ? {
                           facingCamera:h.facingCamera,
                           canvasPosition:{x:h.canvasPosition.x,y:h.canvasPosition.y},
