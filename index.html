@@ -3859,6 +3859,49 @@ verifyButton.addEventListener("click", async () => {
     requestAnimationFrame(() => requestAnimationFrame(placeOverlay));
   }
 
+  let rotationDrag = null;
+  const rotationInteractiveSelector =
+    "button,a,input,select,textarea,label,.leaflet-container,.leaflet-control,[contenteditable='true']";
+
+  overlay.addEventListener("pointerdown", event => {
+    if (!opened || busy || !event.isPrimary || event.button > 0 ||
+        event.target.closest(rotationInteractiveSelector) ||
+        typeof viewer.getCameraOrbit !== "function") return;
+
+    const orbit = viewer.getCameraOrbit();
+    rotationDrag = {
+      pointerId:event.pointerId,
+      startX:event.clientX,
+      startY:event.clientY,
+      theta:orbit.theta,
+      phi:orbit.phi,
+      radius:orbit.radius
+    };
+
+    try { overlay.setPointerCapture(event.pointerId); } catch (_) {}
+  });
+
+  overlay.addEventListener("pointermove", event => {
+    if (!rotationDrag || event.pointerId !== rotationDrag.pointerId) return;
+    const dx = event.clientX - rotationDrag.startX;
+    const dy = event.clientY - rotationDrag.startY;
+    if (Math.abs(dx) < 2 && Math.abs(dy) < 2) return;
+
+    const theta = rotationDrag.theta - dx * 0.008;
+    const phi = Math.max(0.18,Math.min(Math.PI - 0.18,rotationDrag.phi + dy * 0.004));
+    viewer.cameraOrbit =
+      theta + "rad " + phi + "rad " + rotationDrag.radius + "m";
+    if (event.cancelable) event.preventDefault();
+  });
+
+  function stopRotationDrag(event) {
+    if (!rotationDrag || (event && event.pointerId !== rotationDrag.pointerId)) return;
+    rotationDrag = null;
+  }
+  overlay.addEventListener("pointerup",stopRotationDrag);
+  overlay.addEventListener("pointercancel",stopRotationDrag);
+  overlay.addEventListener("lostpointercapture",stopRotationDrag);
+
   async function showRepairForm() {
     if (opened || state !== "open") return false;
     if (typeof window.qamqorShowPage === "function") {
@@ -3924,9 +3967,9 @@ verifyButton.addEventListener("click", async () => {
 
     const formShown = await showRepairForm();
     busy = false;
+    if (hadCameraControls) viewer.setAttribute("camera-controls","");
     if (!formShown) {
       state = "open";
-      if (hadCameraControls) viewer.setAttribute("camera-controls","");
       return false;
     }
     return true;
@@ -3955,6 +3998,7 @@ verifyButton.addEventListener("click", async () => {
     state = "closing";
     opened = false;
     overlay.hidden = true;
+    viewer.removeAttribute("camera-controls");
 
     if (placeholder && placeholder.parentNode) {
       placeholder.parentNode.insertBefore(repair,placeholder);
@@ -4055,6 +4099,7 @@ verifyButton.addEventListener("click", async () => {
   window.addEventListener("resize",scheduleOverlayUpdate);
   window.addEventListener("scroll",scheduleOverlayUpdate,{passive:true});
   viewer.addEventListener("camera-change",scheduleOverlayUpdate);
+  viewer.addEventListener("camera-orbit-change",scheduleOverlayUpdate);
   viewer.addEventListener("load",initializeClosedDuo,{once:true});
   if (viewer.loaded) initializeClosedDuo();
 
@@ -4069,6 +4114,95 @@ verifyButton.addEventListener("click", async () => {
 </script>
 
 
+
+
+<style id="qamqor-crisp-logo-and-attached-screen">
+/* Crisp brand mark: preserve the actual uploaded artwork without filters or blur. */
+.site-header .mark,
+header .mark{
+  width:52px!important;
+  height:52px!important;
+  flex:0 0 52px!important;
+  display:grid!important;
+  place-items:center!important;
+  padding:3px!important;
+  overflow:hidden!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  border-radius:14px!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+.site-header .mark img,
+header .mark img{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  image-rendering:auto!important;
+  filter:none!important;
+  transform:none!important;
+}
+.site-header .brand,
+header .brand{gap:13px!important}
+@media(max-width:620px){
+  .site-header .mark,header .mark{
+    width:46px!important;height:46px!important;flex-basis:46px!important;
+  }
+}
+
+/* Remove frosted-glass blur and decorative gaussian glow throughout the page. */
+:where(*, *::before, *::after){
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+}
+.art:before,.art:after,.art-glow,.service-card:before{
+  filter:none!important;
+}
+
+/* The form is a transparent projection on the real Duo display, not a second card. */
+.qamqor-phone-form-overlay{
+  background:transparent!important;
+  background-color:transparent!important;
+  background-image:none!important;
+  border:0!important;
+  box-shadow:none!important;
+  touch-action:pan-y!important;
+  cursor:grab!important;
+}
+.qamqor-phone-form-overlay:active{cursor:grabbing!important}
+.qamqor-phone-form-content{
+  background:transparent!important;
+  background-color:transparent!important;
+  touch-action:pan-y!important;
+}
+.qamqor-phone-form-close{
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  text-shadow:none!important;
+}
+#repair.qamqor-phone-form-card{
+  touch-action:pan-y!important;
+  background:transparent!important;
+  background-color:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+}
+#repair.qamqor-phone-form-card input,
+#repair.qamqor-phone-form-card select,
+#repair.qamqor-phone-form-card textarea{
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+  background:rgba(13,20,30,.90)!important;
+  box-shadow:none!important;
+}
+#repair.qamqor-phone-form-card input:focus,
+#repair.qamqor-phone-form-card select:focus,
+#repair.qamqor-phone-form-card textarea:focus{
+  background:rgba(20,35,53,.98)!important;
+}
+</style>
 
 </body>
 </html>
