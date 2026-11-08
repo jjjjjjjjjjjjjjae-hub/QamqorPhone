@@ -28,13 +28,13 @@ def build_button_texture() -> Image.Image:
     width, height = TEXTURE_SIZE
     image = Image.new("RGBA", (width, height), (0, 0, 0, 0))
 
-    # Subtle soft shadow and a blue glass-like pill with antialiased edges.
+    # Soft shadow and a clean white pill with antialiased edges.
     shadow = Image.new("RGBA", (width, height), (0, 0, 0, 0))
     shadow_draw = ImageDraw.Draw(shadow)
     shadow_draw.rounded_rectangle(
         (38, 42, width - 38, height - 30),
         radius=116,
-        fill=(0, 20, 55, 105),
+        fill=(35, 67, 105, 78),
     )
     shadow = shadow.filter(ImageFilter.GaussianBlur(18))
     image.alpha_composite(shadow)
@@ -46,8 +46,8 @@ def build_button_texture() -> Image.Image:
 
     gradient = Image.new("RGBA", (width, height), (0, 0, 0, 0))
     px = gradient.load()
-    left = (32, 151, 255)
-    right = (0, 91, 205)
+    left = (255, 255, 255)
+    right = (241, 247, 253)
     for x in range(width):
         t = x / max(1, width - 1)
         color = tuple(round(left[i] * (1 - t) + right[i] * t) for i in range(3))
@@ -60,7 +60,7 @@ def build_button_texture() -> Image.Image:
     draw.rounded_rectangle(
         pill_box,
         radius=116,
-        outline=(205, 235, 255, 210),
+        outline=(175, 198, 222, 255),
         width=5,
     )
 
@@ -70,7 +70,7 @@ def build_button_texture() -> Image.Image:
     hd.rounded_rectangle(
         (48, 32, width - 48, 118),
         radius=74,
-        fill=(255, 255, 255, 28),
+        fill=(255, 255, 255, 120),
     )
     image.alpha_composite(highlight)
 
@@ -81,7 +81,7 @@ def build_button_texture() -> Image.Image:
     text_w, text_h = bounds[2] - bounds[0], bounds[3] - bounds[1]
     x = (width - text_w) / 2 - bounds[0]
     y = (height - text_h) / 2 - bounds[1] - 5
-    draw.text((x, y), label, font=font, fill=(255, 255, 255, 255))
+    draw.text((x, y), label, font=font, fill=(12, 48, 91, 255))
 
     return image
 
@@ -118,7 +118,8 @@ def main():
     button_width = screen_width * 0.72
     button_height = screen_width * 0.18
     button_center_x = float((screen_min[0] + screen_max[0]) / 2)
-    button_center_y = float(screen_min[1] + screen_height * 0.34)
+    # Move the button slightly lower on the front display (model Y grows upward).
+    button_center_y = float(screen_min[1] + screen_height * 0.27)
     button_z = screen_front_z + 0.00018
 
     half_w = button_width / 2
