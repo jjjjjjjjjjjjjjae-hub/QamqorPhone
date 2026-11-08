@@ -15,69 +15,131 @@
             "node_index": 61,
             "node_name": "Bone_Hinge_46",
             "path": "rotation",
-            "sampler": 0
+            "interpolation": "LINEAR",
+            "key_count": 61,
+            "time_start": 0.0,
+            "time_end": 2.0,
+            "first_value": [
+              -2.1105980732658708e-14,
+              -4.7068695607777045e-08,
+              -4.70687027132044e-08,
+              -1.0
+            ],
+            "last_value": [
+              -0.70710688829422,
+              -6.656518536374278e-08,
+              -2.512147467383986e-15,
+              -0.7071066498756409
+            ],
+            "input_accessor": 257,
+            "output_accessor": 258
           },
           {
             "node_index": 64,
             "node_name": "Bone_01_45",
             "path": "translation",
-            "sampler": 1
+            "interpolation": "LINEAR",
+            "key_count": 3,
+            "time_start": 0.0,
+            "time_end": 2.0,
+            "first_value": [
+              1.9633163983456825e-09,
+              0.0002768133126664907,
+              2.2644286445938633e-10
+            ],
+            "last_value": [
+              2.074412641661638e-09,
+              0.0002768134290818125,
+              -5.793129864706259e-12
+            ],
+            "input_accessor": 259,
+            "output_accessor": 260
           },
           {
             "node_index": 64,
             "node_name": "Bone_01_45",
             "path": "rotation",
-            "sampler": 2
+            "interpolation": "LINEAR",
+            "key_count": 61,
+            "time_start": 0.0,
+            "time_end": 2.0,
+            "first_value": [
+              -2.152837761058654e-22,
+              9.786668474844522e-42,
+              3.552724690228815e-15,
+              -1.0
+            ],
+            "last_value": [
+              -0.70710688829422,
+              2.512155302438748e-15,
+              2.5121559377134584e-15,
+              -0.7071066498756409
+            ],
+            "input_accessor": 261,
+            "output_accessor": 262
           },
           {
             "node_index": 6,
             "node_name": "Hinge_Bottom_Transform_51",
             "path": "translation",
-            "sampler": 3
+            "interpolation": "LINEAR",
+            "key_count": 61,
+            "time_start": 0.0,
+            "time_end": 2.0,
+            "first_value": [
+              0.0,
+              0.0,
+              -0.0
+            ],
+            "last_value": [
+              0.0,
+              -0.00020000000949949026,
+              -0.0
+            ],
+            "input_accessor": 263,
+            "output_accessor": 264
           },
           {
             "node_index": 7,
             "node_name": "Hinge_Top_Transform_52",
             "path": "translation",
-            "sampler": 4
+            "interpolation": "LINEAR",
+            "key_count": 61,
+            "time_start": 0.0,
+            "time_end": 2.0,
+            "first_value": [
+              0.0,
+              0.0,
+              -0.0
+            ],
+            "last_value": [
+              0.0,
+              0.00020000000949949026,
+              -0.0
+            ],
+            "input_accessor": 265,
+            "output_accessor": 266
           },
           {
             "node_index": 62,
             "node_name": "Axle_9",
             "path": "translation",
-            "sampler": 5
-          }
-        ],
-        "samplers": [
-          {
-            "input": 257,
             "interpolation": "LINEAR",
-            "output": 258
-          },
-          {
-            "input": 259,
-            "interpolation": "LINEAR",
-            "output": 260
-          },
-          {
-            "input": 261,
-            "interpolation": "LINEAR",
-            "output": 262
-          },
-          {
-            "input": 263,
-            "interpolation": "LINEAR",
-            "output": 264
-          },
-          {
-            "input": 265,
-            "interpolation": "LINEAR",
-            "output": 266
-          },
-          {
-            "input": 267,
-            "interpolation": "LINEAR",
-            "output": 268
+            "key_count": 61,
+            "time_start": 0.0,
+            "time_end": 2.0,
+            "first_value": [
+              -0.05889157950878143,
+              0.00013841692998539656,
+              -0.0024459322448819876
+            ],
+            "last_value": [
+              -0.05889157950878143,
+              0.00013841687177773565,
+              -0.00039987574564293027
+            ],
+            "input_accessor": 267,
+            "output_accessor": 268
           }
         ]
       }
@@ -88,28 +150,36 @@
         "name": "Sketchfab_model",
         "children": [
           1
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 1,
         "name": "root",
         "children": [
           2
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 2,
         "name": "GLTF_SceneRootNode",
         "children": [
           3
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 3,
         "name": "Armature_50",
         "children": [
           4
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 4,
@@ -126,24 +196,32 @@
           104,
           107,
           110
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 5,
         "name": "GLTF_created_0_rootJoint",
         "children": [
           8
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 6,
         "name": "Hinge_Bottom_Transform_51",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 7,
         "name": "Hinge_Top_Transform_52",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 8,
@@ -151,6 +229,17 @@
         "children": [
           9,
           61
+        ],
+        "translation": [
+          0.07928421348333359,
+          0.05889156833291054,
+          0.0024459559936076403
+        ],
+        "rotation": [
+          -1.751774760805347e-07,
+          1.751774902913894e-07,
+          -0.7071068286895752,
+          -0.7071068286895752
         ]
       },
       {
@@ -183,312 +272,416 @@
           55,
           57,
           59
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 10,
         "name": "Object_10",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 11,
         "name": "Front_Panel_0",
         "children": [
           12
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 12,
         "name": "Object_12",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 13,
         "name": "Back_Panel_01_2",
         "children": [
           14
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 14,
         "name": "Object_14",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 15,
         "name": "Occluder_Right_8",
         "children": [
           16
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 16,
         "name": "Object_16",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 17,
         "name": "Back_Cam_Base_10",
         "children": [
           18
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 18,
         "name": "Object_18",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 19,
         "name": "Back_Cam_Black_11",
         "children": [
           20
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 20,
         "name": "Object_20",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 21,
         "name": "Back_Cam_Border_12",
         "children": [
           22
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 22,
         "name": "Object_22",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 23,
         "name": "Back_Cam_Border_Black_13",
         "children": [
           24
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 24,
         "name": "Object_24",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 25,
         "name": "Back_Cam_Detail_01_14",
         "children": [
           26
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 26,
         "name": "Object_26",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 27,
         "name": "Back_Cam_Glass_15",
         "children": [
           28
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 28,
         "name": "Object_28",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 29,
         "name": "Back_Cam_Lens_01_16",
         "children": [
           30
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 30,
         "name": "Object_30",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 31,
         "name": "Back_Cam_Lens_02_17",
         "children": [
           32
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 32,
         "name": "Object_32",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 33,
         "name": "Back_Cam_Lens_Outer_18",
         "children": [
           34
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 34,
         "name": "Object_34",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 35,
         "name": "Back_Flash_Ref_19",
         "children": [
           36
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 36,
         "name": "Object_36",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 37,
         "name": "Back_Logo_20",
         "children": [
           38
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 38,
         "name": "Object_38",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 39,
         "name": "Back_Panel_02_21",
         "children": [
           40
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 40,
         "name": "Object_40",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 41,
         "name": "Antenna_02_29",
         "children": [
           42
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 42,
         "name": "Object_42",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 43,
         "name": "Screws_Aniso_R_01_32",
         "children": [
           44
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 44,
         "name": "Object_44",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 45,
         "name": "Screws_Aniso_R_02_33",
         "children": [
           46
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 46,
         "name": "Object_46",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 47,
         "name": "Screws_R_35",
         "children": [
           48
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 48,
         "name": "Object_48",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 49,
         "name": "Side_Buttons_Cap_36",
         "children": [
           50
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 50,
         "name": "Object_50",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 51,
         "name": "Side_Buttons_Detail_37",
         "children": [
           52
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 52,
         "name": "Object_52",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 53,
         "name": "Back_Cam_Gloss_42",
         "children": [
           54
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 54,
         "name": "Object_54",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 55,
         "name": "Back_Cam_Speaker_43",
         "children": [
           56
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 56,
         "name": "Object_56",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 57,
         "name": "Back_Flash_Base_47",
         "children": [
           58
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 58,
         "name": "Object_58",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 59,
         "name": "Bottom Speaker_48",
         "children": [
           60
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 60,
         "name": "Object_60",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 61,
@@ -496,6 +689,17 @@
         "children": [
           62,
           64
+        ],
+        "translation": [
+          1.2249443681611183e-09,
+          0.07914580404758453,
+          -7.557155595749876e-11
+        ],
+        "rotation": [
+          -2.1105980732658708e-14,
+          -4.7068695607777045e-08,
+          -4.706870626591808e-08,
+          -1.0
         ]
       },
       {
@@ -503,18 +707,42 @@
         "name": "Axle_9",
         "children": [
           63
+        ],
+        "translation": [
+          -0.05889157950878143,
+          0.00013841692998539656,
+          -0.0024459322448819876
+        ],
+        "rotation": [
+          1.4189488695137698e-07,
+          -1.4189488695137698e-07,
+          0.7071068286895752,
+          -0.7071068286895752
         ]
       },
       {
         "index": 63,
         "name": "Object_63",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 64,
         "name": "Bone_01_45",
         "children": [
           65
+        ],
+        "translation": [
+          9.816581991728413e-10,
+          0.0002768133126664907,
+          1.1322143222969316e-10
+        ],
+        "rotation": [
+          -2.1528102455902797e-22,
+          -0.0,
+          3.552724690228815e-15,
+          -1.0
         ]
       },
       {
@@ -539,284 +767,380 @@
           95,
           97,
           99
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 66,
         "name": "Object_66",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 67,
         "name": "Back_Screen_Display_5",
         "children": [
           68
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 68,
         "name": "Object_68",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 69,
         "name": "Occluder_Left_7",
         "children": [
           70
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 70,
         "name": "Object_70",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 71,
         "name": "Back_Screen_22",
         "children": [
           72
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 72,
         "name": "Object_72",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 73,
         "name": "Front_Speaker_23",
         "children": [
           74
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 74,
         "name": "Object_74",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 75,
         "name": "Inner_Cam_Base_24",
         "children": [
           76
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 76,
         "name": "Object_76",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 77,
         "name": "Inner_Cam_Black_25",
         "children": [
           78
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 78,
         "name": "Object_78",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 79,
         "name": "Inner_Cam_Glass_26",
         "children": [
           80
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 80,
         "name": "Object_80",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 81,
         "name": "Inner_Cam_Lens_27",
         "children": [
           82
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 82,
         "name": "Object_82",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 83,
         "name": "Antenna_01_28",
         "children": [
           84
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 84,
         "name": "Object_84",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 85,
         "name": "Screws_Aniso_L_01_30",
         "children": [
           86
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 86,
         "name": "Object_86",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 87,
         "name": "Screws_Aniso_L_02_31",
         "children": [
           88
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 88,
         "name": "Object_88",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 89,
         "name": "Screws_L_34",
         "children": [
           90
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 90,
         "name": "Object_90",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 91,
         "name": "Top_Speakers_38",
         "children": [
           92
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 92,
         "name": "Object_92",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 93,
         "name": "USB_Base_39",
         "children": [
           94
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 94,
         "name": "Object_94",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 95,
         "name": "USB_Metal_40",
         "children": [
           96
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 96,
         "name": "Object_96",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 97,
         "name": "USB_Pin_41",
         "children": [
           98
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 98,
         "name": "Object_98",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 99,
         "name": "Front_Panel.001_44",
         "children": [
           100
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 100,
         "name": "Object_100",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 101,
         "name": "Front_Screen_Border_53_correction",
         "children": [
           102
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 102,
         "name": "Front_Screen_Border_53",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 103,
         "name": "Object_103",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 104,
         "name": "Front_Screen_54_correction",
         "children": [
           105
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 105,
         "name": "Front_Screen_54",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 106,
         "name": "Object_106",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 107,
         "name": "Hinge_Bottom_55_correction",
         "children": [
           108
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 108,
         "name": "Hinge_Bottom_55",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 109,
         "name": "Object_109",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 110,
         "name": "Hinge_Top_56_correction",
         "children": [
           111
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 111,
         "name": "Hinge_Top_56",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 112,
         "name": "Object_112",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       }
     ]
   },
@@ -831,28 +1155,36 @@
         "name": "Sketchfab_model",
         "children": [
           1
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 1,
         "name": "root",
         "children": [
           2
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 2,
         "name": "GLTF_SceneRootNode",
         "children": [
           3
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 3,
         "name": "Armature_50",
         "children": [
           4
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 4,
@@ -869,92 +1201,124 @@
           17,
           18,
           19
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 5,
         "name": "Hinge_Top_56_correction",
         "children": [
           6
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 6,
         "name": "Hinge_Top_56",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 7,
         "name": "Hinge_Bottom_55_correction",
         "children": [
           8
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 8,
         "name": "Hinge_Bottom_55",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 9,
         "name": "Front_Screen_54_correction",
         "children": [
           10
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 10,
         "name": "Front_Screen_54",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 11,
         "name": "Front_Screen_Border_53_correction",
         "children": [
           12
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 12,
         "name": "Front_Screen_Border_53",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 13,
         "name": "Hinge_Top_Transform_52",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 14,
         "name": "Hinge_Bottom_Transform_51",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 15,
         "name": "Object_112",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 16,
         "name": "Object_109",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 17,
         "name": "Object_106",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 18,
         "name": "Object_103",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 19,
         "name": "GLTF_created_0_rootJoint",
         "children": [
           20
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 20,
@@ -962,7 +1326,9 @@
         "children": [
           21,
           61
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 21,
@@ -970,14 +1336,18 @@
         "children": [
           22,
           59
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 22,
         "name": "Bone_01_45",
         "children": [
           23
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 23,
@@ -1001,228 +1371,304 @@
           54,
           56,
           58
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 24,
         "name": "Front_Panel.001_44",
         "children": [
           25
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 25,
         "name": "Object_100",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 26,
         "name": "USB_Pin_41",
         "children": [
           27
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 27,
         "name": "Object_98",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 28,
         "name": "USB_Metal_40",
         "children": [
           29
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 29,
         "name": "Object_96",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 30,
         "name": "USB_Base_39",
         "children": [
           31
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 31,
         "name": "Object_94",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 32,
         "name": "Top_Speakers_38",
         "children": [
           33
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 33,
         "name": "Object_92",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 34,
         "name": "Screws_L_34",
         "children": [
           35
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 35,
         "name": "Object_90",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 36,
         "name": "Screws_Aniso_L_02_31",
         "children": [
           37
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 37,
         "name": "Object_88",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 38,
         "name": "Screws_Aniso_L_01_30",
         "children": [
           39
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 39,
         "name": "Object_86",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 40,
         "name": "Antenna_01_28",
         "children": [
           41
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 41,
         "name": "Object_84",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 42,
         "name": "Inner_Cam_Lens_27",
         "children": [
           43
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 43,
         "name": "Object_82",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 44,
         "name": "Inner_Cam_Glass_26",
         "children": [
           45
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 45,
         "name": "Object_80",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 46,
         "name": "Inner_Cam_Black_25",
         "children": [
           47
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 47,
         "name": "Object_78",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 48,
         "name": "Inner_Cam_Base_24",
         "children": [
           49
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 49,
         "name": "Object_76",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 50,
         "name": "Front_Speaker_23",
         "children": [
           51
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 51,
         "name": "Object_74",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 52,
         "name": "Back_Screen_22",
         "children": [
           53
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 53,
         "name": "Object_72",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 54,
         "name": "Occluder_Left_7",
         "children": [
           55
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 55,
         "name": "Object_70",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 56,
         "name": "Back_Screen_Display_5",
         "children": [
           57
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 57,
         "name": "Object_68",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 58,
         "name": "Object_66",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 59,
         "name": "Axle_9",
         "children": [
           60
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 60,
         "name": "Object_63",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 61,
@@ -1254,317 +1700,423 @@
           108,
           110,
           112
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 62,
         "name": "Bottom Speaker_48",
         "children": [
           63
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 63,
         "name": "Object_60",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 64,
         "name": "Back_Flash_Base_47",
         "children": [
           65
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 65,
         "name": "Object_58",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 66,
         "name": "Back_Cam_Speaker_43",
         "children": [
           67
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 67,
         "name": "Object_56",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 68,
         "name": "Back_Cam_Gloss_42",
         "children": [
           69
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 69,
         "name": "Object_54",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 70,
         "name": "Side_Buttons_Detail_37",
         "children": [
           71
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 71,
         "name": "Object_52",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 72,
         "name": "Side_Buttons_Cap_36",
         "children": [
           73
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 73,
         "name": "Object_50",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 74,
         "name": "Screws_R_35",
         "children": [
           75
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 75,
         "name": "Object_48",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 76,
         "name": "Screws_Aniso_R_02_33",
         "children": [
           77
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 77,
         "name": "Object_46",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 78,
         "name": "Screws_Aniso_R_01_32",
         "children": [
           79
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 79,
         "name": "Object_44",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 80,
         "name": "Antenna_02_29",
         "children": [
           81
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 81,
         "name": "Object_42",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 82,
         "name": "Back_Panel_02_21",
         "children": [
           83
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 83,
         "name": "Object_40",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 84,
         "name": "Back_Logo_20",
         "children": [
           85
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 85,
         "name": "Object_38",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 86,
         "name": "Back_Flash_Ref_19",
         "children": [
           87
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 87,
         "name": "Object_36",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 88,
         "name": "Back_Cam_Lens_Outer_18",
         "children": [
           89
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 89,
         "name": "Object_34",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 90,
         "name": "Back_Cam_Lens_02_17",
         "children": [
           91
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 91,
         "name": "Object_32",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 92,
         "name": "Back_Cam_Lens_01_16",
         "children": [
           93
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 93,
         "name": "Object_30",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 94,
         "name": "Back_Cam_Glass_15",
         "children": [
           95
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 95,
         "name": "Object_28",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 96,
         "name": "Back_Cam_Detail_01_14",
         "children": [
           97
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 97,
         "name": "Object_26",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 98,
         "name": "Back_Cam_Border_Black_13",
         "children": [
           99
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 99,
         "name": "Object_24",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 100,
         "name": "Back_Cam_Border_12",
         "children": [
           101
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 101,
         "name": "Object_22",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 102,
         "name": "Back_Cam_Black_11",
         "children": [
           103
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 103,
         "name": "Object_20",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 104,
         "name": "Back_Cam_Base_10",
         "children": [
           105
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 105,
         "name": "Object_18",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 106,
         "name": "Occluder_Right_8",
         "children": [
           107
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 107,
         "name": "Object_16",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 108,
         "name": "Back_Panel_01_2",
         "children": [
           109
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 109,
         "name": "Object_14",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 110,
         "name": "Front_Panel_0",
         "children": [
           111
-        ]
+        ],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 111,
         "name": "Object_12",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 112,
         "name": "Object_10",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       },
       {
         "index": 113,
         "name": "QAMQOR_Duo_Request_Button",
-        "children": []
+        "children": [],
+        "translation": null,
+        "rotation": null
       }
     ]
   },
