@@ -3707,41 +3707,51 @@ verifyButton.addEventListener("click", async () => {
   }
 
   async function playDuoAnimation(direction) {
+    // model-viewer reuses a completed AnimationAction. Detach/append resets that
+    // action before each direction so the same native GLB clip can replay safely.
     if (!await selectDuoAnimation()) return false;
-
-    let settled = false;
-    let fallbackTimer = null;
-    const duration = viewer.duration;
+    const duration = Number(viewer.duration) || 2;
     const closedTime = getClosedAnimationTime();
+    const startTime = direction < 0 ? closedTime : 0.001;
     const destination = direction < 0 ? 0 : closedTime;
 
+    // appendAnimation refuses to append the primary animationName, so release
+    // the primary selection before creating a fresh one-shot appended action.
+    viewer.animationName = undefined;
+    if (viewer.updateComplete && typeof viewer.updateComplete.then === "function") {
+      await viewer.updateComplete;
+    }
+    await nextFrame();
+    viewer.pause();
+    viewer.detachAnimation(animationName,{fade:false});
+    await nextFrame();
+
     return new Promise(resolve => {
+      let settled = false;
+      let fallbackTimer = null;
+
       const finish = () => {
         if (settled) return;
         settled = true;
         if (fallbackTimer) clearTimeout(fallbackTimer);
-        viewer.removeEventListener("finished", finish);
+        viewer.removeEventListener("finished",finish);
         viewer.pause();
-        viewer.currentTime = destination;
         viewer.timeScale = 1;
-        requestAnimationFrame(() => resolve(true));
+        requestAnimationFrame(() => {
+          const actual = Number(viewer.currentTime) || 0;
+          resolve(Math.abs(actual-destination)<0.12);
+        });
       };
 
-      viewer.pause();
-      // Select LoopOnce before seeking; LoopRepeat wraps the exact final time to zero.
-      viewer.play({repetitions:1});
-      viewer.pause();
-      viewer.timeScale = direction;
-      viewer.currentTime = direction < 0 ? closedTime : 0;
-
-      requestAnimationFrame(() => {
-        viewer.addEventListener("finished", finish, {once:true});
-        viewer.play({repetitions:1});
-        fallbackTimer = setTimeout(
-          finish,
-          Math.ceil(duration * 1000) + 1800
-        );
+      viewer.addEventListener("finished",finish,{once:true});
+      viewer.appendAnimation(animationName,{
+        repetitions:1,
+        timeScale:direction,
+        time:startTime,
+        fade:false,
+        warp:false
       });
+      fallbackTimer=setTimeout(finish,Math.ceil(duration*1000)+1800);
     });
   }
 
