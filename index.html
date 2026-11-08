@@ -3401,11 +3401,16 @@ body.qamqor-home-clean .hero#top{
   white-space:nowrap;
   pointer-events:auto;
   cursor:pointer;
-  transform:translate(-50%,-50%);
   text-shadow:none!important;
   pointer-events:auto;
   z-index:20;
+  --min-hotspot-opacity:0;
+  --max-hotspot-opacity:1;
+  opacity:0;
+  transition:opacity .12s ease;
 }
+.hero#top .qamqor-phone-model .model-hotspot-apply[data-ready]{opacity:1;}
+.hero#top .qamqor-phone-model .model-hotspot-apply:not([data-visible]){pointer-events:none;}
 .hero#top .qamqor-phone-model .model-hotspot-apply:hover{
   filter:brightness(1.14);
 }
@@ -3419,38 +3424,76 @@ body.qamqor-home-clean .hero#top{
 }
 </style>
 <script id="qamqor-model-screen-request-hotspot">
-/* Anchor the application button to the actual front glass of the uploaded GLB. */
+/* Hit-test the actual visible GLB screen and update the registered model-viewer hotspot. */
 (() => {
   const viewer = document.querySelector(".qamqor-phone-model");
   if (!viewer) return;
   const button = viewer.querySelector('[slot="hotspot-apply"]');
   if (!button) return;
 
-  const placeButton = () => {
-    if (!viewer.loaded || typeof viewer.getDimensions !== "function" ||
-        typeof viewer.getBoundingBoxCenter !== "function") return;
-
-    const size = viewer.getDimensions();
-    const center = viewer.getBoundingBoxCenter();
-    if (!size || !center ||
-        ![size.x,size.y,size.z,center.x,center.y,center.z].every(Number.isFinite)) return;
-
-    // The front face is the +Z side; keep the CTA in the lower half of the glass.
-    const depth = Math.max(Math.abs(size.z) * 0.505, 0.001);
-    const position = {
-      x: center.x,
-      y: center.y - size.y * 0.22,
-      z: center.z + depth
+  let placed = false;
+  const cameraDirection = () => {
+    const orbit = viewer.getCameraOrbit?.();
+    if (!orbit) return {x:0,y:0,z:1};
+    const sinPhi = Math.sin(orbit.phi);
+    return {
+      x:Math.sin(orbit.theta)*sinPhi,
+      y:Math.cos(orbit.phi),
+      z:Math.cos(orbit.theta)*sinPhi
     };
-    button.setAttribute("data-position",
-      [position.x,position.y,position.z].map(n => n.toFixed(6)).join(" "));
-    button.setAttribute("data-normal","0 0 1");
-    button.setAttribute("data-visibility-attribute","visible");
   };
 
-  viewer.addEventListener("load", () => requestAnimationFrame(placeButton));
-  viewer.addEventListener("model-visibility", placeButton);
-  if (viewer.loaded) requestAnimationFrame(placeButton);
+  const placeOnActualScreen = () => {
+    if (placed || !viewer.loaded ||
+        typeof viewer.positionAndNormalFromPoint !== "function" ||
+        typeof viewer.updateHotspot !== "function") return;
+
+    const rect = viewer.getBoundingClientRect();
+    if (rect.width < 20 || rect.height < 20) return;
+
+    const direction = cameraDirection();
+    const candidates = [];
+    // Probe the lower-middle area of the visible phone screen, avoiding the bezel.
+    [0.62,0.66,0.58,0.70,0.54].forEach(yRatio => {
+      [0.50,0.47,0.53].forEach(xRatio => {
+        const hit = viewer.positionAndNormalFromPoint(
+          rect.width*xRatio,
+          rect.height*yRatio
+        );
+        if (!hit || !hit.position || !hit.normal) return;
+        const n=hit.normal;
+        const facing=n.x*direction.x+n.y*direction.y+n.z*direction.z;
+        candidates.push({hit,facing,score:facing-Math.abs(xRatio-.5)*.4-Math.abs(yRatio-.64)*.15});
+      });
+    });
+
+    if (!candidates.length) return;
+    candidates.sort((a,b)=>b.score-a.score);
+    const best=candidates[0];
+    if (best.facing < 0.20) return;
+
+    // updateHotspot is required: model-viewer does not observe later data-position changes.
+    viewer.updateHotspot({
+      name:"hotspot-apply",
+      position:best.hit.position.toString(),
+      normal:best.hit.normal.toString()
+    });
+    button.dataset.position=best.hit.position.toString();
+    button.dataset.normal=best.hit.normal.toString();
+    button.dataset.ready="true";
+    placed=true;
+  };
+
+  viewer.addEventListener("load", () => {
+    requestAnimationFrame(() => requestAnimationFrame(placeOnActualScreen));
+  });
+  viewer.addEventListener("camera-change", () => {
+    if (!placed) placeOnActualScreen();
+  });
+  window.addEventListener("resize", () => {
+    if (!placed) requestAnimationFrame(placeOnActualScreen);
+  }, {passive:true});
+  if (viewer.loaded) requestAnimationFrame(placeOnActualScreen);
 })();
 </script>
 </body>
