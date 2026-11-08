@@ -192,28 +192,33 @@ jobs:
                     !document.querySelector('#repair [data-wizard-step="1"]').hidden
                   """)
 
-                  # Fire the close control's real click handler at its button node.
+                  # Trigger the close control and capture its final state after the 2-second clip.
                   page.locator(".qamqor-phone-form-close").evaluate("(button) => button.click()")
-                  page.wait_for_function(
-                    "() => { const v=document.querySelector('.qamqor-phone-model'); const f=document.getElementById('repair'); const closedTime=v.duration-Math.min(0.05,v.duration*0.025); return window.qamqorPhoneForm.getState()==='closed' && !window.qamqorPhoneForm.isOpen() && Math.abs(v.currentTime-closedTime)<0.08 && v.hasAttribute('camera-controls') && f.hidden; }"
-                  )
+                  page.wait_for_timeout(4500)
                   closed_again=page.evaluate("""() => {
                     const v=document.querySelector('.qamqor-phone-model');
+                    const f=document.getElementById('repair');
+                    const o=document.getElementById('qamqor-phone-form-overlay');
                     return {
                       state:window.qamqorPhoneForm.getState(),
+                      open:window.qamqorPhoneForm.isOpen(),
                       currentTime:v.currentTime,
                       duration:v.duration,
-                      cameraControls:v.hasAttribute('camera-controls')
+                      timeScale:v.timeScale,
+                      paused:v.paused,
+                      cameraControls:v.hasAttribute('camera-controls'),
+                      formHidden:f.hidden,
+                      overlayHidden:o.hidden
                     };
                   }""")
                   result["closed_again_state"]=closed_again
-                  closed_pose_time = closed_again["duration"] - min(
-                    0.05, closed_again["duration"] * 0.025
-                  )
-                  result["checks"]["close_plays_reverse_to_closed_pose"]=(
+                  result["checks"]["close_plays_forward_to_closed_pose"]=(
                     closed_again["state"]=="closed" and
-                    abs(closed_again["currentTime"]-closed_pose_time)<0.08 and
-                    closed_again["cameraControls"]
+                    not closed_again["open"] and
+                    abs(closed_again["currentTime"]-closed_again["duration"])<0.08 and
+                    closed_again["cameraControls"] and
+                    closed_again["formHidden"] and
+                    closed_again["overlayHidden"]
                   )
                   page.locator(".qamqor-phone-model").screenshot(
                     path="diagnostics/duo/duo-closed-again.png"
