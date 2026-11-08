@@ -119,7 +119,7 @@ def main():
     button_height = screen_width * 0.18
     button_center_x = float((screen_min[0] + screen_max[0]) / 2)
     # Move the button slightly lower on the front display (model Y grows upward).
-    button_center_y = float(screen_min[1] + screen_height * 0.32)
+    button_center_y = float(screen_min[1] + screen_height * 0.25)
     button_z = screen_front_z + 0.00018
 
     half_w = button_width / 2
