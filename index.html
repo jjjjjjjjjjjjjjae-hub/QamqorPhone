@@ -1525,6 +1525,255 @@ main .hero .premium-art .device *::after{
 }
 </style>
 
+
+<style id="qamqor-one-screen-layout">
+/* One-screen app layout: the page itself never zooms or scrolls vertically. */
+html,body{
+  width:100%;
+  height:100%!important;
+  min-height:0!important;
+  margin:0!important;
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+  scroll-behavior:auto!important;
+}
+body{
+  height:100vh!important;
+  height:100dvh!important;
+  padding:0!important;
+}
+.wrap{
+  width:min(1600px,calc(100% - 64px))!important;
+  height:100vh!important;
+  height:100dvh!important;
+  min-height:0!important;
+  max-height:100dvh!important;
+  margin:0 auto!important;
+  display:grid!important;
+  grid-template-rows:68px minmax(0,1fr) 32px!important;
+  overflow:hidden!important;
+}
+.site-header{
+  min-height:0!important;
+  height:68px!important;
+  position:relative!important;
+  top:auto!important;
+  overflow:visible!important;
+}
+main{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:auto minmax(0,1fr)!important;
+  min-height:0!important;
+  height:100%!important;
+  overflow:hidden!important;
+}
+.page-context{
+  min-height:20px!important;
+  margin:5px 0!important;
+}
+main [data-app-page][hidden]{display:none!important}
+main [data-app-page]:not([hidden]){
+  grid-column:1!important;
+  grid-row:2!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  max-height:100%!important;
+  margin:0!important;
+  animation:none!important;
+  transform:none!important;
+}
+.hero{
+  min-height:0!important;
+  height:100%!important;
+  grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)!important;
+  grid-template-rows:minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:clamp(18px,3vw,44px)!important;
+  padding:clamp(10px,2vh,24px) 0!important;
+  overflow:hidden!important;
+}
+.hero-copy{
+  min-width:0!important;
+  max-height:100%!important;
+  padding:0!important;
+  margin:0!important;
+}
+.hero h1{
+  margin:12px 0 14px!important;
+  font-size:clamp(38px,5.2vw,70px)!important;
+  line-height:1.02!important;
+  letter-spacing:-.065em!important;
+}
+.hero h1 span{
+  color:#9bd0ff!important;
+  background:linear-gradient(105deg,#54b2ff 4%,#d2ebff 55%,#a9b7ff 100%)!important;
+  background-clip:text!important;
+  -webkit-background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+  text-shadow:none!important;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.55));
+}
+.hero .lead{
+  max-width:620px!important;
+  font-size:clamp(12px,1.05vw,15px)!important;
+  line-height:1.55!important;
+}
+.hero-actions{margin-top:16px!important;gap:10px!important;flex-wrap:wrap!important}
+.hero-cta,.hero-secondary{min-height:46px!important;padding:12px 19px!important;font-size:12px!important}
+.hero-points{gap:7px!important;margin-top:14px!important;font-size:10px!important}
+.hero-points span{line-height:1.35!important}
+.art,.premium-art{
+  width:100%!important;
+  height:min(62vh,520px)!important;
+  min-height:0!important;
+  max-height:100%!important;
+  max-width:560px!important;
+  justify-self:center!important;
+  margin:0!important;
+  overflow:visible!important;
+}
+footer{
+  min-height:0!important;
+  height:32px!important;
+  margin:0!important;
+  padding:5px 2px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  overflow:hidden!important;
+  white-space:nowrap!important;
+  font-size:9px!important;
+}
+.qamqor-reveal-ready .qamqor-reveal,
+.qamqor-reveal-ready .qamqor-reveal.qamqor-visible{
+  opacity:1!important;
+  transform:none!important;
+  transition:none!important;
+}
+/* The service cards share one viewport instead of extending the document. */
+.services-section{
+  height:100%!important;
+  min-height:0!important;
+  padding:8px 0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  overflow:hidden!important;
+}
+.section-heading{
+  flex:0 0 auto!important;
+  margin:0 auto 10px!important;
+  padding:5px 10px!important;
+}
+.section-heading h2{font-size:clamp(23px,3vw,36px)!important;margin:6px 0!important}
+.section-heading p{font-size:12px!important;line-height:1.4!important}
+.service-grid{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  grid-template-rows:repeat(2,minmax(0,1fr))!important;
+  gap:10px!important;
+}
+.service-card{
+  min-height:0!important;
+  height:100%!important;
+  padding:14px!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+.service-icon{width:36px!important;height:36px!important;margin-bottom:7px!important}
+.service-card-top{top:18px!important;left:61px!important;right:12px!important}
+.service-card h3{font-size:14px!important;margin:0 0 5px!important}
+.service-card p{min-height:0!important;font-size:10px!important;line-height:1.4!important;margin:0 0 8px!important}
+.service-card>a{margin-top:auto!important}
+/* The request wizard scrolls inside its own panel only when a step needs it. */
+#repair{
+  height:100%!important;
+  max-height:100%!important;
+  min-height:0!important;
+  margin:0 auto!important;
+  padding:12px 18px!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overscroll-behavior:contain!important;
+}
+#repair .cardhead{margin-bottom:10px!important}
+#repair .wizard-progress{position:relative!important;top:auto!important;margin-bottom:0!important;padding:9px 12px!important}
+#repair .wizard-step{min-height:0!important;gap:10px!important;padding:12px!important}
+#repair .wizard-step-heading{padding-bottom:8px!important}
+#repair #serviceMap{height:min(25vh,210px)!important;min-height:145px!important}
+@media(max-width:900px){
+  .wrap{width:calc(100% - 32px)!important;grid-template-rows:60px minmax(0,1fr) 28px!important}
+  .site-header{height:60px!important;min-height:60px!important}
+  .hero{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:minmax(0,1fr) auto!important;
+    text-align:center!important;
+    justify-items:center!important;
+    gap:5px!important;
+    padding:5px 0!important;
+  }
+  .hero-copy{width:100%!important;align-self:center!important}
+  .hero .lead{margin:0 auto!important}
+  .hero-actions{justify-content:center!important;margin-top:12px!important}
+  .hero-points{display:none!important}
+  .art,.premium-art{height:clamp(110px,18vh,165px)!important;min-height:0!important;max-width:100%!important}
+  .services-section{padding:5px 0!important}
+  .section-heading{margin-bottom:7px!important}
+  .service-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(3,minmax(0,1fr))!important;gap:7px!important}
+  .service-card{padding:10px!important}
+  .service-icon{width:30px!important;height:30px!important;margin-bottom:4px!important}
+  .service-card-top{top:13px!important;left:48px!important;font-size:6px!important}
+  .service-card h3{font-size:12px!important}
+  .service-card p{font-size:9px!important}
+}
+@media(max-width:620px){
+  .wrap{width:calc(100% - 20px)!important;grid-template-rows:56px minmax(0,1fr) 0px!important}
+  .site-header{height:56px!important;min-height:56px!important}
+  .brand{font-size:10px!important;gap:7px!important}
+  .brand small{font-size:6px!important}
+  .mark{width:34px!important;height:34px!important;flex-basis:34px!important}
+  .header-right{display:none!important}
+  .main-nav{
+    position:fixed!important;
+    top:auto!important;
+    bottom:calc(env(safe-area-inset-bottom,0px) + 8px)!important;
+    left:50%!important;
+    right:auto!important;
+    z-index:3000!important;
+    transform:translateX(-50%)!important;
+    width:max-content!important;
+    max-width:calc(100vw - 16px)!important;
+    margin:0!important;
+  }
+  .main-nav a{font-size:9px!important;padding:7px 9px!important}
+  .page-context{margin:3px 0!important;min-height:17px!important;font-size:8px!important}
+  .hero h1{font-size:clamp(30px,8.3vw,42px)!important;margin:8px 0 9px!important}
+  .hero .tag{font-size:8px!important}
+  .hero .lead{font-size:11px!important;line-height:1.4!important}
+  .hero-actions{display:flex!important;gap:7px!important;margin-top:10px!important}
+  .hero-cta,.hero-secondary{flex:1 1 0!important;min-height:40px!important;padding:9px 8px!important;font-size:10px!important}
+  .art,.premium-art{height:clamp(100px,15vh,132px)!important}
+  .device{width:68px!important;height:118px!important}
+  .device-logo{width:39px!important;height:39px!important}
+  footer{display:none!important}
+  #repair{padding:10px!important}
+  #repair .cardhead h2{font-size:19px!important}
+  #repair .wizard-step{padding:10px!important}
+}
+@media(max-height:700px) and (min-width:901px){
+  .wrap{grid-template-rows:58px minmax(0,1fr) 26px!important}
+  .site-header{height:58px!important;min-height:58px!important}
+  .hero{padding:5px 0!important}
+  .hero h1{font-size:clamp(34px,4.4vw,58px)!important;margin:8px 0!important}
+  .hero .lead{font-size:12px!important;line-height:1.4!important}
+  .hero-actions{margin-top:9px!important}
+  .hero-points{margin-top:8px!important}
+  .art,.premium-art{height:56vh!important}
+}
+</style>
+
 </head>
 <body>
 <div id="qamqor-video-background" aria-hidden="true">
