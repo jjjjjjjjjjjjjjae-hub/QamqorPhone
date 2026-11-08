@@ -3798,12 +3798,12 @@ verifyButton.addEventListener("click", async () => {
     "hotspot-screen-top-right",
     "hotspot-screen-bottom-right",
     "hotspot-screen-bottom-left"
-  ]) {
+  ], requireFacingCamera = true) {
     if (typeof viewer.queryHotspot !== "function") return null;
     const viewerRect = viewer.getBoundingClientRect();
     const hotspots = names.map(name => viewer.queryHotspot(name));
     if (hotspots.some(point =>
-      !point || !point.facingCamera || !point.canvasPosition ||
+      !point || (requireFacingCamera && !point.facingCamera) || !point.canvasPosition ||
       !Number.isFinite(point.canvasPosition.x) ||
       !Number.isFinite(point.canvasPosition.y)
     )) return null;
@@ -3892,7 +3892,10 @@ verifyButton.addEventListener("click", async () => {
     ];
     let rect = null;
     for (const names of candidateSets) {
-      rect = getProjectedScreenRect(names);
+      // The folded outer display uses a reverse-facing material normal. Its
+      // canvas positions are still valid while visible, so do not reject these
+      // four points just because model-viewer reports facingCamera=false.
+      rect = getProjectedScreenRect(names, false);
       if (rect) break;
     }
     if (!rect) {
