@@ -3719,6 +3719,9 @@ verifyButton.addEventListener("click", async () => {
       };
 
       viewer.pause();
+      // Select LoopOnce before seeking; LoopRepeat wraps the exact final time to zero.
+      viewer.play({repetitions:1});
+      viewer.pause();
       viewer.timeScale = direction;
       viewer.currentTime = direction < 0 ? duration : 0;
 
@@ -3931,6 +3934,8 @@ verifyButton.addEventListener("click", async () => {
       return;
     }
 
+    // A one-shot action can hold its final keyframe; an infinite loop wraps to zero.
+    viewer.play({repetitions:1});
     viewer.pause();
     viewer.timeScale = 1;
     viewer.currentTime = viewer.duration;
