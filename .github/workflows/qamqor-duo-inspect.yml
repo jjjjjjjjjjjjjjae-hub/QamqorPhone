@@ -50,120 +50,182 @@ jobs:
           done
           cat /tmp/qamqor-http.log
           exit 1
-      - name: Test Duo model, screen mapping, rotation, and repair form
+      - name: Test Duo open-close animation, outer CTA, and repair form
         run: |
           mkdir -p diagnostics/duo
           python - <<'PY'
-          import json, pathlib, time, traceback
+          import json, pathlib, traceback
           from playwright.sync_api import sync_playwright
 
           errors = []
           result = {"model":"QAMQOR-iPhone-Duo.glb","checks":{},"browser_errors":errors}
           try:
               with sync_playwright() as p:
-                  browser = p.chromium.launch(headless=True,args=["--no-sandbox","--disable-dev-shm-usage"])
-                  page = browser.new_page(viewport={"width":1440,"height":1000},device_scale_factor=1)
+                  browser = p.chromium.launch(
+                      headless=True,
+                      args=["--no-sandbox","--disable-dev-shm-usage"]
+                  )
+                  page = browser.new_page(
+                      viewport={"width":1440,"height":1000},
+                      device_scale_factor=1
+                  )
                   page.on("pageerror",lambda e: errors.append(str(e)))
-                  page.goto("http://127.0.0.1:8765/index.html",wait_until="domcontentloaded",timeout=90000)
+                  page.goto(
+                      "http://127.0.0.1:8765/index.html",
+                      wait_until="domcontentloaded",
+                      timeout=90000
+                  )
                   page.wait_for_function("""() => {
                     const v=document.querySelector('.qamqor-phone-model');
-                    return v && v.loaded && typeof v.queryHotspot==='function';
+                    return v && v.loaded &&
+                      v.availableAnimations &&
+                      v.availableAnimations.includes('open-close') &&
+                      window.qamqorPhoneForm &&
+                      window.qamqorPhoneForm.getState()==='closed';
                   }""",timeout=120000)
-                  page.wait_for_function("""() => {
-                    const el=document.querySelector('.qamqor-ios-dark-screen');
-                    return el && !el.hidden;
-                  }""",timeout=15000)
 
-                  state = page.evaluate("""() => {
+                  initial = page.evaluate("""() => {
                     const v=document.querySelector('.qamqor-phone-model');
-                    const names=['hotspot-screen-top-left','hotspot-screen-top-right','hotspot-screen-bottom-right','hotspot-screen-bottom-left'];
-                    const corners=names.map(n=>{const h=v.queryHotspot(n);return h?{facingCamera:h.facingCamera,x:h.canvasPosition.x,y:h.canvasPosition.y}:null;});
-                    const button=v.queryHotspot('hotspot-probe');
+                    const mat=v.model && v.model.getMaterialByName('QAMQOR_Duo_Closed_Display');
                     return {
                       src:v.getAttribute('src'),
                       loaded:v.loaded,
-                      viewer:{width:v.clientWidth,height:v.clientHeight},
-                      corners,
-                      button:button?{facingCamera:button.facingCamera,position:button.position,canvasPosition:button.canvasPosition}:null,
-                      idleScreenVisible:!document.querySelector('.qamqor-ios-dark-screen').hidden,
-                      cameraOrbit:(()=>{const o=v.getCameraOrbit();return {theta:o.theta,phi:o.phi,radius:o.radius};})()
+                      animations:v.availableAnimations,
+                      duration:v.duration,
+                      currentTime:v.currentTime,
+                      state:window.qamqorPhoneForm.getState(),
+                      outerMaterial:mat ? {
+                        name:mat.name,
+                        loaded:mat.isLoaded,
+                        emissive:mat.emissiveFactor
+                      } : null,
+                      viewer:{width:v.clientWidth,height:v.clientHeight}
                     };
                   }""")
-                  result["initial_state"]=state
-                  result["checks"]["duo_asset_loaded"]="QAMQOR-iPhone-Duo.glb" in (state.get("src") or "")
-                  result["checks"]["all_screen_corners_visible"]=bool(state.get("corners")) and all(x and x["facingCamera"] for x in state["corners"])
-                  result["checks"]["physical_button_visible"]=bool(state.get("button") and state["button"]["facingCamera"])
-                  result["checks"]["dark_idle_screen_visible"]=state.get("idleScreenVisible",False)
-                  page.locator(".qamqor-phone-model").screenshot(path="diagnostics/duo/duo-front.png")
+                  result["initial_state"]=initial
+                  result["checks"]["duo_asset_loaded"]="QAMQOR-iPhone-Duo.glb" in (initial.get("src") or "")
+                  result["checks"]["open_close_animation_preserved"]="open-close" in initial.get("animations",[])
+                  result["checks"]["starts_in_closed_pose"]=(
+                    initial.get("duration",0)>0 and
+                    abs(initial.get("currentTime",0)-initial.get("duration",0))<0.08 and
+                    initial.get("state")=="closed"
+                  )
+                  result["checks"]["closed_screen_art_material_present"]=bool(
+                    initial.get("outerMaterial") and
+                    initial["outerMaterial"]["name"]=="QAMQOR_Duo_Closed_Display"
+                  )
 
-                  # Turn the device around: the inner screen layer must disappear instead of floating.
-                  page.evaluate("""async () => {
+                  # Locate the actual outer-display mesh by ray-casting the rendered model.
+                  hit = page.evaluate("""() => {
                     const v=document.querySelector('.qamqor-phone-model');
-                    const o=v.getCameraOrbit();
-                    v.cameraOrbit=(o.theta+Math.PI)+'rad '+o.phi+'rad '+o.radius+'m';
-                    await new Promise(r=>setTimeout(r,700));
+                    const r=v.getBoundingClientRect();
+                    const found=[];
+                    for(let y=r.top+8;y<r.bottom-8;y+=14){
+                      for(let x=r.left+8;x<r.right-8;x+=14){
+                        const m=v.materialFromPoint(x,y);
+                        if(m && m.name==='QAMQOR_Duo_Closed_Display') found.push({x,y});
+                      }
+                    }
+                    if(!found.length) return null;
+                    return {
+                      count:found.length,
+                      x:found.reduce((a,p)=>a+p.x,0)/found.length,
+                      y:found.reduce((a,p)=>a+p.y,0)/found.length
+                    };
                   }""")
-                  back_hidden=page.evaluate("""() => document.querySelector('.qamqor-ios-dark-screen').hidden""")
-                  result["checks"]["screen_hides_when_back_faces_camera"]=back_hidden
-                  page.evaluate("""async () => {
-                    const v=document.querySelector('.qamqor-phone-model');
-                    const o=v.getCameraOrbit();
-                    v.cameraOrbit=(o.theta+Math.PI)+'rad '+o.phi+'rad '+o.radius+'m';
-                    await new Promise(r=>setTimeout(r,700));
-                  }""")
-                  front_again=page.evaluate("""() => !document.querySelector('.qamqor-ios-dark-screen').hidden""")
-                  result["checks"]["screen_returns_when_front_faces_camera"]=front_again
+                  result["closed_screen_hit_test"]=hit
+                  result["checks"]["closed_outer_screen_is_visible"]=bool(hit and hit["count"]>=1)
+                  page.locator(".qamqor-phone-model").screenshot(
+                    path="diagnostics/duo/duo-closed-screen.png"
+                  )
 
-                  hitbox=page.locator(".qamqor-apply-hitbox")
-                  hitbox.click(force=True)
-                  page.wait_for_function("""() => {
-                    const o=document.getElementById('qamqor-phone-form-overlay');
-                    const f=document.getElementById('repair');
-                    return o && !o.hidden && f && o.contains(f) && !f.hidden;
-                  }""",timeout=12000)
-                  form_state=page.evaluate("""() => ({
-                    open:window.qamqorPhoneForm.isOpen(),
-                    nativeScreenHidden:document.querySelector('.qamqor-ios-dark-screen').hidden,
-                    buttonHidden:document.querySelector('.qamqor-apply-hitbox').hidden,
-                    formInsideOverlay:document.getElementById('qamqor-phone-form-overlay').contains(document.getElementById('repair')),
-                    cameraControls:document.querySelector('.qamqor-phone-model').hasAttribute('camera-controls')
-                  })""")
-                  result["form_state"]=form_state
-                  result["checks"]["request_form_opens_on_display"]=form_state["open"] and form_state["formInsideOverlay"]
-                  result["checks"]["home_screen_and_apply_button_hide"]=form_state["nativeScreenHidden"] and form_state["buttonHidden"]
-                  result["checks"]["camera_not_forced_to_zoom"]=form_state["cameraControls"]
+                  if hit:
+                    page.mouse.click(hit["x"],hit["y"])
+                    page.wait_for_function("""() =>
+                      window.qamqorPhoneForm &&
+                      window.qamqorPhoneForm.getState()==='form' &&
+                      window.qamqorPhoneForm.isOpen() &&
+                      document.getElementById('qamqor-phone-form-overlay') &&
+                      !document.getElementById('qamqor-phone-form-overlay').hidden &&
+                      document.getElementById('qamqor-phone-form-overlay').contains(document.getElementById('repair'))
+                    """,timeout=10000)
+
+                  opened = page.evaluate("""() => {
+                    const v=document.querySelector('.qamqor-phone-model');
+                    const r=window.qamqorPhoneForm.getScreenRect();
+                    return {
+                      state:window.qamqorPhoneForm.getState(),
+                      currentTime:v.currentTime,
+                      duration:v.duration,
+                      formInsideOverlay:document.getElementById('qamqor-phone-form-overlay').contains(document.getElementById('repair')),
+                      cameraControls:v.hasAttribute('camera-controls'),
+                      innerScreenRect:r
+                    };
+                  }""")
+                  result["opened_state"]=opened
+                  result["checks"]["tap_plays_open_animation"]=(
+                    opened["state"]=="form" and
+                    opened["currentTime"]<0.08 and
+                    opened["formInsideOverlay"] and
+                    opened["innerScreenRect"] is not None
+                  )
+                  result["checks"]["camera_stays_locked_for_form"]=not opened["cameraControls"]
+                  page.locator("#repair").screenshot(
+                    path="diagnostics/duo/duo-open-form.png"
+                  )
 
                   page.locator("#brand").fill("iPhone Duo")
                   page.locator("[data-wizard-next]").first.click()
                   page.wait_for_function("""() => {
-                    const s=document.querySelector('#repair [data-wizard-step="1"]');
-                    return s && !s.hidden;
+                    const step=document.querySelector('#repair [data-wizard-step="1"]');
+                    return step && !step.hidden &&
+                      document.getElementById('qamqor-phone-form-overlay').contains(document.getElementById('repair'));
                   }""",timeout=7000)
-                  result["checks"]["wizard_works_inside_phone"]=page.evaluate("""() =>
-                    window.qamqorPhoneForm.isOpen() &&
-                    document.getElementById('qamqor-phone-form-overlay').contains(document.getElementById('repair')) &&
+                  result["checks"]["wizard_works_inside_open_duo"]=page.evaluate("""() =>
+                    window.qamqorPhoneForm.getState()==='form' &&
                     !document.querySelector('#repair [data-wizard-step="1"]').hidden
                   """)
+
                   page.locator(".qamqor-phone-form-close").click()
                   page.wait_for_function("""() => {
+                    const v=document.querySelector('.qamqor-phone-model');
                     const f=document.getElementById('repair');
-                    const b=document.querySelector('.qamqor-apply-hitbox');
-                    const n=document.querySelector('.qamqor-ios-dark-screen');
-                    return window.qamqorPhoneForm && !window.qamqorPhoneForm.isOpen() &&
-                      b && !b.hidden && n && !n.hidden && f && f.hidden;
-                  }""",timeout=7000)
-                  result["checks"]["close_restores_duo_home_screen"]=True
-                  page.screenshot(path="diagnostics/duo/duo-home-screen.png",full_page=True)
+                    return window.qamqorPhoneForm.getState()==='closed' &&
+                      !window.qamqorPhoneForm.isOpen() &&
+                      Math.abs(v.currentTime-v.duration)<0.08 &&
+                      v.hasAttribute('camera-controls') &&
+                      f.hidden;
+                  }""",timeout=10000)
+                  closed_again=page.evaluate("""() => {
+                    const v=document.querySelector('.qamqor-phone-model');
+                    return {
+                      state:window.qamqorPhoneForm.getState(),
+                      currentTime:v.currentTime,
+                      duration:v.duration,
+                      cameraControls:v.hasAttribute('camera-controls')
+                    };
+                  }""")
+                  result["closed_again_state"]=closed_again
+                  result["checks"]["close_plays_reverse_to_closed_pose"]=(
+                    closed_again["state"]=="closed" and
+                    abs(closed_again["currentTime"]-closed_again["duration"])<0.08 and
+                    closed_again["cameraControls"]
+                  )
+                  page.locator(".qamqor-phone-model").screenshot(
+                    path="diagnostics/duo/duo-closed-again.png"
+                  )
                   browser.close()
           except Exception as e:
               result["error"]=str(e)
               result["traceback"]=traceback.format_exc()
 
-          pathlib.Path("qamqor-duo-browser-test.json").write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf-8")
+          pathlib.Path("qamqor-duo-browser-test.json").write_text(
+            json.dumps(result,ensure_ascii=False,indent=2),encoding="utf-8"
+          )
           print("QAMQOR_DUO_BROWSER_TEST="+json.dumps(result,ensure_ascii=False))
           failed=[k for k,v in result["checks"].items() if v is not True]
           if failed or errors or result.get("error"):
-              raise SystemExit("Duo browser tests failed: "+", ".join(failed))
+              raise SystemExit("Duo animation tests failed: "+", ".join(failed))
           PY
       - name: Upload Duo preview screenshots and test report
         if: always()
