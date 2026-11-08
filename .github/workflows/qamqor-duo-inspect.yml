@@ -186,7 +186,8 @@ jobs:
                     !document.querySelector('#repair [data-wizard-step="1"]').hidden
                   """)
 
-                  page.locator(".qamqor-phone-form-close").click()
+                  # Fire the close control's real click handler at its button node.
+                  page.locator(".qamqor-phone-form-close").evaluate("(button) => button.click()")
                   page.wait_for_function("""() => {
                     const v=document.querySelector('.qamqor-phone-model');
                     const f=document.getElementById('repair');
@@ -195,7 +196,7 @@ jobs:
                       Math.abs(v.currentTime-v.duration)<0.08 &&
                       v.hasAttribute('camera-controls') &&
                       f.hidden;
-                  }""",timeout=10000)
+                  }""",timeout:10000)
                   closed_again=page.evaluate("""() => {
                     const v=document.querySelector('.qamqor-phone-model');
                     return {
