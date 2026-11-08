@@ -6,6 +6,7 @@ on:
     paths:
       - "iPhone duo.glb"
       - "index.html"
+      - "duo-request.js"
       - "scripts/inspect_duo_model.py"
       - "scripts/build_duo_request_button.py"
       - ".github/workflows/qamqor-duo-inspect.yml"
@@ -320,6 +321,88 @@ jobs:
                   page.locator(".qamqor-phone-model").screenshot(
                     path="diagnostics/duo/duo-closed-again.png"
                   )
+
+                  # Confirm the mesh-ray fallback opens the same in-screen form
+                  # when the projected HTML hit target is unavailable.
+                  fallback_box = page.locator("#qamqor-lock-click-button").bounding_box()
+                  if not fallback_box:
+                    raise RuntimeError("Cannot measure the folded screen CTA for ray fallback.")
+                  page.evaluate("""() => {
+                    document.getElementById("qamqor-lock-click-plane").hidden = true;
+                  }""")
+                  page.mouse.click(
+                    fallback_box["x"] + fallback_box["width"] / 2,
+                    fallback_box["y"] + fallback_box["height"] / 2
+                  )
+                  page.wait_for_function("""() => {
+                    const o=document.getElementById('qamqor-phone-form-overlay');
+                    return window.qamqorPhoneForm &&
+                      window.qamqorPhoneForm.getState()==='form' &&
+                      o && !o.hidden && o.contains(document.getElementById('repair'));
+                  }""", timeout=15000)
+                  ray_debug = page.evaluate("() => window.qamqorPhoneForm.getDiagnostics()")
+                  result["ray_hit_fallback"] = ray_debug
+                  result["checks"]["model_ray_hit_fallback_opens_form"] = (
+                    ray_debug["rayHits"] > 0 and
+                    ray_debug["lastRayHit"] is not None and
+                    ray_debug["lastRayHit"]["inside"] and
+                    ray_debug["lastRayHit"]["correctMaterial"]
+                  )
+                  page.locator(".qamqor-phone-form-close").click()
+                  page.wait_for_function("""() =>
+                    window.qamqorPhoneForm &&
+                    window.qamqorPhoneForm.getState()==='closed'
+                  """, timeout=15000)
+
+                  # Test the actual phone-sized touchscreen viewport as well.
+                  mobile = browser.new_page(
+                    viewport={"width":390,"height":844},
+                    device_scale_factor=3,
+                    is_mobile=True,
+                    has_touch=True
+                  )
+                  mobile.on("pageerror", lambda e: errors.append("mobile: " + str(e)))
+                  mobile.goto(
+                    "http://127.0.0.1:8765/index.html",
+                    wait_until="domcontentloaded",
+                    timeout=90000
+                  )
+                  mobile.wait_for_function("""() => {
+                    const v=document.querySelector('.qamqor-phone-model');
+                    return v && v.loaded && window.qamqorPhoneForm &&
+                      window.qamqorPhoneForm.getState()==='closed' &&
+                      window.qamqorPhoneForm.isLockButtonVisible();
+                  }""", timeout=120000)
+                  mobile_hit = mobile.locator("#qamqor-lock-click-button").bounding_box()
+                  if not mobile_hit or mobile_hit["width"] < 20 or mobile_hit["height"] < 15:
+                    raise RuntimeError("Mobile folded-screen CTA target is too small or missing.")
+                  mobile.touchscreen.tap(
+                    mobile_hit["x"] + mobile_hit["width"] / 2,
+                    mobile_hit["y"] + mobile_hit["height"] / 2
+                  )
+                  mobile.wait_for_function("""() => {
+                    const o=document.getElementById('qamqor-phone-form-overlay');
+                    return window.qamqorPhoneForm &&
+                      window.qamqorPhoneForm.getState()==='form' &&
+                      o && !o.hidden && o.contains(document.getElementById('repair'));
+                  }""", timeout=15000)
+                  result["mobile_state"] = mobile.evaluate("""() => ({
+                    state:window.qamqorPhoneForm.getState(),
+                    formInsideOverlay:document.getElementById('qamqor-phone-form-overlay')
+                      .contains(document.getElementById('repair')),
+                    buttonVisible:window.qamqorPhoneForm.isLockButtonVisible(),
+                    diagnostics:window.qamqorPhoneForm.getDiagnostics()
+                  })""")
+                  result["checks"]["mobile_touch_opens_form_inside_duo"] = (
+                    result["mobile_state"]["state"] == "form" and
+                    result["mobile_state"]["formInsideOverlay"]
+                  )
+                  mobile.locator(".qamqor-phone-form-close").click()
+                  mobile.wait_for_function("""() =>
+                    window.qamqorPhoneForm &&
+                    window.qamqorPhoneForm.getState()==='closed'
+                  """, timeout=15000)
+                  mobile.close()
                   browser.close()
           except Exception as e:
               result["error"]=str(e)
