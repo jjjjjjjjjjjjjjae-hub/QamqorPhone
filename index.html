@@ -3919,12 +3919,14 @@ verifyButton.addEventListener("click", async () => {
     try { overlay.setPointerCapture(event.pointerId); } catch (_) {}
   });
 
-  overlay.addEventListener("pointermove", event => {
+  // Track the drag at document level so it continues even when the pointer
+  // briefly leaves the projected screen polygon.
+  function trackRotationPointer(event) {
     if (!rotationDrag || event.pointerId !== rotationDrag.pointerId) return;
     pendingRotationPoint = {x:event.clientX,y:event.clientY};
     if (!rotationFrame) rotationFrame = requestAnimationFrame(applyRotationFrame);
     if (event.cancelable) event.preventDefault();
-  });
+  }
 
   function stopRotationDrag(event) {
     if (!rotationDrag || (event && event.pointerId !== rotationDrag.pointerId)) return;
@@ -3934,8 +3936,9 @@ verifyButton.addEventListener("click", async () => {
     rotationFrame = 0;
     viewer.shadowIntensity = normalShadowIntensity;
   }
-  overlay.addEventListener("pointerup",stopRotationDrag);
-  overlay.addEventListener("pointercancel",stopRotationDrag);
+  document.addEventListener("pointermove",trackRotationPointer,{capture:true,passive:false});
+  document.addEventListener("pointerup",stopRotationDrag,true);
+  document.addEventListener("pointercancel",stopRotationDrag,true);
   overlay.addEventListener("lostpointercapture",stopRotationDrag);
 
   async function showRepairForm() {
