@@ -2,55 +2,24 @@
   "source": "iPhone duo.glb",
   "output": "QAMQOR-iPhone-Duo.glb",
   "source_size_bytes": 5673908,
-  "output_size_bytes": 4584328,
-  "screen_material": "C_StarWhite_Screen_Inner",
-  "screen_node": "Object_106",
-  "screen_mesh": "Object_46",
-  "screen_bounds_min": [
-    -0.07928421348333359,
-    0.00343487411737442,
-    0.0024459538981318474
+  "output_size_bytes": 5773190,
+  "closed_screen_material_source": "C_SW_Screen_Outer",
+  "closed_screen_material_output": "QAMQOR_Duo_Closed_Display",
+  "screen_mesh_indices": [
+    30
   ],
-  "screen_bounds_max": [
-    0.07928421348333359,
-    0.11434826254844666,
-    0.0024460158310830593
+  "texture_size": [
+    768,
+    1120
   ],
-  "screen_width": 0.15856842696666718,
-  "screen_height": 0.11091338843107224,
-  "screen_front_z": 0.0024460158310830593,
-  "button": {
-    "center": [
-      0.0,
-      0.025617551803588868,
-      0.0026460158310830594
-    ],
-    "size": [
-      0.07928421348333359,
-      0.013478316292166712
-    ],
-    "bounds_min": [
-      -0.039642106741666794,
-      0.018878393657505512,
-      0.0026460158310830594
-    ],
-    "bounds_max": [
-      0.039642106741666794,
-      0.03235670994967223,
-      0.0026460158310830594
-    ],
-    "normal": [
-      0,
-      0,
-      1
-    ],
-    "physical_glb_mesh": true,
-    "texture_size": [
-      1200,
-      320
-    ]
-  },
-  "geometry_count_after_export": 50,
-  "button_mesh_found_after_export": true,
+  "texture_bytes": 98870,
+  "animations_preserved": true,
+  "animations_count": 1,
+  "animations": [
+    {
+      "name": "open-close",
+      "channels": 6
+    }
+  ],
   "source_asset_modified": false
 }

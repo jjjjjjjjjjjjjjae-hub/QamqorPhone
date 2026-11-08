@@ -1147,8 +1147,147 @@
   "generated_animation_data": {
     "file": "QAMQOR-iPhone-Duo.glb",
     "glb_version": 2,
-    "animations_count": 0,
-    "animations": [],
+    "animations_count": 1,
+    "animations": [
+      {
+        "index": 0,
+        "name": "open-close",
+        "channel_count": 6,
+        "sampler_count": 6,
+        "channels": [
+          {
+            "node_index": 61,
+            "node_name": "Bone_Hinge_46",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "key_count": 61,
+            "time_start": 0.0,
+            "time_end": 2.0,
+            "first_value": [
+              -2.1105980732658708e-14,
+              -4.7068695607777045e-08,
+              -4.70687027132044e-08,
+              -1.0
+            ],
+            "last_value": [
+              -0.70710688829422,
+              -6.656518536374278e-08,
+              -2.512147467383986e-15,
+              -0.7071066498756409
+            ],
+            "input_accessor": 257,
+            "output_accessor": 258
+          },
+          {
+            "node_index": 64,
+            "node_name": "Bone_01_45",
+            "path": "translation",
+            "interpolation": "LINEAR",
+            "key_count": 3,
+            "time_start": 0.0,
+            "time_end": 2.0,
+            "first_value": [
+              1.9633163983456825e-09,
+              0.0002768133126664907,
+              2.2644286445938633e-10
+            ],
+            "last_value": [
+              2.074412641661638e-09,
+              0.0002768134290818125,
+              -5.793129864706259e-12
+            ],
+            "input_accessor": 259,
+            "output_accessor": 260
+          },
+          {
+            "node_index": 64,
+            "node_name": "Bone_01_45",
+            "path": "rotation",
+            "interpolation": "LINEAR",
+            "key_count": 61,
+            "time_start": 0.0,
+            "time_end": 2.0,
+            "first_value": [
+              -2.152837761058654e-22,
+              9.786668474844522e-42,
+              3.552724690228815e-15,
+              -1.0
+            ],
+            "last_value": [
+              -0.70710688829422,
+              2.512155302438748e-15,
+              2.5121559377134584e-15,
+              -0.7071066498756409
+            ],
+            "input_accessor": 261,
+            "output_accessor": 262
+          },
+          {
+            "node_index": 6,
+            "node_name": "Hinge_Bottom_Transform_51",
+            "path": "translation",
+            "interpolation": "LINEAR",
+            "key_count": 61,
+            "time_start": 0.0,
+            "time_end": 2.0,
+            "first_value": [
+              0.0,
+              0.0,
+              -0.0
+            ],
+            "last_value": [
+              0.0,
+              -0.00020000000949949026,
+              -0.0
+            ],
+            "input_accessor": 263,
+            "output_accessor": 264
+          },
+          {
+            "node_index": 7,
+            "node_name": "Hinge_Top_Transform_52",
+            "path": "translation",
+            "interpolation": "LINEAR",
+            "key_count": 61,
+            "time_start": 0.0,
+            "time_end": 2.0,
+            "first_value": [
+              0.0,
+              0.0,
+              -0.0
+            ],
+            "last_value": [
+              0.0,
+              0.00020000000949949026,
+              -0.0
+            ],
+            "input_accessor": 265,
+            "output_accessor": 266
+          },
+          {
+            "node_index": 62,
+            "node_name": "Axle_9",
+            "path": "translation",
+            "interpolation": "LINEAR",
+            "key_count": 61,
+            "time_start": 0.0,
+            "time_end": 2.0,
+            "first_value": [
+              -0.05889157950878143,
+              0.00013841692998539656,
+              -0.0024459322448819876
+            ],
+            "last_value": [
+              -0.05889157950878143,
+              0.00013841687177773565,
+              -0.00039987574564293027
+            ],
+            "input_accessor": 267,
+            "output_accessor": 268
+          }
+        ]
+      }
+    ],
     "scene_nodes": [
       {
         "index": 0,
@@ -1191,39 +1330,23 @@
         "name": "GLTF_created_0",
         "children": [
           5,
+          103,
+          106,
+          109,
+          112,
+          6,
           7,
-          9,
-          11,
-          13,
-          14,
-          15,
-          16,
-          17,
-          18,
-          19
+          101,
+          104,
+          107,
+          110
         ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 5,
-        "name": "Hinge_Top_56_correction",
-        "children": [
-          6
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 6,
-        "name": "Hinge_Top_56",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 7,
-        "name": "Hinge_Bottom_55_correction",
+        "name": "GLTF_created_0_rootJoint",
         "children": [
           8
         ],
@@ -1231,31 +1354,82 @@
         "rotation": null
       },
       {
-        "index": 8,
-        "name": "Hinge_Bottom_55",
+        "index": 6,
+        "name": "Hinge_Bottom_Transform_51",
         "children": [],
         "translation": null,
         "rotation": null
       },
       {
-        "index": 9,
-        "name": "Front_Screen_54_correction",
+        "index": 7,
+        "name": "Hinge_Top_Transform_52",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 8,
+        "name": "Bone_02_49",
         "children": [
-          10
+          9,
+          61
+        ],
+        "translation": [
+          0.07928421348333359,
+          0.05889156833291054,
+          0.0024459559936076403
+        ],
+        "rotation": [
+          -1.751774760805347e-07,
+          1.751774902913894e-07,
+          -0.7071068286895752,
+          -0.7071068286895752
+        ]
+      },
+      {
+        "index": 9,
+        "name": "Side_Panel_Right_3",
+        "children": [
+          10,
+          11,
+          13,
+          15,
+          17,
+          19,
+          21,
+          23,
+          25,
+          27,
+          29,
+          31,
+          33,
+          35,
+          37,
+          39,
+          41,
+          43,
+          45,
+          47,
+          49,
+          51,
+          53,
+          55,
+          57,
+          59
         ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 10,
-        "name": "Front_Screen_54",
+        "name": "Object_10",
         "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 11,
-        "name": "Front_Screen_Border_53_correction",
+        "name": "Front_Panel_0",
         "children": [
           12
         ],
@@ -1264,56 +1438,62 @@
       },
       {
         "index": 12,
-        "name": "Front_Screen_Border_53",
+        "name": "Object_12",
         "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 13,
-        "name": "Hinge_Top_Transform_52",
-        "children": [],
+        "name": "Back_Panel_01_2",
+        "children": [
+          14
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 14,
-        "name": "Hinge_Bottom_Transform_51",
+        "name": "Object_14",
         "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 15,
-        "name": "Object_112",
-        "children": [],
+        "name": "Occluder_Right_8",
+        "children": [
+          16
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 16,
-        "name": "Object_109",
+        "name": "Object_16",
         "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 17,
-        "name": "Object_106",
-        "children": [],
+        "name": "Back_Cam_Base_10",
+        "children": [
+          18
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 18,
-        "name": "Object_103",
+        "name": "Object_18",
         "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 19,
-        "name": "GLTF_created_0_rootJoint",
+        "name": "Back_Cam_Black_11",
         "children": [
           20
         ],
@@ -1322,341 +1502,318 @@
       },
       {
         "index": 20,
-        "name": "Bone_02_49",
-        "children": [
-          21,
-          61
-        ],
+        "name": "Object_20",
+        "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 21,
-        "name": "Bone_Hinge_46",
+        "name": "Back_Cam_Border_12",
         "children": [
-          22,
-          59
+          22
         ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 22,
-        "name": "Bone_01_45",
-        "children": [
-          23
-        ],
+        "name": "Object_22",
+        "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 23,
-        "name": "Side_Panel_Left_6",
+        "name": "Back_Cam_Border_Black_13",
         "children": [
-          24,
-          26,
-          28,
-          30,
-          32,
-          34,
-          36,
-          38,
-          40,
-          42,
-          44,
-          46,
-          48,
-          50,
-          52,
-          54,
-          56,
-          58
+          24
         ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 24,
-        "name": "Front_Panel.001_44",
-        "children": [
-          25
-        ],
+        "name": "Object_24",
+        "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 25,
-        "name": "Object_100",
-        "children": [],
+        "name": "Back_Cam_Detail_01_14",
+        "children": [
+          26
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 26,
-        "name": "USB_Pin_41",
-        "children": [
-          27
-        ],
+        "name": "Object_26",
+        "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 27,
-        "name": "Object_98",
-        "children": [],
+        "name": "Back_Cam_Glass_15",
+        "children": [
+          28
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 28,
-        "name": "USB_Metal_40",
-        "children": [
-          29
-        ],
+        "name": "Object_28",
+        "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 29,
-        "name": "Object_96",
-        "children": [],
+        "name": "Back_Cam_Lens_01_16",
+        "children": [
+          30
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 30,
-        "name": "USB_Base_39",
-        "children": [
-          31
-        ],
+        "name": "Object_30",
+        "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 31,
-        "name": "Object_94",
-        "children": [],
+        "name": "Back_Cam_Lens_02_17",
+        "children": [
+          32
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 32,
-        "name": "Top_Speakers_38",
-        "children": [
-          33
-        ],
+        "name": "Object_32",
+        "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 33,
-        "name": "Object_92",
-        "children": [],
+        "name": "Back_Cam_Lens_Outer_18",
+        "children": [
+          34
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 34,
-        "name": "Screws_L_34",
-        "children": [
-          35
-        ],
+        "name": "Object_34",
+        "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 35,
-        "name": "Object_90",
-        "children": [],
+        "name": "Back_Flash_Ref_19",
+        "children": [
+          36
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 36,
-        "name": "Screws_Aniso_L_02_31",
-        "children": [
-          37
-        ],
+        "name": "Object_36",
+        "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 37,
-        "name": "Object_88",
-        "children": [],
+        "name": "Back_Logo_20",
+        "children": [
+          38
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 38,
-        "name": "Screws_Aniso_L_01_30",
-        "children": [
-          39
-        ],
+        "name": "Object_38",
+        "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 39,
-        "name": "Object_86",
-        "children": [],
+        "name": "Back_Panel_02_21",
+        "children": [
+          40
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 40,
-        "name": "Antenna_01_28",
-        "children": [
-          41
-        ],
+        "name": "Object_40",
+        "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 41,
-        "name": "Object_84",
-        "children": [],
+        "name": "Antenna_02_29",
+        "children": [
+          42
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 42,
-        "name": "Inner_Cam_Lens_27",
-        "children": [
-          43
-        ],
+        "name": "Object_42",
+        "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 43,
-        "name": "Object_82",
-        "children": [],
+        "name": "Screws_Aniso_R_01_32",
+        "children": [
+          44
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 44,
-        "name": "Inner_Cam_Glass_26",
-        "children": [
-          45
-        ],
+        "name": "Object_44",
+        "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 45,
-        "name": "Object_80",
-        "children": [],
+        "name": "Screws_Aniso_R_02_33",
+        "children": [
+          46
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 46,
-        "name": "Inner_Cam_Black_25",
-        "children": [
-          47
-        ],
+        "name": "Object_46",
+        "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 47,
-        "name": "Object_78",
-        "children": [],
+        "name": "Screws_R_35",
+        "children": [
+          48
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 48,
-        "name": "Inner_Cam_Base_24",
-        "children": [
-          49
-        ],
+        "name": "Object_48",
+        "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 49,
-        "name": "Object_76",
-        "children": [],
+        "name": "Side_Buttons_Cap_36",
+        "children": [
+          50
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 50,
-        "name": "Front_Speaker_23",
-        "children": [
-          51
-        ],
+        "name": "Object_50",
+        "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 51,
-        "name": "Object_74",
-        "children": [],
+        "name": "Side_Buttons_Detail_37",
+        "children": [
+          52
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 52,
-        "name": "Back_Screen_22",
-        "children": [
-          53
-        ],
+        "name": "Object_52",
+        "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 53,
-        "name": "Object_72",
-        "children": [],
+        "name": "Back_Cam_Gloss_42",
+        "children": [
+          54
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 54,
-        "name": "Occluder_Left_7",
-        "children": [
-          55
-        ],
+        "name": "Object_54",
+        "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 55,
-        "name": "Object_70",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 56,
-        "name": "Back_Screen_Display_5",
+        "name": "Back_Cam_Speaker_43",
         "children": [
-          57
+          56
         ],
         "translation": null,
         "rotation": null
       },
       {
-        "index": 57,
-        "name": "Object_68",
+        "index": 56,
+        "name": "Object_56",
         "children": [],
         "translation": null,
         "rotation": null
       },
       {
+        "index": 57,
+        "name": "Back_Flash_Base_47",
+        "children": [
+          58
+        ],
+        "translation": null,
+        "rotation": null
+      },
+      {
         "index": 58,
-        "name": "Object_66",
+        "name": "Object_58",
         "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 59,
-        "name": "Axle_9",
+        "name": "Bottom Speaker_48",
         "children": [
           60
         ],
@@ -1665,384 +1822,404 @@
       },
       {
         "index": 60,
-        "name": "Object_63",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 61,
-        "name": "Side_Panel_Right_3",
-        "children": [
-          62,
-          64,
-          66,
-          68,
-          70,
-          72,
-          74,
-          76,
-          78,
-          80,
-          82,
-          84,
-          86,
-          88,
-          90,
-          92,
-          94,
-          96,
-          98,
-          100,
-          102,
-          104,
-          106,
-          108,
-          110,
-          112
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 62,
-        "name": "Bottom Speaker_48",
-        "children": [
-          63
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 63,
         "name": "Object_60",
         "children": [],
         "translation": null,
         "rotation": null
       },
       {
+        "index": 61,
+        "name": "Bone_Hinge_46",
+        "children": [
+          62,
+          64
+        ],
+        "translation": [
+          1.2249443681611183e-09,
+          0.07914580404758453,
+          -7.557155595749876e-11
+        ],
+        "rotation": [
+          -2.1105980732658708e-14,
+          -4.7068695607777045e-08,
+          -4.706870626591808e-08,
+          -1.0
+        ]
+      },
+      {
+        "index": 62,
+        "name": "Axle_9",
+        "children": [
+          63
+        ],
+        "translation": [
+          -0.05889157950878143,
+          0.00013841692998539656,
+          -0.0024459322448819876
+        ],
+        "rotation": [
+          1.4189488695137698e-07,
+          -1.4189488695137698e-07,
+          0.7071068286895752,
+          -0.7071068286895752
+        ]
+      },
+      {
+        "index": 63,
+        "name": "Object_63",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
         "index": 64,
-        "name": "Back_Flash_Base_47",
+        "name": "Bone_01_45",
         "children": [
           65
         ],
-        "translation": null,
-        "rotation": null
+        "translation": [
+          9.816581991728413e-10,
+          0.0002768133126664907,
+          1.1322143222969316e-10
+        ],
+        "rotation": [
+          -2.1528102455902797e-22,
+          -0.0,
+          3.552724690228815e-15,
+          -1.0
+        ]
       },
       {
         "index": 65,
-        "name": "Object_58",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 66,
-        "name": "Back_Cam_Speaker_43",
+        "name": "Side_Panel_Left_6",
         "children": [
-          67
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 67,
-        "name": "Object_56",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 68,
-        "name": "Back_Cam_Gloss_42",
-        "children": [
-          69
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 69,
-        "name": "Object_54",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 70,
-        "name": "Side_Buttons_Detail_37",
-        "children": [
-          71
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 71,
-        "name": "Object_52",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 72,
-        "name": "Side_Buttons_Cap_36",
-        "children": [
-          73
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 73,
-        "name": "Object_50",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 74,
-        "name": "Screws_R_35",
-        "children": [
-          75
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 75,
-        "name": "Object_48",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 76,
-        "name": "Screws_Aniso_R_02_33",
-        "children": [
-          77
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 77,
-        "name": "Object_46",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 78,
-        "name": "Screws_Aniso_R_01_32",
-        "children": [
-          79
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 79,
-        "name": "Object_44",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 80,
-        "name": "Antenna_02_29",
-        "children": [
-          81
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 81,
-        "name": "Object_42",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 82,
-        "name": "Back_Panel_02_21",
-        "children": [
-          83
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 83,
-        "name": "Object_40",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 84,
-        "name": "Back_Logo_20",
-        "children": [
-          85
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 85,
-        "name": "Object_38",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 86,
-        "name": "Back_Flash_Ref_19",
-        "children": [
-          87
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 87,
-        "name": "Object_36",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 88,
-        "name": "Back_Cam_Lens_Outer_18",
-        "children": [
-          89
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 89,
-        "name": "Object_34",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 90,
-        "name": "Back_Cam_Lens_02_17",
-        "children": [
-          91
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 91,
-        "name": "Object_32",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 92,
-        "name": "Back_Cam_Lens_01_16",
-        "children": [
-          93
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 93,
-        "name": "Object_30",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 94,
-        "name": "Back_Cam_Glass_15",
-        "children": [
-          95
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 95,
-        "name": "Object_28",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 96,
-        "name": "Back_Cam_Detail_01_14",
-        "children": [
-          97
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 97,
-        "name": "Object_26",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 98,
-        "name": "Back_Cam_Border_Black_13",
-        "children": [
+          66,
+          67,
+          69,
+          71,
+          73,
+          75,
+          77,
+          79,
+          81,
+          83,
+          85,
+          87,
+          89,
+          91,
+          93,
+          95,
+          97,
           99
         ],
         "translation": null,
         "rotation": null
       },
       {
-        "index": 99,
-        "name": "Object_24",
+        "index": 66,
+        "name": "Object_66",
         "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 67,
+        "name": "Back_Screen_Display_5",
+        "children": [
+          68
+        ],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 68,
+        "name": "Object_68",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 69,
+        "name": "Occluder_Left_7",
+        "children": [
+          70
+        ],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 70,
+        "name": "Object_70",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 71,
+        "name": "Back_Screen_22",
+        "children": [
+          72
+        ],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 72,
+        "name": "Object_72",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 73,
+        "name": "Front_Speaker_23",
+        "children": [
+          74
+        ],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 74,
+        "name": "Object_74",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 75,
+        "name": "Inner_Cam_Base_24",
+        "children": [
+          76
+        ],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 76,
+        "name": "Object_76",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 77,
+        "name": "Inner_Cam_Black_25",
+        "children": [
+          78
+        ],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 78,
+        "name": "Object_78",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 79,
+        "name": "Inner_Cam_Glass_26",
+        "children": [
+          80
+        ],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 80,
+        "name": "Object_80",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 81,
+        "name": "Inner_Cam_Lens_27",
+        "children": [
+          82
+        ],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 82,
+        "name": "Object_82",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 83,
+        "name": "Antenna_01_28",
+        "children": [
+          84
+        ],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 84,
+        "name": "Object_84",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 85,
+        "name": "Screws_Aniso_L_01_30",
+        "children": [
+          86
+        ],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 86,
+        "name": "Object_86",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 87,
+        "name": "Screws_Aniso_L_02_31",
+        "children": [
+          88
+        ],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 88,
+        "name": "Object_88",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 89,
+        "name": "Screws_L_34",
+        "children": [
+          90
+        ],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 90,
+        "name": "Object_90",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 91,
+        "name": "Top_Speakers_38",
+        "children": [
+          92
+        ],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 92,
+        "name": "Object_92",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 93,
+        "name": "USB_Base_39",
+        "children": [
+          94
+        ],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 94,
+        "name": "Object_94",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 95,
+        "name": "USB_Metal_40",
+        "children": [
+          96
+        ],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 96,
+        "name": "Object_96",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 97,
+        "name": "USB_Pin_41",
+        "children": [
+          98
+        ],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 98,
+        "name": "Object_98",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
+        "index": 99,
+        "name": "Front_Panel.001_44",
+        "children": [
+          100
+        ],
         "translation": null,
         "rotation": null
       },
       {
         "index": 100,
-        "name": "Back_Cam_Border_12",
-        "children": [
-          101
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 101,
-        "name": "Object_22",
+        "name": "Object_100",
         "children": [],
         "translation": null,
         "rotation": null
       },
       {
-        "index": 102,
-        "name": "Back_Cam_Black_11",
+        "index": 101,
+        "name": "Front_Screen_Border_53_correction",
         "children": [
-          103
+          102
         ],
         "translation": null,
         "rotation": null
       },
       {
+        "index": 102,
+        "name": "Front_Screen_Border_53",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
         "index": 103,
-        "name": "Object_20",
+        "name": "Object_103",
         "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 104,
-        "name": "Back_Cam_Base_10",
+        "name": "Front_Screen_54_correction",
         "children": [
           105
         ],
@@ -2051,46 +2228,44 @@
       },
       {
         "index": 105,
-        "name": "Object_18",
+        "name": "Front_Screen_54",
         "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 106,
-        "name": "Occluder_Right_8",
-        "children": [
-          107
-        ],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 107,
-        "name": "Object_16",
+        "name": "Object_106",
         "children": [],
         "translation": null,
         "rotation": null
       },
       {
-        "index": 108,
-        "name": "Back_Panel_01_2",
+        "index": 107,
+        "name": "Hinge_Bottom_55_correction",
         "children": [
-          109
+          108
         ],
         "translation": null,
         "rotation": null
       },
       {
+        "index": 108,
+        "name": "Hinge_Bottom_55",
+        "children": [],
+        "translation": null,
+        "rotation": null
+      },
+      {
         "index": 109,
-        "name": "Object_14",
+        "name": "Object_109",
         "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 110,
-        "name": "Front_Panel_0",
+        "name": "Hinge_Top_56_correction",
         "children": [
           111
         ],
@@ -2099,21 +2274,14 @@
       },
       {
         "index": 111,
-        "name": "Object_12",
+        "name": "Hinge_Top_56",
         "children": [],
         "translation": null,
         "rotation": null
       },
       {
         "index": 112,
-        "name": "Object_10",
-        "children": [],
-        "translation": null,
-        "rotation": null
-      },
-      {
-        "index": 113,
-        "name": "QAMQOR_Duo_Request_Button",
+        "name": "Object_112",
         "children": [],
         "translation": null,
         "rotation": null
@@ -2131,17 +2299,17 @@
   "scene_bounds_max": [
     0.08320875938440646,
     0.11825120942785905,
-    0.0025848149433518584
+    0.0025848149433518606
   ],
   "scene_size": [
     0.166001808239126,
     0.1182380399848885,
-    0.011284815373952888
+    0.01128481537395289
   ],
   "scene_center": [
     0.0002078552648434595,
     0.0591321894354148,
-    -0.003057592743624586
+    -0.0030575927436245847
   ],
   "geometry": [
     {
@@ -2365,28 +2533,28 @@
       "bounds_min": [
         -0.0820286450360896,
         0.0006702883026741018,
-        0.0013343559456595075
+        0.0013343559456595077
       ],
       "bounds_max": [
-        -0.0005015807940569882,
+        -0.0005015807940569881,
         0.11711016604925686,
-        0.0025848149433518584
+        0.0025848149433518606
       ],
       "size": [
         0.08152706424203261,
         0.11643987774658277,
-        0.001250458997692351
+        0.0012504589976923529
       ],
       "center": [
         -0.041265112915073295,
         0.05889022717596548,
-        0.001959585444505683
+        0.0019595854445056842
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -2418,28 +2586,28 @@
       "bounds_min": [
         -0.0435362139145115,
         0.0016844167933450197,
-        -0.00041900827830832556
+        -0.00041900827830832464
       ],
       "bounds_max": [
         -0.0377690542119341,
         0.0074189622809217514,
-        0.00024196858236490612
+        0.00024196858236490718
       ],
       "size": [
         0.0057671597025774,
         0.005734545487576731,
-        0.0006609768606732317
+        0.0006609768606732319
       ],
       "center": [
         -0.040652634063222795,
         0.004551689537133386,
-        -8.851984797170972e-05
+        -8.851984797170873e-05
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -2471,12 +2639,12 @@
       "bounds_min": [
         -0.044979651449314005,
         1.3205560727200775e-05,
-        -0.0014293627701890735
+        -0.0014293627701890727
       ],
       "bounds_max": [
         -0.036355924783324244,
         0.0076037283058229925,
-        0.0012522925734328887
+        0.0012522925734328898
       ],
       "size": [
         0.008623726665989762,
@@ -2486,13 +2654,13 @@
       "center": [
         -0.040667788116319124,
         0.0038084669332750965,
-        -8.85350983780924e-05
+        -8.853509837809142e-05
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -2524,12 +2692,12 @@
       "bounds_min": [
         -0.04489121004686564,
         0.0014544501855795469,
-        -0.0013725530244614143
+        -0.0013725530244614132
       ],
       "bounds_max": [
         -0.03644436761484358,
         0.007603638084235108,
-        0.0011955151911620836
+        0.0011955151911620847
       ],
       "size": [
         0.00844684243202206,
@@ -2539,13 +2707,13 @@
       "center": [
         -0.040667788830854604,
         0.004529044134907328,
-        -8.851891664966535e-05
+        -8.851891664966426e-05
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -2577,12 +2745,12 @@
       "bounds_min": [
         -0.048289351945692456,
         0.11720816660330548,
-        -0.000913085672578218
+        -0.0009130856725782171
       ],
       "bounds_max": [
         -0.033601683413559416,
         0.11722707749618162,
-        0.0004335822648905185
+        0.0004335822648905195
       ],
       "size": [
         0.01468766853213304,
@@ -2592,13 +2760,13 @@
       "center": [
         -0.04094551767962594,
         0.11721762204974355,
-        -0.00023975170384384973
+        -0.00023975170384384878
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -2630,12 +2798,12 @@
       "bounds_min": [
         -0.04878638034587646,
         9.186228037227699e-05,
-        -0.0008468855759320315
+        -0.0008468855759320303
       ],
       "bounds_max": [
         -0.03254688626056305,
         0.0002989792033327114,
-        0.0006696874387370888
+        0.00066968743873709
       ],
       "size": [
         0.01623949408531341,
@@ -2645,13 +2813,13 @@
       "center": [
         -0.04066663330321975,
         0.0001954207418524942,
-        -8.859906859747131e-05
+        -8.859906859747012e-05
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -2683,12 +2851,12 @@
       "bounds_min": [
         -0.03402273449864045,
         9.219932114178462e-05,
-        -0.0008061907957499025
+        -0.0008061907957499018
       ],
       "bounds_max": [
         -0.03258425462808267,
         9.219945655654756e-05,
-        0.000629123160130799
+        0.0006291231601307998
       ],
       "size": [
         0.001438479870557778,
@@ -2698,13 +2866,13 @@
       "center": [
         -0.033303494563361555,
         9.219938884916609e-05,
-        -8.853381780955176e-05
+        -8.8533817809551e-05
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -2736,12 +2904,12 @@
       "bounds_min": [
         -0.048749004488845414,
         9.219010591854163e-05,
-        -0.0008063417864223116
+        -0.0008063417864223104
       ],
       "bounds_max": [
         -0.0473103569802242,
         9.219024134908557e-05,
-        0.0006291435910197801
+        0.0006291435910197813
       ],
       "size": [
         0.0014386475086212158,
@@ -2751,13 +2919,13 @@
       "center": [
         -0.048029680734534806,
         9.21901736338136e-05,
-        -8.859909770126578e-05
+        -8.859909770126458e-05
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -2789,12 +2957,12 @@
       "bounds_min": [
         -0.08279304885471954,
         1.3170697586286742e-05,
-        -0.0028095963299668326
+        -0.002809596329966831
       ],
       "bounds_max": [
         -0.01488569083907153,
         0.11778675196945348,
-        0.0021026988159648444
+        0.0021026988159648465
       ],
       "size": [
         0.06790735801564801,
@@ -2804,13 +2972,13 @@
       "center": [
         -0.04883936984689553,
         0.058899961333519886,
-        -0.00035344875700099414
+        -0.0003534487570009922
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -2842,12 +3010,12 @@
       "bounds_min": [
         -0.07268401218787111,
         0.10656699922122849,
-        -0.0027931338064749955
+        -0.0027931338064749937
       ],
       "bounds_max": [
         -0.07148402912534461,
         0.1077669822837557,
-        -0.0026351742800703078
+        -0.002635174280070306
       ],
       "size": [
         0.0011999830625264996,
@@ -2857,13 +3025,13 @@
       "center": [
         -0.07208402065660786,
         0.10716699075249209,
-        -0.002714154043272652
+        -0.00271415404327265
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -2895,12 +3063,12 @@
       "bounds_min": [
         -0.07368828339602955,
         0.10556286957409225,
-        -0.002894483588673508
+        -0.0028944835886735064
       ],
       "bounds_max": [
         -0.07048000378634939,
         0.10877114918377241,
-        -0.0028944444731256362
+        -0.0028944444731256345
       ],
       "size": [
         0.003208279609680162,
@@ -2910,13 +3078,13 @@
       "center": [
         -0.07208414359118948,
         0.10716700937893234,
-        -0.002894464030899572
+        -0.0028944640308995705
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -2948,12 +3116,12 @@
       "bounds_min": [
         -0.07517859323670932,
         0.10413207497801706,
-        -0.0028945008181410054
+        -0.0028945008181410037
       ],
       "bounds_max": [
         -0.06897701306989262,
         0.11021237459387702,
-        -0.0027702558674296733
+        -0.0027702558674296716
       ],
       "size": [
         0.0062015801668166975,
@@ -2963,13 +3131,13 @@
       "center": [
         -0.07207780315330098,
         0.10717222478594704,
-        -0.002832378342785339
+        -0.0028323783427853374
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -3001,12 +3169,12 @@
       "bounds_min": [
         -0.07368828339602955,
         0.10556286957409226,
-        -0.0027702949829775452
+        -0.0027702949829775435
       ],
       "bounds_max": [
         -0.07048000378634939,
         0.10877114918377243,
-        -0.001892590511627908
+        -0.0018925905116279063
       ],
       "size": [
         0.003208279609680162,
@@ -3016,13 +3184,13 @@
       "center": [
         -0.07208414359118948,
         0.10716700937893234,
-        -0.0023314427473027266
+        -0.002331442747302725
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -3054,28 +3222,28 @@
       "bounds_min": [
         -0.04773692485628622,
         0.11629204324601723,
-        -0.0021175896637535426
+        -0.0021175896637535417
       ],
       "bounds_max": [
         -0.03459305387673948,
         0.11652856312015285,
-        -0.0021175132953024237
+        -0.0021175132953024224
       ],
       "size": [
         0.013143870979546744,
         0.0002365198741356156,
-        7.636845111890292e-08
+        7.63684511193366e-08
       ],
       "center": [
         -0.04116498936651285,
         0.11641030318308504,
-        -0.002117551479527983
+        -0.002117551479527982
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -3112,23 +3280,23 @@
       "bounds_max": [
         -0.0023292067683447267,
         0.11510452910472514,
-        -0.002299462992737073
+        -0.0022994629927370713
       ],
       "size": [
         0.07771398951659542,
         0.11236317471532467,
-        0.0006052847020230267
+        0.0006052847020230285
       ],
       "center": [
         -0.04118620152664243,
         0.05892294174706281,
-        -0.0026021053437485864
+        -0.0026021053437485855
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -3163,7 +3331,7 @@
         -0.001598739612876908
       ],
       "bounds_max": [
-        2.3042011908124883e-07,
+        2.3042011908119783e-07,
         0.11713997580003908,
         0.002100051997210186
       ],
@@ -3181,7 +3349,7 @@
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -3216,25 +3384,25 @@
         -0.00290594630691363
       ],
       "bounds_max": [
-        -0.0009293549418327849,
+        -0.000929354941832785,
         0.1165295346086807,
-        -0.002092588774899024
+        -0.0020925887748990224
       ],
       "size": [
         0.08054604392046717,
         0.11525914072990376,
-        0.0008133575320146058
+        0.0008133575320146075
       ],
       "center": [
         -0.04120237690206637,
         0.058899964243728814,
-        -0.002499267540906327
+        -0.002499267540906326
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -3269,25 +3437,25 @@
         -0.0029087826498243666
       ],
       "bounds_max": [
-        2.3042013329210355e-07,
+        2.3042013329205254e-07,
         0.11778675322954144,
-        0.0021026988159652026
+        0.0021026988159652043
       ],
       "size": [
         0.08279327925527948,
         0.11777358378657088,
-        0.005011481465789569
+        0.005011481465789571
       ],
       "center": [
         -0.041396409207506445,
         0.058899961336255996,
-        -0.000403041916929582
+        -0.0004030419169295811
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -4911,28 +5079,28 @@
       "bounds_min": [
         -0.0820286450360896,
         0.0006702883026741018,
-        0.0013343559456595075
+        0.0013343559456595077
       ],
       "bounds_max": [
-        -0.0005015807940569882,
+        -0.0005015807940569881,
         0.11711016604925686,
-        0.0025848149433518584
+        0.0025848149433518606
       ],
       "size": [
         0.08152706424203261,
         0.11643987774658277,
-        0.001250458997692351
+        0.0012504589976923529
       ],
       "center": [
         -0.041265112915073295,
         0.05889022717596548,
-        0.001959585444505683
+        0.0019595854445056842
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -5020,25 +5188,25 @@
         -0.00290594630691363
       ],
       "bounds_max": [
-        -0.0009293549418327849,
+        -0.000929354941832785,
         0.1165295346086807,
-        -0.002092588774899024
+        -0.0020925887748990224
       ],
       "size": [
         0.08054604392046717,
         0.11525914072990376,
-        0.0008133575320146058
+        0.0008133575320146075
       ],
       "center": [
         -0.04120237690206637,
         0.058899964243728814,
-        -0.002499267540906327
+        -0.002499267540906326
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -5181,23 +5349,23 @@
       "bounds_max": [
         -0.0023292067683447267,
         0.11510452910472514,
-        -0.002299462992737073
+        -0.0022994629927370713
       ],
       "size": [
         0.07771398951659542,
         0.11236317471532467,
-        0.0006052847020230267
+        0.0006052847020230285
       ],
       "center": [
         -0.04118620152664243,
         0.05892294174706281,
-        -0.0026021053437485864
+        -0.0026021053437485855
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -5335,12 +5503,12 @@
       "bounds_min": [
         -0.07268401218787111,
         0.10656699922122849,
-        -0.0027931338064749955
+        -0.0027931338064749937
       ],
       "bounds_max": [
         -0.07148402912534461,
         0.1077669822837557,
-        -0.0026351742800703078
+        -0.002635174280070306
       ],
       "size": [
         0.0011999830625264996,
@@ -5350,13 +5518,13 @@
       "center": [
         -0.07208402065660786,
         0.10716699075249209,
-        -0.002714154043272652
+        -0.00271415404327265
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -5388,12 +5556,12 @@
       "bounds_min": [
         -0.07517859323670932,
         0.10413207497801706,
-        -0.0028945008181410054
+        -0.0028945008181410037
       ],
       "bounds_max": [
         -0.06897701306989262,
         0.11021237459387702,
-        -0.0027702558674296733
+        -0.0027702558674296716
       ],
       "size": [
         0.0062015801668166975,
@@ -5403,13 +5571,13 @@
       "center": [
         -0.07207780315330098,
         0.10717222478594704,
-        -0.002832378342785339
+        -0.0028323783427853374
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -5494,12 +5662,12 @@
       "bounds_min": [
         -0.07368828339602955,
         0.10556286957409225,
-        -0.002894483588673508
+        -0.0028944835886735064
       ],
       "bounds_max": [
         -0.07048000378634939,
         0.10877114918377241,
-        -0.0028944444731256362
+        -0.0028944444731256345
       ],
       "size": [
         0.003208279609680162,
@@ -5509,13 +5677,13 @@
       "center": [
         -0.07208414359118948,
         0.10716700937893234,
-        -0.002894464030899572
+        -0.0028944640308995705
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
@@ -5713,23 +5881,23 @@
       "bounds_max": [
         -0.0023292067683447267,
         0.11510452910472514,
-        -0.002299462992737073
+        -0.0022994629927370713
       ],
       "size": [
         0.07771398951659542,
         0.11236317471532467,
-        0.0006052847020230267
+        0.0006052847020230285
       ],
       "center": [
         -0.04118620152664243,
         0.05892294174706281,
-        -0.0026021053437485864
+        -0.0026021053437485855
       ],
       "matrix_world": [
         [
           1.0,
           -9e-08,
-          -0.0,
+          0.0,
           0.0
         ],
         [
