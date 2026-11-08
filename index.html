@@ -2429,7 +2429,7 @@ main [data-app-page]:not([hidden]){
       interaction-prompt="none"
       loading="eager"
       reveal="auto"
-      shadow-intensity="0.75"
+      shadow-intensity="0.35"
       exposure="1.05"
       environment-image="neutral"
       camera-orbit="0deg 75deg 100%"
@@ -3854,14 +3854,41 @@ verifyButton.addEventListener("click", async () => {
     return true;
   }
 
+  // Coalesce camera/scroll events: one hotspot projection pass per display frame.
+  let overlayUpdateFrame = 0;
   function scheduleOverlayUpdate() {
-    if (!opened) return;
-    requestAnimationFrame(() => requestAnimationFrame(placeOverlay));
+    if (!opened || overlayUpdateFrame) return;
+    overlayUpdateFrame = requestAnimationFrame(() => {
+      overlayUpdateFrame = 0;
+      if (opened) placeOverlay();
+    });
   }
 
   let rotationDrag = null;
+  let rotationFrame = 0;
+  let pendingRotationPoint = null;
+  const normalShadowIntensity = Number(viewer.getAttribute("shadow-intensity")) || 0;
   const rotationInteractiveSelector =
     "button,a,input,select,textarea,label,.leaflet-container,.leaflet-control,[contenteditable='true']";
+
+  function applyRotationFrame() {
+    rotationFrame = 0;
+    const point = pendingRotationPoint;
+    pendingRotationPoint = null;
+    if (!rotationDrag || !point) return;
+
+    const dx = point.x - rotationDrag.startX;
+    const dy = point.y - rotationDrag.startY;
+    const theta = rotationDrag.theta - dx * 0.008;
+    const phi = Math.max(0.18,Math.min(Math.PI - 0.18,rotationDrag.phi + dy * 0.004));
+
+    viewer.cameraOrbit =
+      theta + "rad " + phi + "rad " + rotationDrag.radius + "m";
+    // Avoid restarting a long camera interpolation for every drag update.
+    if (typeof viewer.jumpCameraToGoal === "function") {
+      viewer.jumpCameraToGoal();
+    }
+  }
 
   overlay.addEventListener("pointerdown", event => {
     if (!opened || busy || !event.isPrimary || event.button > 0 ||
@@ -3878,25 +3905,25 @@ verifyButton.addEventListener("click", async () => {
       radius:orbit.radius
     };
 
+    // Temporarily remove the dynamic shadow while the 3D model is moving.
+    viewer.shadowIntensity = 0;
     try { overlay.setPointerCapture(event.pointerId); } catch (_) {}
   });
 
   overlay.addEventListener("pointermove", event => {
     if (!rotationDrag || event.pointerId !== rotationDrag.pointerId) return;
-    const dx = event.clientX - rotationDrag.startX;
-    const dy = event.clientY - rotationDrag.startY;
-    if (Math.abs(dx) < 2 && Math.abs(dy) < 2) return;
-
-    const theta = rotationDrag.theta - dx * 0.008;
-    const phi = Math.max(0.18,Math.min(Math.PI - 0.18,rotationDrag.phi + dy * 0.004));
-    viewer.cameraOrbit =
-      theta + "rad " + phi + "rad " + rotationDrag.radius + "m";
+    pendingRotationPoint = {x:event.clientX,y:event.clientY};
+    if (!rotationFrame) rotationFrame = requestAnimationFrame(applyRotationFrame);
     if (event.cancelable) event.preventDefault();
   });
 
   function stopRotationDrag(event) {
     if (!rotationDrag || (event && event.pointerId !== rotationDrag.pointerId)) return;
     rotationDrag = null;
+    pendingRotationPoint = null;
+    if (rotationFrame) cancelAnimationFrame(rotationFrame);
+    rotationFrame = 0;
+    viewer.shadowIntensity = normalShadowIntensity;
   }
   overlay.addEventListener("pointerup",stopRotationDrag);
   overlay.addEventListener("pointercancel",stopRotationDrag);
@@ -3997,6 +4024,13 @@ verifyButton.addEventListener("click", async () => {
     busy = true;
     state = "closing";
     opened = false;
+    if (overlayUpdateFrame) cancelAnimationFrame(overlayUpdateFrame);
+    overlayUpdateFrame = 0;
+    if (rotationFrame) cancelAnimationFrame(rotationFrame);
+    rotationFrame = 0;
+    rotationDrag = null;
+    pendingRotationPoint = null;
+    viewer.shadowIntensity = normalShadowIntensity;
     overlay.hidden = true;
     viewer.removeAttribute("camera-controls");
 
