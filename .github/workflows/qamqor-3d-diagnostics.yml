@@ -1,0 +1,221 @@
+name: Qamqor 3D diagnostics
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "kor.html"
+      - "*.glb"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: qamqor-3d-diagnostics-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install diagnostic tools
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy trimesh pygltflib playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Start local web server
+        run: |
+          python -m http.server 8765 --directory . > /tmp/qamqor-http.log 2>&1 &
+          echo $! > /tmp/qamqor-http.pid
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:8765/kor.html >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/qamqor-http.log
+          exit 1
+
+      - name: Run browser and GLB geometry analysis
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import pathlib
+          import subprocess
+          import time
+          import traceback
+
+          import numpy as np
+          import trimesh
+          from playwright.sync_api import sync_playwright
+
+          root = pathlib.Path(".")
+          report = {
+              "repository": "jjjjjjjjjjjjjjae-hub/QamqorPhone",
+              "commit": os.environ.get("GITHUB_SHA"),
+              "branch": os.environ.get("GITHUB_REF_NAME"),
+              "generated_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+              "browser_diagnostics": {},
+              "glb_geometry": {}
+          }
+
+          # Read the actual GLB scene: node transforms, meshes, materials,
+          # world-space bounds, and dominant face-normal directions.
+          glb_files = sorted(root.glob("*.glb"))
+          if not glb_files:
+              report["glb_geometry"] = {"error": "No .glb file found in repository root"}
+          else:
+              glb_path = glb_files[0]
+              try:
+                  scene = trimesh.load(str(glb_path), force="scene", process=False)
+                  bounds = scene.bounds.tolist() if scene.bounds is not None else None
+                  report["glb_geometry"] = {
+                      "file": glb_path.name,
+                      "file_size_bytes": glb_path.stat().st_size,
+                      "scene_bounds_min_max": bounds,
+                      "scene_extents": scene.extents.tolist() if scene.bounds is not None else None,
+                      "scene_center": scene.centroid.tolist() if scene.bounds is not None else None,
+                      "geometry_count": len(scene.geometry),
+                      "geometry": [],
+                      "nodes": []
+                  }
+
+                  for node_name in list(scene.graph.nodes_geometry):
+                      try:
+                          transform, geometry_name = scene.graph.get(node_name)
+                          geom = scene.geometry[geometry_name]
+                          vertices_world = trimesh.transform_points(
+                              np.asarray(geom.vertices), transform
+                          )
+                          bounds_world = [
+                              vertices_world.min(axis=0).tolist(),
+                              vertices_world.max(axis=0).tolist()
+                          ] if len(vertices_world) else None
+                          material = getattr(getattr(geom, "visual", None), "material", None)
+                          material_info = None
+                          if material is not None:
+                              material_info = {
+                                  "name": getattr(material, "name", None),
+                                  "baseColorFactor": (
+                                      np.asarray(getattr(material, "baseColorFactor")).tolist()
+                                      if getattr(material, "baseColorFactor", None) is not None else None
+                                  ),
+                                  "metallicFactor": getattr(material, "metallicFactor", None),
+                                  "roughnessFactor": getattr(material, "roughnessFactor", None)
+                              }
+
+                          normal_summary = []
+                          try:
+                              normals = np.asarray(geom.face_normals)
+                              if len(normals):
+                                  rounded = np.round(normals, 2)
+                                  unique, counts = np.unique(rounded, axis=0, return_counts=True)
+                                  order = np.argsort(counts)[::-1][:12]
+                                  normal_summary = [
+                                      {"normal": unique[i].tolist(), "face_count": int(counts[i])}
+                                      for i in order
+                                  ]
+                          except Exception:
+                              pass
+
+                          report["glb_geometry"]["geometry"].append({
+                              "node": str(node_name),
+                              "mesh": str(geometry_name),
+                              "vertex_count": int(len(geom.vertices)),
+                              "face_count": int(len(getattr(geom, "faces", []))),
+                              "world_bounds_min_max": bounds_world,
+                              "world_extents": (
+                                  (vertices_world.max(axis=0) - vertices_world.min(axis=0)).tolist()
+                                  if len(vertices_world) else None
+                              ),
+                              "material": material_info,
+                              "dominant_local_face_normals": normal_summary
+                          })
+                          report["glb_geometry"]["nodes"].append({
+                              "node": str(node_name),
+                              "mesh": str(geometry_name),
+                              "transform": np.asarray(transform).tolist()
+                          })
+                      except Exception as exc:
+                          report["glb_geometry"]["geometry"].append({
+                              "node": str(node_name),
+                              "error": str(exc)
+                          })
+              except Exception as exc:
+                  report["glb_geometry"] = {
+                      "file": glb_path.name,
+                      "error": str(exc),
+                      "traceback": traceback.format_exc()
+                  }
+
+          # Run kor.html in Chromium and ask its diagnostic API to sweep the
+          # actual model from four camera directions, sampling 3D hits.
+          try:
+              with sync_playwright() as p:
+                  browser = p.chromium.launch(
+                      headless=True,
+                      args=["--no-sandbox", "--disable-dev-shm-usage"]
+                  )
+                  page = browser.new_page(
+                      viewport={"width": 1440, "height": 1100},
+                      device_scale_factor=1
+                  )
+                  page.goto(
+                      "http://127.0.0.1:8765/kor.html",
+                      wait_until="domcontentloaded",
+                      timeout=90000
+                  )
+                  page.wait_for_function(
+                      "() => window.QAMQOR_DIAGNOSTICS && window.QAMQOR_DIAGNOSTICS.ready === true",
+                      timeout=120000
+                  )
+                  browser_data = page.evaluate(
+                      "() => window.QAMQOR_DIAGNOSTICS.collect()"
+                  )
+                  report["browser_diagnostics"] = browser_data
+                  browser.close()
+          except Exception as exc:
+              report["browser_diagnostics"] = {
+                  "error": str(exc),
+                  "traceback": traceback.format_exc()
+              }
+
+          out = root / "qamqor-3d-report.json"
+          out.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+          print("QAMQOR_DIAGNOSTIC_REPORT_BEGIN")
+          print(json.dumps({
+              "generated_at_utc": report["generated_at_utc"],
+              "glb_file": report.get("glb_geometry", {}).get("file"),
+              "geometry_count": report.get("glb_geometry", {}).get("geometry_count"),
+              "browser_sample_count": len(report.get("browser_diagnostics", {}).get("samples", [])),
+              "browser_error": report.get("browser_diagnostics", {}).get("error")
+          }, ensure_ascii=False))
+          print("QAMQOR_DIAGNOSTIC_REPORT_END")
+          PY
+
+      - name: Commit report so it can be read through GitHub
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add qamqor-3d-report.json
+          if git diff --cached --quiet; then
+            echo "No report changes to commit."
+          else
+            git commit -m "chore: update automatic 3D diagnostics report"
+            git push
+          fi
