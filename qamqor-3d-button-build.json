@@ -1,0 +1,41 @@
+{
+  "source": "iPhone 18 pro max.glb",
+  "output": "QAMQOR-iPhone-18-Pro-Max.glb",
+  "output_size_bytes": 2877448,
+  "screen_bounds_min": [
+    -0.0365150012075901,
+    0.002391000045463443,
+    0.0043219998478889465
+  ],
+  "screen_bounds_max": [
+    0.0365150012075901,
+    0.1608780026435852,
+    0.0043219998478889465
+  ],
+  "screen_width": 0.0730300024151802,
+  "screen_height": 0.15848700259812176,
+  "screen_front_z": 0.0043219998478889465,
+  "button": {
+    "center": [
+      0.0,
+      0.05627658092882484,
+      0.004501999847888946
+    ],
+    "size": [
+      0.05258160173892975,
+      0.013145400434732437
+    ],
+    "normal": [
+      0,
+      0,
+      1
+    ],
+    "physical_glb_mesh": true,
+    "texture_size": [
+      1200,
+      320
+    ]
+  },
+  "mesh_count_after_export": 44,
+  "button_mesh_found_after_export": true
+}
