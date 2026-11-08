@@ -3509,6 +3509,13 @@ verifyButton.addEventListener("click", async () => {
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function showPage(id, options = {}) {
+    const openRepairOnDuo = id === "repair";
+    if (openRepairOnDuo) {
+      // Never bypass the fold animation by opening the standalone repair page.
+      window.qamqorOpenRequestWhenReady = true;
+      id = "top";
+    }
+
     const activePage = pages.find(page => page.id === id);
     if (!activePage) return;
 
@@ -3543,6 +3550,10 @@ verifyButton.addEventListener("click", async () => {
     }
     if (id === "repair" && typeof serviceMap !== "undefined" && serviceMap) {
       requestAnimationFrame(() => serviceMap.invalidateSize());
+    }
+    if (openRepairOnDuo && window.qamqorPhoneForm &&
+        typeof window.qamqorPhoneForm.open === "function") {
+      window.qamqorPhoneForm.open();
     }
   }
 
@@ -3688,6 +3699,7 @@ verifyButton.addEventListener("click", async () => {
   let lastScreenRect = null;
   let shouldRestore = false;
   try { shouldRestore = sessionStorage.getItem("qamqorPhoneFormOpen")==="yes"; } catch (_) {}
+  let openRequested = Boolean(window.qamqorOpenRequestWhenReady);
   const hadCameraControls = viewer.hasAttribute("camera-controls");
 
   const nextFrame = () => new Promise(resolve =>
@@ -3903,6 +3915,13 @@ verifyButton.addEventListener("click", async () => {
 
     state = "open";
     busy = false;
+    openRequested = false;
+    window.qamqorOpenRequestWhenReady = false;
+
+    // Let the fully opened Duo pose paint before placing the request UI on it.
+    await nextFrame();
+    await new Promise(resolve => setTimeout(resolve, 180));
+
     const formShown = await showRepairForm();
     if (!formShown) {
       state = "open";
@@ -3910,6 +3929,23 @@ verifyButton.addEventListener("click", async () => {
       return false;
     }
     return true;
+  }
+
+  async function requestOpenDuoForm() {
+    if (opened || state === "form") return true;
+
+    if (state === "loading" || state === "initializing" || busy) {
+      openRequested = true;
+      window.qamqorOpenRequestWhenReady = true;
+      return true;
+    }
+
+    openRequested = false;
+    window.qamqorOpenRequestWhenReady = false;
+
+    if (state === "closed") return openDuoAndForm();
+    if (state === "open") return showRepairForm();
+    return false;
   }
 
   async function closePhoneForm() {
@@ -3934,6 +3970,9 @@ verifyButton.addEventListener("click", async () => {
     state = closedAnimation ? "closed" : "open";
     busy = false;
     if (hadCameraControls) viewer.setAttribute("camera-controls","");
+    if (closedAnimation && (openRequested || window.qamqorOpenRequestWhenReady)) {
+      requestOpenDuoForm();
+    }
   }
 
   function handleClosedDisplayPress(event) {
@@ -3948,7 +3987,7 @@ verifyButton.addEventListener("click", async () => {
     if (!material || !closedDisplayMaterials.has(material.name)) return;
     event.preventDefault();
     event.stopPropagation();
-    openDuoAndForm();
+    requestOpenDuoForm();
   }
 
   async function initializeClosedDuo() {
@@ -3984,16 +4023,18 @@ verifyButton.addEventListener("click", async () => {
     }
 
     state = "closed";
-    if (shouldRestore) openDuoAndForm();
+    if (shouldRestore || openRequested || window.qamqorOpenRequestWhenReady) {
+      requestOpenDuoForm();
+    }
   }
 
   const applyHitbox = viewer.querySelector(".qamqor-apply-hitbox");
   if (applyHitbox) {
     applyHitbox.addEventListener("click", event => {
-      if (state !== "closed" || busy) return;
+      if (busy || opened || state === "form") return;
       event.preventDefault();
       event.stopPropagation();
-      openDuoAndForm();
+      requestOpenDuoForm();
     });
   }
 
@@ -4002,7 +4043,7 @@ verifyButton.addEventListener("click", async () => {
   viewer.addEventListener("keydown",event=>{
     if ((event.key==="Enter" || event.key===" ") && state==="closed") {
       event.preventDefault();
-      openDuoAndForm();
+      requestOpenDuoForm();
     }
   });
 
@@ -4017,7 +4058,7 @@ verifyButton.addEventListener("click", async () => {
   if (viewer.loaded) initializeClosedDuo();
 
   window.qamqorPhoneForm = {
-    open:openDuoAndForm,
+    open:requestOpenDuoForm,
     close:closePhoneForm,
     isOpen:()=>opened,
     getScreenRect:()=>lastScreenRect,
