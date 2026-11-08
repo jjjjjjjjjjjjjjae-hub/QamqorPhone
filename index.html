@@ -2413,7 +2413,7 @@ main [data-app-page]:not([hidden]){
 </div>
 
 <div class="wrap">
-<header class="site-header"><a class="brand" href="#top" aria-label="QAMQOR PHONE басты беті"><div class="mark"><img src="QamqorPhone.png" alt="QAMQOR PHONE логотипі" width="46" height="46"></div><div>QAMQOR PHONE<small>PHONE REPAIR SERVICE</small></div></a></header>
+<header class="site-header"><a class="brand" href="#top" aria-label="QAMQOR PHONE басты беті"><div class="mark"><img src="QamqorPhone.png" alt="QAMQOR PHONE логотипі" width="46" height="46"></div><div>QAMQOR PHONE<small>PHONE REPAIR SERVICE</small></div></a><nav class="main-nav" aria-label="Негізгі навигация"><a href="#top">Басты бет</a><a href="#services">Қызметтер</a><a href="#repair">Өтінім</a></nav></header>
 <main>
 
 <section class="hero" id="top" data-app-page="home">
@@ -2917,6 +2917,7 @@ document.getElementById("year").textContent = new Date().getFullYear();
 function updateMapPoint(lat, lng) {
   const point = {lat: Number(lat.toFixed(6)), lng: Number(lng.toFixed(6))};
   selectedPoint = point;
+  locationConfirmed = true;
 
   if (!locationMarker) {
     locationMarker = L.marker([point.lat, point.lng], {draggable: true}).addTo(serviceMap);
@@ -3092,7 +3093,7 @@ function validPayload(payload) {
   const whatsappDigits = String(document.getElementById("whatsappNumber").value || "").replace(/\D/g, "");
   if (whatsappDigits.length < 10 || whatsappDigits.length > 15) { showNotice("WhatsApp нөмірін дұрыс енгізіңіз. Мысалы: +7 777 123 45 67."); document.getElementById("whatsappNumber").focus(); return false; }
   if (!payload.address) { showNotice("Көше немесе үй нөмірі жоқ болса, арнайы белгіні қойыңыз."); return false; }
-  if (!selectedPoint || !locationConfirmed) { showNotice("Келесі қадамға өту үшін «Менің орнымды анықтау» батырмасын басыңыз."); document.getElementById("serviceMap").scrollIntoView({behavior:"smooth",block:"center"}); return false; }
+  if (!selectedPoint || !locationConfirmed) { showNotice("Келесі қадамға өту үшін картадан орынды белгілеңіз немесе GPS арқылы анықтаңыз."); document.getElementById("serviceMap").scrollIntoView({behavior:"smooth",block:"center"}); return false; }
   if (!payload.consent) { showNotice("Өтінімді өңдеу үшін келісіміңіз қажет."); return false; }
   return true;
 }
@@ -3160,7 +3161,7 @@ function validPayload(payload) {
     }
     if (index === 4) {
       if (!selectedPoint || !locationConfirmed) {
-        showNotice("«Менің орнымды анықтау» батырмасын басып, орналасқан жеріңізді растаңыз.");
+        showNotice("Картадан орынды түртіп белгілеңіз немесе «Менің орнымды анықтау» батырмасын пайдаланыңыз.");
         mapStatus.classList.add("error");
         document.getElementById("serviceMap").scrollIntoView({behavior:"smooth",block:"center"});
         return false;
@@ -3509,13 +3510,6 @@ verifyButton.addEventListener("click", async () => {
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function showPage(id, options = {}) {
-    const openRepairOnDuo = id === "repair";
-    if (openRepairOnDuo) {
-      // Never bypass the fold animation by opening the standalone repair page.
-      window.qamqorOpenRequestWhenReady = true;
-      id = "top";
-    }
-
     const activePage = pages.find(page => page.id === id);
     if (!activePage) return;
 
@@ -3550,10 +3544,6 @@ verifyButton.addEventListener("click", async () => {
     }
     if (id === "repair" && typeof serviceMap !== "undefined" && serviceMap) {
       requestAnimationFrame(() => serviceMap.invalidateSize());
-    }
-    if (openRepairOnDuo && window.qamqorPhoneForm &&
-        typeof window.qamqorPhoneForm.open === "function") {
-      window.qamqorPhoneForm.open();
     }
   }
 
@@ -3715,9 +3705,9 @@ verifyButton.addEventListener("click", async () => {
   let opened = false;
   let lastScreenRect = null;
   // Always start folded and locked after reload. Stale session state must not bypass the lock CTA.
-  let openRequested = false;
+
   try { sessionStorage.removeItem("qamqorPhoneFormOpen"); } catch (_) {}
-  window.qamqorOpenRequestWhenReady = false;
+
   const hadCameraControls = viewer.hasAttribute("camera-controls");
 
   const nextFrame = () => new Promise(resolve =>
@@ -4022,7 +4012,11 @@ verifyButton.addEventListener("click", async () => {
 
     const projected = getProjectedScreenRect();
     if (!projected) {
-      alert("Duo ішкі экраны көрінбей тұр. Телефон ашық күйінде қалды.");
+      if (typeof window.qamqorShowPage === "function") {
+        window.qamqorShowPage("repair", {updateHistory:true, scroll:true});
+      } else {
+        repair.hidden = false;
+      }
       return false;
     }
 
@@ -4065,13 +4059,14 @@ verifyButton.addEventListener("click", async () => {
       busy = false;
       if (hadCameraControls) viewer.setAttribute("camera-controls","");
       placeLockScreenButton();
-      alert("Duo ашылу анимациясын іске қоса алмадым.");
+      if (typeof window.qamqorShowPage === "function") {
+        window.qamqorShowPage("repair", {updateHistory:true, scroll:true});
+      }
       return false;
     }
 
     state = "open";
-    openRequested = false;
-    window.qamqorOpenRequestWhenReady = false;
+
     await nextFrame();
     await new Promise(resolve => setTimeout(resolve,180));
 
@@ -4086,19 +4081,13 @@ verifyButton.addEventListener("click", async () => {
   }
 
   async function requestOpenDuoForm() {
-    if (opened || state === "form") return true;
-
-    // Page-level CTAs only bring the folded phone lock screen into view.
-    // The user must press the real 3D button on that lock screen to unfold Duo.
     if (typeof window.qamqorShowPage === "function") {
-      window.qamqorShowPage("top", {updateHistory:false, scroll:false});
-    }
-    if (state === "loading" || state === "initializing" || state === "closed") {
-      viewer.scrollIntoView({behavior:"smooth",block:"center"});
+      window.qamqorShowPage("repair", {updateHistory:true, scroll:true});
       return true;
     }
-    if (state === "open") return showRepairForm();
-    return false;
+    repair.hidden = false;
+    repair.scrollIntoView({behavior:"smooth",block:"start"});
+    return true;
   }
 
   async function closePhoneForm() {
@@ -4168,8 +4157,7 @@ verifyButton.addEventListener("click", async () => {
     }
 
     state = "closed";
-    openRequested = false;
-    window.qamqorOpenRequestWhenReady = false;
+
     try { sessionStorage.removeItem("qamqorPhoneFormOpen"); } catch (_) {}
     placeLockScreenButton();
   }
