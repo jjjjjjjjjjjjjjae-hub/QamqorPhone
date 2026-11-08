@@ -3810,8 +3810,7 @@ verifyButton.addEventListener("click", async () => {
   async function detectScreenWithKorDiagnostics() {
     if (!viewer.loaded) throw new Error("3D модель әлі жүктелмеді.");
     if (typeof viewer.positionAndNormalFromPoint !== "function" ||
-        typeof viewer.materialFromPoint !== "function" ||
-        typeof viewer.surfaceFromPoint !== "function") {
+        typeof viewer.materialFromPoint !== "function") {
       throw new Error("kor.html диагностикалық әдістері қолжетімсіз.");
     }
 
@@ -3884,7 +3883,9 @@ verifyButton.addEventListener("click", async () => {
     const surfaceX=(bounds.pixels.left+bounds.pixels.right)/2;
     const surfaceY=(bounds.pixels.top+bounds.pixels.bottom)/2;
     let surface=null;
-    try { surface=viewer.surfaceFromPoint(surfaceX,surfaceY); } catch (_) {}
+    if (typeof viewer.surfaceFromPoint === "function") {
+      try { surface=viewer.surfaceFromPoint(surfaceX,surfaceY); } catch (_) {}
+    }
 
     return {
       material:SCREEN_MATERIAL,
@@ -3941,6 +3942,13 @@ verifyButton.addEventListener("click", async () => {
     setStatus("kor.html жүйесі 3D экранның нақты шекарасын анықтап жатыр…");
 
     try {
+      if (!viewer.loaded) {
+        await new Promise((resolve,reject)=>{
+          const timer=setTimeout(()=>reject(new Error("3D телефон жүктелуін күту уақыты аяқталды.")),18000);
+          viewer.addEventListener("load",()=>{clearTimeout(timer);resolve();},{once:true});
+          viewer.addEventListener("error",()=>{clearTimeout(timer);reject(new Error("3D телефон моделі жүктелмеді."));},{once:true});
+        });
+      }
       await waitFrame();
       const screen=await detectScreenWithKorDiagnostics();
 
