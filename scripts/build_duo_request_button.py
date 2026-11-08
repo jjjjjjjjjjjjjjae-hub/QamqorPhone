@@ -29,57 +29,92 @@ def load_font(size: int):
 
 
 def make_screen_artwork() -> bytes:
-    """Create the very short closed-screen state requested: logo + one CTA."""
+    """Bake a compact lock screen and its physical request CTA into the folded Duo display."""
     width, height = TEXTURE_SIZE
-    image = Image.new("RGB", (width, height), (3, 5, 10))
-    draw = ImageDraw.Draw(image)
+    image = Image.new("RGB", (width, height), (2, 5, 10))
 
-    # Subtle OLED-black vignette.
+    # Restrained OLED glow, keeping most of the screen near true black.
     glow = Image.new("RGBA", (width, height), (0, 0, 0, 0))
     glow_draw = ImageDraw.Draw(glow)
     glow_draw.ellipse(
-        (90, 180, width - 90, 800),
-        fill=(9, 33, 68, 75),
+        (95, 140, width - 95, 760),
+        fill=(8, 47, 96, 88),
     )
-    glow = glow.filter(ImageFilter.GaussianBlur(95))
+    glow = glow.filter(ImageFilter.GaussianBlur(92))
     image = Image.alpha_composite(image.convert("RGBA"), glow).convert("RGB")
     draw = ImageDraw.Draw(image)
 
-    if LOGO.exists():
-        logo = Image.open(LOGO).convert("RGBA")
-        logo.thumbnail((260, 260), Image.Resampling.LANCZOS)
-        # Keep the supplied logo itself; do not redraw or replace it.
-        x = (width - logo.width) // 2
-        y = 315 + (260 - logo.height) // 2
-        image_rgba = image.convert("RGBA")
-        image_rgba.alpha_composite(logo, (x, y))
-        image = image_rgba.convert("RGB")
-        draw = ImageDraw.Draw(image)
-    else:
+    # Subtle system status indicators along the top edge.
+    font_status = load_font(20)
+    draw.text((48, 46), "QAMQOR", font=font_status, fill=(220, 232, 248))
+    # Cellular bars.
+    for i, bar_h in enumerate((10, 15, 20, 25)):
+        x = 570 + i * 12
+        draw.rounded_rectangle(
+            (x, 68 - bar_h, x + 7, 68),
+            radius=3,
+            fill=(238, 245, 255),
+        )
+    # Wi-Fi arcs and a compact battery glyph.
+    draw.arc((632, 36, 672, 74), 218, 322, fill=(238, 245, 255), width=4)
+    draw.arc((640, 45, 664, 69), 218, 322, fill=(238, 245, 255), width=4)
+    draw.ellipse((650, 64, 655, 69), fill=(238, 245, 255))
+    draw.rounded_rectangle((684, 43, 733, 68), radius=6, outline=(238, 245, 255), width=3)
+    draw.rounded_rectangle((735, 50, 740, 61), radius=2, fill=(238, 245, 255))
+    draw.rounded_rectangle((689, 48, 724, 63), radius=3, fill=(65, 205, 117))
+
+    # iPhone-style lock-screen clock and a short service label.
+    date = "ТЕЛЕФОН ЖӨНДЕУ ҚЫЗМЕТІ"
+    font_date = load_font(25)
+    date_box = draw.textbbox((0, 0), date, font=font_date)
+    draw.text(((width - (date_box[2] - date_box[0])) / 2, 145),
+              date, font=font_date, fill=(208, 222, 242))
+
+    font_time = load_font(154)
+    time_label = "9:41"
+    time_box = draw.textbbox((0, 0), time_label, font=font_time)
+    time_w = time_box[2] - time_box[0]
+    draw.text(((width - time_w) / 2 - time_box[0], 205 - time_box[1]),
+              time_label, font=font_time, fill=(250, 252, 255))
+
+    # Use the actual uploaded QamqorPhone logo in the lock screen.
+    if not LOGO.exists():
         raise FileNotFoundError(f"QamqorPhone logo not found: {LOGO}")
+    logo = Image.open(LOGO).convert("RGBA")
+    logo.thumbnail((172, 172), Image.Resampling.LANCZOS)
+    logo_x = (width - logo.width) // 2
+    logo_y = 475 + (172 - logo.height) // 2
+    image_rgba = image.convert("RGBA")
+    image_rgba.alpha_composite(logo, (logo_x, logo_y))
+    image = image_rgba.convert("RGB")
+    draw = ImageDraw.Draw(image)
 
-    # One restrained label beneath the logo.
     brand = "QAMQOR PHONE"
-    font_brand = load_font(26)
-    box = draw.textbbox((0, 0), brand, font=font_brand)
-    draw.text(((width - (box[2]-box[0]))/2, 595), brand, font=font_brand, fill=(199, 214, 236))
+    font_brand = load_font(30)
+    brand_box = draw.textbbox((0, 0), brand, font=font_brand)
+    brand_w = brand_box[2] - brand_box[0]
+    draw.text(((width - brand_w) / 2 - brand_box[0], 665 - brand_box[1]),
+              brand, font=font_brand, fill=(219, 231, 248))
 
-    # Single clear, tactile CTA near the lower part of the outer screen.
+    # The button stays at the same UV location as the existing 3D hitbox.
     button_box = (82, 835, width - 82, 965)
     draw.rounded_rectangle(
         button_box,
         radius=64,
         fill=(17, 112, 225),
-        outline=(122, 186, 255),
-        width=3,
+        outline=(132, 194, 255),
+        width=4,
     )
-    font_cta = load_font(39)
+    font_cta = load_font(42)
     label = "Өтінім беру"
     box = draw.textbbox((0, 0), label, font=font_cta)
     text_w, text_h = box[2] - box[0], box[3] - box[1]
     text_x = (width - text_w) / 2 - box[0]
     text_y = (button_box[1] + button_box[3] - text_h) / 2 - box[1] - 2
     draw.text((text_x, text_y), label, font=font_cta, fill=(255, 255, 255))
+
+    # A familiar bottom home indicator.
+    draw.rounded_rectangle((292, 1050, 476, 1058), radius=5, fill=(238, 242, 250))
 
     out = io.BytesIO()
     image.save(out, format="PNG", optimize=True)
@@ -242,6 +277,9 @@ def main():
         "screen_mesh_indices": mesh_indices,
         "texture_size": list(TEXTURE_SIZE),
         "texture_bytes": len(png_bytes),
+        "lock_screen_artwork": True,
+        "lock_screen_time": "9:41",
+        "physical_request_button_box_px": [82, 835, width - 82, 965],
         "animations_preserved": True,
         "animations_count": len(animations_after),
         "animations": [
