@@ -16,7 +16,7 @@ permissions:
 
 concurrency:
   group: qamqor-3d-diagnostics-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   collect:
