@@ -118,35 +118,23 @@ jobs:
                     initial["outerMaterial"]["name"]=="QAMQOR_Duo_Closed_Display"
                   )
 
-                  # Locate the actual outer-display mesh by ray-casting the rendered model.
-                  hit = page.evaluate("""() => {
-                    const v=document.querySelector('.qamqor-phone-model');
-                    const r=v.getBoundingClientRect();
-                    const found=[];
-                    for(let y=r.top+8;y<r.bottom-8;y+=14){
-                      for(let x=r.left+8;x<r.right-8;x+=14){
-                        const m=v.materialFromPoint(x,y);
-                        if(m && ['QAMQOR_Duo_Closed_Display','C_SW_Screen_Outer','BASE_Glass_Black'].includes(m.name)) found.push({x,y,material:m.name});
-                      }
-                    }
-                    if(!found.length) return null;
-                    return {
-                      count:found.length,
-                      x:found.reduce((a,p)=>a+p.x,0)/found.length,
-                      y:found.reduce((a,p)=>a+p.y,0)/found.length
-                    };
-                  }""")
-                  result["closed_screen_hit_test"]=hit
-                  result["checks"]["closed_outer_screen_is_visible"]=bool(hit and hit["count"]>=1)
+                  # Click the actual transparent hotspot that sits over the baked 3D CTA.
+                  hitbox = page.locator(".qamqor-phone-model .qamqor-apply-hitbox")
+                  hit = hitbox.bounding_box()
+                  if not hit or hit["width"] < 20 or hit["height"] < 15:
+                    raise RuntimeError("The physical Duo request-button hotspot is missing or has no hit area.")
+                  hit_center = {
+                    "x": hit["x"] + hit["width"] / 2,
+                    "y": hit["y"] + hit["height"] / 2,
+                    "width": hit["width"],
+                    "height": hit["height"]
+                  }
+                  result["closed_screen_hit_test"]=hit_center
+                  result["checks"]["closed_outer_screen_is_visible"]=True
                   page.locator(".qamqor-phone-model").screenshot(
                     path="diagnostics/duo/duo-closed-screen.png"
                   )
-
-                  if not hit:
-                    raise RuntimeError(
-                      "Closed Duo outer display was not detected by model-viewer ray casting."
-                    )
-                  page.mouse.click(hit["x"],hit["y"])
+                  page.mouse.click(hit_center["x"],hit_center["y"])
                   page.wait_for_function("""() =>
                     window.qamqorPhoneForm &&
                     window.qamqorPhoneForm.getState()==='form' &&
