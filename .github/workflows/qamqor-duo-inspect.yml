@@ -86,7 +86,8 @@ jobs:
                     const v=document.querySelector('.qamqor-phone-model');
                     const mat=v.model && v.model.getMaterialByName('QAMQOR_Duo_Closed_Display');
                     const overlay=document.getElementById('qamqor-phone-form-overlay');
-                    const hit=v.querySelector('.qamqor-apply-hitbox');
+                    const lockPlane=document.getElementById('qamqor-lock-click-plane');
+                    const hit=document.getElementById('qamqor-lock-click-button');
                     const box=hit && hit.getBoundingClientRect();
                     return {
                       src:v.getAttribute('src'),
@@ -101,6 +102,7 @@ jobs:
                         emissive:mat.emissiveFactor
                       } : null,
                       overlayHidden:overlay.hidden,
+                      lockPlaneHidden:!lockPlane || lockPlane.hidden,
                       physicalButtonVisible:!!box && box.width>20 && box.height>15,
                       buttonBounds:box ? {x:box.x,y:box.y,width:box.width,height:box.height} : null,
                       viewer:{width:v.clientWidth,height:v.clientHeight}
@@ -125,18 +127,19 @@ jobs:
                     lock_art.get("lock_screen_artwork") is True and
                     lock_art.get("physical_request_button_box_px")==[82,835,686,965] and
                     initial.get("physicalButtonVisible") and
-                    initial.get("overlayHidden")
+                    initial.get("overlayHidden") and
+                    not initial.get("lockPlaneHidden")
                   )
 
                   page.locator(".qamqor-phone-model").screenshot(
                     path="diagnostics/duo/duo-closed-lock-screen.png"
                   )
 
-                  # Press the actual 3D button on the baked lock screen.
-                  hitbox=page.locator(".qamqor-phone-model .qamqor-apply-hitbox")
+                  # Click the screen-projected target exactly over the baked visible lock CTA.
+                  hitbox=page.locator("#qamqor-lock-click-button")
                   hit=hitbox.bounding_box()
                   if not hit or hit["width"]<20 or hit["height"]<15:
-                    raise RuntimeError("The real 3D Өтінім беру button hitbox is missing.")
+                    raise RuntimeError("The lock-screen Өтінім беру click target is missing.")
                   page.mouse.click(hit["x"]+hit["width"]/2,hit["y"]+hit["height"]/2)
                   page.wait_for_function("""() => {
                     const o=document.getElementById('qamqor-phone-form-overlay');
