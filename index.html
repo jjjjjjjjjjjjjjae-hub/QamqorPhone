@@ -2262,7 +2262,8 @@ main [data-app-page]:not([hidden]){
   overflow-y:auto!important;
   overscroll-behavior:contain!important;
   -webkit-overflow-scrolling:touch!important;
-  background:linear-gradient(160deg,rgba(15,29,47,.985),rgba(8,17,30,.99))!important;
+  background:transparent!important;
+  background-color:transparent!important;
   box-shadow:none!important;
   scrollbar-width:thin!important;
   scrollbar-color:rgba(130,180,230,.55) transparent!important;
@@ -2354,6 +2355,35 @@ main [data-app-page]:not([hidden]){
 #repair.qamqor-phone-form-card #telegramVerifyBox{padding:10px!important;border-radius:11px!important}
 #repair.qamqor-phone-form-card #telegramVerifyButton{min-height:41px!important;font-size:10px!important}
 #repair.qamqor-phone-form-card .notice{margin-top:8px!important;padding:9px!important;font-size:10px!important}
+/* The page card and step panels contribute text/layout only; no opaque sheet behind them. */
+#repair.qamqor-phone-form-card .cardhead,
+#repair.qamqor-phone-form-card .wizard-progress,
+#repair.qamqor-phone-form-card .wizard-step,
+#repair.qamqor-phone-form-card .wizard-step-heading,
+#repair.qamqor-phone-form-card .map-field,
+#repair.qamqor-phone-form-card #telegramVerifyBox,
+#repair.qamqor-phone-form-card .phone-model-preview{
+  background:transparent!important;
+  background-color:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+}
+#repair.qamqor-phone-form-card .wizard-progress,
+#repair.qamqor-phone-form-card .wizard-step,
+#repair.qamqor-phone-form-card .map-field,
+#repair.qamqor-phone-form-card #telegramVerifyBox{
+  border-color:transparent!important;
+}
+#repair.qamqor-phone-form-card .wizard-step{
+  padding:2px 0!important;
+}
+#repair.qamqor-phone-form-card .wizard-progress{
+  padding:2px 0 7px!important;
+  backdrop-filter:none!important;
+}
+#repair.qamqor-phone-form-card .wizard-step-heading{
+  border-bottom-color:rgba(220,235,255,.22)!important;
+}
 @media(max-width:420px){
   #repair.qamqor-phone-form-card{padding-left:9px!important;padding-right:9px!important}
   #repair.qamqor-phone-form-card .wizard-step{padding:8px!important}
@@ -3647,6 +3677,18 @@ verifyButton.addEventListener("click", async () => {
     requestAnimationFrame(() => requestAnimationFrame(resolve))
   );
 
+  let overlayUpdateFrame = 0;
+  function scheduleOverlayUpdate() {
+    if (!opened || overlayUpdateFrame) return;
+    // Let model-viewer finish its camera/render update before reading hotspots.
+    overlayUpdateFrame = requestAnimationFrame(() => {
+      overlayUpdateFrame = requestAnimationFrame(() => {
+        overlayUpdateFrame = 0;
+        placeOverlay();
+      });
+    });
+  }
+
   function getProjectedScreenRect() {
     if (typeof viewer.queryHotspot !== "function") return null;
     const viewerRect = viewer.getBoundingClientRect();
@@ -3663,10 +3705,17 @@ verifyButton.addEventListener("click", async () => {
       !Number.isFinite(point.canvasPosition.y)
     )) return null;
 
-    // Convert the four real GLB screen corners into viewport coordinates.
+    // queryHotspot returns coordinates in model-viewer's render canvas.
+    // Scale them to the live CSS box so browser zoom and fractional sizes do not drift.
+    const canvasWidth = viewer.clientWidth || viewerRect.width;
+    const canvasHeight = viewer.clientHeight || viewerRect.height;
+    const scaleX = viewerRect.width / canvasWidth;
+    const scaleY = viewerRect.height / canvasHeight;
+
+    // Use all four current screen corners, not the last saved rectangle.
     const p = hotspots.map(point => ({
-      x: viewerRect.left + point.canvasPosition.x,
-      y: viewerRect.top + point.canvasPosition.y
+      x: viewerRect.left + point.canvasPosition.x * scaleX,
+      y: viewerRect.top + point.canvasPosition.y * scaleY
     }));
     const distance = (a,b) => Math.hypot(b.x-a.x,b.y-a.y);
     const width = (distance(p[0],p[1]) + distance(p[3],p[2])) / 2;
@@ -3718,13 +3767,20 @@ verifyButton.addEventListener("click", async () => {
   function placeOverlay() {
     if (!opened) return false;
     const screenRect = getProjectedScreenRect();
-    if (!screenRect) return false;
+
+    // Never leave the form floating at an old angle when the display turns away.
+    if (!screenRect) {
+      overlay.hidden = true;
+      return false;
+    }
+
     lastScreenRect = screenRect;
     overlay.style.left = "0px";
     overlay.style.top = "0px";
     overlay.style.width = screenRect.width + "px";
     overlay.style.height = screenRect.height + "px";
     overlay.style.transform = screenRect.matrix;
+    overlay.hidden = false;
     return true;
   }
 
@@ -3825,15 +3881,9 @@ verifyButton.addEventListener("click", async () => {
   document.addEventListener("keydown", event => {
     if (event.key === "Escape" && opened) closePhoneForm();
   });
-  window.addEventListener("resize", () => {
-    if (opened) requestAnimationFrame(placeOverlay);
-  });
-  window.addEventListener("scroll", () => {
-    if (opened) requestAnimationFrame(placeOverlay);
-  }, {passive:true});
-  viewer.addEventListener("camera-change", () => {
-    if (opened) requestAnimationFrame(placeOverlay);
-  });
+  window.addEventListener("resize", scheduleOverlayUpdate);
+  window.addEventListener("scroll", scheduleOverlayUpdate, {passive:true});
+  viewer.addEventListener("camera-change", scheduleOverlayUpdate);
 
   window.qamqorPhoneForm = {
     open: openPhoneForm,
