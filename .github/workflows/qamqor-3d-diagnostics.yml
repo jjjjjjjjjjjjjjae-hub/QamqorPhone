@@ -6,7 +6,7 @@ on:
     paths:
       - "kor.html"
       - "index.html"
-      - "*.glb"
+      - "iPhone 18 pro max.glb"
       - "scripts/build_phone_button.py"
       - ".github/workflows/qamqor-3d-diagnostics.yml"
   workflow_dispatch:
