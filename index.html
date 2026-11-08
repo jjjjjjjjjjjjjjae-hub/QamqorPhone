@@ -3903,7 +3903,12 @@ verifyButton.addEventListener("click", async () => {
     if (state !== "closed" || busy || opened ||
         typeof viewer.materialFromPoint !== "function") return;
     const material = viewer.materialFromPoint(event.clientX,event.clientY);
-    if (!material || material.name !== "QAMQOR_Duo_Closed_Display") return;
+    const closedDisplayMaterials = new Set([
+      "QAMQOR_Duo_Closed_Display",
+      "C_SW_Screen_Outer",
+      "BASE_Glass_Black"
+    ]);
+    if (!material || !closedDisplayMaterials.has(material.name)) return;
     event.preventDefault();
     event.stopPropagation();
     openDuoAndForm();
