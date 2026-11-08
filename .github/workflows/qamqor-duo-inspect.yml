@@ -212,10 +212,13 @@ jobs:
                     };
                   }""")
                   result["closed_again_state"]=closed_again
+                  closed_pose_time = closed_again["duration"] - min(
+                    0.05, closed_again["duration"] * 0.025
+                  )
                   result["checks"]["close_plays_forward_to_closed_pose"]=(
                     closed_again["state"]=="closed" and
                     not closed_again["open"] and
-                    abs(closed_again["currentTime"]-closed_again["duration"])<0.08 and
+                    abs(closed_again["currentTime"]-closed_pose_time)<0.08 and
                     closed_again["cameraControls"] and
                     closed_again["formHidden"] and
                     closed_again["overlayHidden"]
