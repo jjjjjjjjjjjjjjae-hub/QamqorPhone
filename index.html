@@ -1688,9 +1688,21 @@ footer{
 
 
 <style id="qamqor-home-phone-only-final">
-/* Centre the full home view in the available viewport. */
-.site-header .header-right,
-footer{display:none!important}
+/* Keep the moving video visible behind a custom, touch-controlled QAMQOR phone. */
+html,body{background:transparent!important}
+#qamqor-video-background{
+  background:transparent!important;
+  z-index:0!important;
+}
+#qamqor-video-background video{
+  opacity:1!important;
+  filter:none!important;
+}
+#qamqor-video-background .qamqor-video-shade{
+  background:transparent!important;
+}
+.wrap{position:relative!important;z-index:1!important;background:transparent!important}
+.site-header .header-right,footer{display:none!important}
 .site-header{
   display:flex!important;
   justify-content:flex-start!important;
@@ -1699,8 +1711,11 @@ footer{display:none!important}
   min-height:68px!important;
   padding:0 4px!important;
   background:transparent!important;
+  background-color:transparent!important;
   border:0!important;
   box-shadow:none!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
 }
 .wrap{
   width:min(1600px,calc(100% - 64px))!important;
@@ -1721,6 +1736,7 @@ main{
   min-height:0!important;
   height:100%!important;
   overflow:hidden!important;
+  background:transparent!important;
 }
 main [data-app-page]:not([hidden]){
   grid-column:1!important;
@@ -1731,6 +1747,7 @@ main [data-app-page]:not([hidden]){
   min-height:0!important;
   max-height:100%!important;
   margin:0!important;
+  background:transparent!important;
 }
 .hero#top{
   display:grid!important;
@@ -1744,6 +1761,7 @@ main [data-app-page]:not([hidden]){
   padding:0!important;
   gap:0!important;
   overflow:visible!important;
+  background:transparent!important;
 }
 .hero#top .premium-art{
   display:grid!important;
@@ -1761,6 +1779,8 @@ main [data-app-page]:not([hidden]){
   perspective:1500px!important;
   perspective-origin:50% 50%!important;
   background:transparent!important;
+  background-color:transparent!important;
+  background-image:none!important;
   border:0!important;
   border-radius:0!important;
   box-shadow:none!important;
@@ -1771,29 +1791,34 @@ main [data-app-page]:not([hidden]){
   align-self:center!important;
   justify-self:center!important;
   flex:0 0 auto!important;
-  width:clamp(205px,20vw,276px)!important;
-  height:clamp(370px,66vh,510px)!important;
+  width:clamp(194px,19vw,250px)!important;
+  height:clamp(370px,65vh,500px)!important;
   max-height:calc(100dvh - 112px)!important;
   margin:0!important;
   padding:0!important;
   box-sizing:border-box!important;
   overflow:visible!important;
-  border:5px solid #aeb7c4!important;
-  border-radius:43px!important;
-  background:linear-gradient(145deg,#dce5ef 0%,#737f8e 18%,#202a37 48%,#8994a2 82%,#e4ebf3 100%)!important;
+  border:3px solid #aeb9c8!important;
+  border-radius:45px!important;
+  background:linear-gradient(110deg,#3c4654 0%,#dbe3eb 16%,#697789 34%,#283443 52%,#d8e0e9 78%,#647184 100%)!important;
   box-shadow:
-    0 0 0 2px #222a35,
-    0 0 0 5px #7f8997,
-    0 0 0 7px rgba(13,19,28,.9),
-    0 34px 72px rgba(0,0,0,.62),
-    0 0 70px rgba(60,145,255,.2),
-    inset 0 0 0 1px rgba(255,255,255,.85)!important;
+    0 0 0 1px rgba(9,15,24,.95),
+    0 0 0 3px rgba(176,191,208,.68),
+    0 28px 70px rgba(0,0,0,.48),
+    0 0 48px rgba(107,176,255,.16),
+    inset 0 0 0 1px rgba(255,255,255,.72)!important;
   transform-style:preserve-3d!important;
   transform-origin:center center!important;
-  animation:qamqorPhoneSpin 11s linear infinite!important;
-  transition:none!important;
+  transform:perspective(1400px) rotateX(2deg) rotateY(0deg) rotateZ(-1deg)!important;
+  animation:none!important;
+  transition:transform 120ms ease-out!important;
   will-change:transform!important;
+  cursor:grab!important;
+  touch-action:none!important;
+  user-select:none!important;
+  -webkit-user-select:none!important;
 }
+.hero#top .device:active{cursor:grabbing!important}
 .hero#top .device-screen{
   position:absolute!important;
   inset:5px!important;
@@ -1806,31 +1831,33 @@ main [data-app-page]:not([hidden]){
   width:auto!important;
   height:auto!important;
   margin:0!important;
-  padding:24px 12px!important;
-  border:1px solid rgba(255,255,255,.78)!important;
-  border-radius:35px!important;
+  padding:30px 12px!important;
+  border:1px solid rgba(255,255,255,.3)!important;
+  border-radius:37px!important;
   overflow:hidden!important;
   background:
-    radial-gradient(circle at 50% 28%,rgba(103,174,255,.28),transparent 38%),
-    linear-gradient(155deg,#fbfdff 0%,#dceafa 58%,#b9d5f4 100%)!important;
-  color:#183a61!important;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.72),inset 0 -15px 35px rgba(44,108,177,.09)!important;
+    linear-gradient(155deg,rgba(7,17,31,.20),rgba(10,25,44,.35) 55%,rgba(5,14,28,.24))!important;
+  background-color:rgba(7,17,31,.18)!important;
+  color:#f6fbff!important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),inset 0 -16px 40px rgba(0,0,0,.10)!important;
+  -webkit-backdrop-filter:blur(1.5px)!important;
+  backdrop-filter:blur(1.5px)!important;
   transform:translateZ(8px)!important;
   backface-visibility:hidden!important;
 }
 .hero#top .device-logo{
   display:grid!important;
   place-items:center!important;
-  width:clamp(82px,8vw,108px)!important;
-  height:clamp(82px,8vw,108px)!important;
+  width:clamp(78px,7.4vw,104px)!important;
+  height:clamp(78px,7.4vw,104px)!important;
   flex:0 0 auto!important;
   margin:14px 0 0!important;
   padding:0!important;
-  border:0!important;
+  border:1px solid rgba(255,255,255,.35)!important;
   border-radius:23px!important;
-  background:transparent!important;
+  background:rgba(255,255,255,.92)!important;
   overflow:hidden!important;
-  box-shadow:none!important;
+  box-shadow:0 12px 32px rgba(0,0,0,.22)!important;
 }
 .hero#top .device-logo img{
   display:block!important;
@@ -1841,16 +1868,18 @@ main [data-app-page]:not([hidden]){
   border-radius:inherit!important;
 }
 .hero#top .device-screen>strong{
-  color:#163b66!important;
+  color:#fff!important;
   font-size:clamp(15px,1.5vw,19px)!important;
   font-weight:900!important;
   letter-spacing:.16em!important;
+  text-shadow:0 2px 12px rgba(0,0,0,.8)!important;
 }
 .hero#top .device-screen>span{
-  color:#6483a5!important;
+  color:#d9eaff!important;
   font-size:clamp(7px,.7vw,9px)!important;
   font-weight:850!important;
   letter-spacing:.27em!important;
+  text-shadow:0 2px 8px rgba(0,0,0,.85)!important;
 }
 .hero#top .device-apply{
   display:inline-flex!important;
@@ -1872,87 +1901,98 @@ main [data-app-page]:not([hidden]){
   cursor:pointer!important;
   text-shadow:none!important;
   transform:translateZ(2px)!important;
+  touch-action:manipulation!important;
 }
-.hero#top .device-apply:hover{
-  background:linear-gradient(135deg,#55b5ff,#0872df)!important;
-}
+.hero#top .device-apply:hover{background:linear-gradient(135deg,#55b5ff,#0872df)!important}
 .hero#top .device-camera{
   position:absolute!important;
   z-index:5!important;
-  top:17px!important;
+  top:16px!important;
   left:50%!important;
-  width:66px!important;
-  height:17px!important;
+  width:78px!important;
+  height:23px!important;
+  border:1px solid rgba(255,255,255,.10)!important;
   border-radius:99px!important;
-  background:#10151d!important;
-  box-shadow:inset 0 1px 3px #000,0 1px 0 rgba(255,255,255,.32)!important;
+  background:#030508!important;
+  box-shadow:inset 0 1px 4px #000,0 1px 0 rgba(255,255,255,.35)!important;
   transform:translateX(-50%) translateZ(12px)!important;
   backface-visibility:hidden!important;
 }
 .hero#top .device-camera:after{
   content:""!important;
   position:absolute!important;
-  right:8px!important;
-  top:5px!important;
-  width:7px!important;
-  height:7px!important;
+  right:10px!important;
+  top:7px!important;
+  width:9px!important;
+  height:9px!important;
   border-radius:50%!important;
-  background:radial-gradient(circle at 35% 35%,#8ccaff,#1b5e98 55%,#080e17 70%)!important;
+  background:radial-gradient(circle at 35% 35%,#9bd2ff,#28628d 55%,#080e17 72%)!important;
+  box-shadow:0 0 5px rgba(60,160,255,.4)!important;
 }
 .hero#top .device-back{
   position:absolute!important;
   inset:5px!important;
   z-index:2!important;
   display:block!important;
-  border:1px solid rgba(255,255,255,.45)!important;
-  border-radius:35px!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+  border-radius:37px!important;
   overflow:hidden!important;
   background:
-    radial-gradient(ellipse at 50% 48%,rgba(255,255,255,.1),transparent 42%),
-    linear-gradient(145deg,#657487 0%,#293646 47%,#111923 100%)!important;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),inset 0 -20px 45px rgba(0,0,0,.24)!important;
+    radial-gradient(ellipse at 52% 52%,rgba(255,255,255,.10),transparent 48%),
+    linear-gradient(145deg,rgba(50,62,78,.92),rgba(15,25,39,.94) 55%,rgba(78,91,108,.92))!important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.10),inset 0 -20px 45px rgba(0,0,0,.22)!important;
   transform:rotateY(180deg) translateZ(8px)!important;
   backface-visibility:hidden!important;
 }
 .hero#top .device-back-camera{
   position:absolute!important;
-  top:7%!important;
-  left:7%!important;
-  width:31%!important;
-  height:23%!important;
+  top:6%!important;
+  left:6%!important;
+  width:39%!important;
+  height:25%!important;
   display:grid!important;
   grid-template-columns:repeat(2,minmax(0,1fr))!important;
   align-items:center!important;
   justify-items:center!important;
-  gap:5px!important;
-  padding:8px!important;
-  border:1px solid rgba(255,255,255,.18)!important;
+  gap:3px!important;
+  padding:7px!important;
+  border:1px solid rgba(255,255,255,.22)!important;
   border-radius:22px!important;
-  background:linear-gradient(145deg,#9aa8b8,#354456)!important;
-  box-shadow:0 7px 18px rgba(0,0,0,.35),inset 0 1px 2px rgba(255,255,255,.3)!important;
+  background:linear-gradient(145deg,#8593a6,#303d4f)!important;
+  box-shadow:0 8px 19px rgba(0,0,0,.35),inset 0 1px 2px rgba(255,255,255,.3)!important;
 }
 .hero#top .device-back-camera i{
   display:block!important;
-  width:clamp(18px,2vw,29px)!important;
+  width:clamp(19px,2.1vw,28px)!important;
   aspect-ratio:1!important;
-  border:3px solid #8995a4!important;
+  border:3px solid #9aa9bc!important;
   border-radius:50%!important;
-  background:radial-gradient(circle at 35% 32%,#7fb8e7 0 8%,#182737 35%,#05090f 72%)!important;
+  background:radial-gradient(circle at 35% 32%,#8dc9f7 0 7%,#1d3249 34%,#03080f 72%)!important;
   box-shadow:0 2px 5px #000!important;
+}
+.hero#top .device-back-camera:after{
+  content:""!important;
+  width:9px!important;
+  height:9px!important;
+  justify-self:center!important;
+  align-self:center!important;
+  border-radius:50%!important;
+  background:#edf3cb!important;
+  box-shadow:0 0 9px rgba(255,245,180,.7)!important;
 }
 .hero#top .device-back-logo{
   position:absolute!important;
-  top:48%!important;
+  top:49%!important;
   left:50%!important;
   display:grid!important;
   place-items:center!important;
-  width:54px!important;
-  height:54px!important;
-  border:1px solid rgba(255,255,255,.3)!important;
-  border-radius:17px!important;
-  color:#eaf4ff!important;
-  background:linear-gradient(145deg,rgba(255,255,255,.18),rgba(0,0,0,.12))!important;
-  font:900 27px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+  width:62px!important;
+  height:62px!important;
+  border:1px solid rgba(255,255,255,.28)!important;
+  border-radius:20px!important;
+  color:#f4f9ff!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.18),rgba(0,0,0,.16))!important;
+  font:900 29px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
   transform:translate(-50%,-50%)!important;
   box-shadow:0 8px 24px rgba(0,0,0,.18)!important;
 }
@@ -1961,7 +2001,7 @@ main [data-app-page]:not([hidden]){
   left:0!important;
   right:0!important;
   bottom:14%!important;
-  color:rgba(236,245,255,.68)!important;
+  color:rgba(236,245,255,.75)!important;
   font:800 9px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
   letter-spacing:.28em!important;
   text-align:center!important;
@@ -1976,23 +2016,15 @@ main [data-app-page]:not([hidden]){
   box-shadow:0 1px 3px #0008!important;
   transform:translateZ(0)!important;
 }
-.hero#top .device-side-volume{
-  left:-8px!important;
-  top:23%!important;
-  height:74px!important;
-}
-.hero#top .device-side-power{
-  right:-8px!important;
-  top:29%!important;
-  height:57px!important;
-}
+.hero#top .device-side-volume{left:-8px!important;top:23%!important;height:74px!important}
+.hero#top .device-side-power{right:-8px!important;top:29%!important;height:57px!important}
 .hero#top .device:before{
   content:""!important;
   position:absolute!important;
   z-index:6!important;
   inset:5px!important;
-  border-radius:35px!important;
-  background:linear-gradient(112deg,transparent 24%,rgba(255,255,255,.27) 46%,transparent 65%)!important;
+  border-radius:37px!important;
+  background:linear-gradient(112deg,transparent 24%,rgba(255,255,255,.20) 46%,transparent 65%)!important;
   pointer-events:none!important;
   transform:translateZ(10px)!important;
   backface-visibility:hidden!important;
@@ -2002,24 +2034,20 @@ main [data-app-page]:not([hidden]){
   position:absolute!important;
   z-index:7!important;
   inset:5px!important;
-  border-radius:35px!important;
-  background:linear-gradient(120deg,transparent 32%,rgba(255,255,255,.22) 48%,transparent 63%)!important;
+  border-radius:37px!important;
+  background:linear-gradient(120deg,transparent 32%,rgba(255,255,255,.15) 48%,transparent 63%)!important;
   pointer-events:none!important;
   transform:translateZ(11px)!important;
   backface-visibility:hidden!important;
-}
-@keyframes qamqorPhoneSpin{
-  0%{transform:perspective(1400px) rotateX(7deg) rotateY(0deg) rotateZ(-2deg)}
-  100%{transform:perspective(1400px) rotateX(7deg) rotateY(360deg) rotateZ(-2deg)}
 }
 @media(max-width:900px){
   .wrap{width:calc(100% - 36px)!important}
   .hero#top .device{
     width:clamp(180px,27vw,220px)!important;
-    height:clamp(325px,61vh,430px)!important;
+    height:clamp(330px,61vh,430px)!important;
     max-height:calc(100dvh - 108px)!important;
   }
-  .hero#top .device-screen{gap:10px!important;padding:18px 10px!important}
+  .hero#top .device-screen{gap:10px!important;padding:22px 10px!important}
   .hero#top .device-logo{width:82px!important;height:82px!important}
   .hero#top .device-apply{width:132px!important;min-height:45px!important;font-size:12px!important}
 }
@@ -2028,28 +2056,24 @@ main [data-app-page]:not([hidden]){
   .site-header{height:62px!important;min-height:62px!important}
   .hero#top .device{
     width:clamp(165px,48vw,205px)!important;
-    height:clamp(300px,60vh,420px)!important;
+    height:clamp(300px,60vh,410px)!important;
     max-height:calc(100dvh - 102px)!important;
-    border-radius:37px!important;
+    border-radius:39px!important;
   }
-  .hero#top .device-screen,
-  .hero#top .device-back{border-radius:30px!important}
+  .hero#top .device-screen,.hero#top .device-back{border-radius:32px!important}
   .hero#top .device-logo{width:72px!important;height:72px!important;margin-top:10px!important}
-  .hero#top .device-screen{gap:8px!important;padding:13px 8px!important}
+  .hero#top .device-screen{gap:8px!important;padding:15px 8px!important}
   .hero#top .device-screen>strong{font-size:14px!important}
   .hero#top .device-screen>span{font-size:7px!important}
   .hero#top .device-apply{width:122px!important;min-height:41px!important;margin-top:8px!important;font-size:11px!important}
-  .hero#top .device-camera{top:14px!important;width:56px!important;height:15px!important}
+  .hero#top .device-camera{top:14px!important;width:65px!important;height:20px!important}
   .hero#top .device-back-logo{width:45px!important;height:45px!important;font-size:23px!important}
 }
 @media(max-height:700px) and (min-width:621px){
   .hero#top .device{
     width:clamp(170px,19vw,230px)!important;
-    height:clamp(300px,61vh,430px)!important;
+    height:clamp(290px,59vh,430px)!important;
   }
-}
-@media(prefers-reduced-motion:reduce){
-  .hero#top .device{animation:none!important}
 }
 </style>
 
@@ -3277,5 +3301,95 @@ verifyButton.addEventListener("click", async () => {
 })();
 </script>
 
+<script id="qamqor-phone-touch-control">
+/* The phone stays still until the user touches or drags it. */
+(() => {
+  const phone = document.querySelector(".hero#top .device");
+  if (!phone) return;
+
+  let rotationX = 2;
+  let rotationY = 0;
+  let pointerId = null;
+  let startX = 0;
+  let startY = 0;
+  let startRotationX = 0;
+  let startRotationY = 0;
+  let lastDeltaX = 0;
+  let lastDeltaY = 0;
+  let moved = false;
+
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+  const setRotation = (x, y, animate = false) => {
+    rotationX = clamp(x, -55, 55);
+    rotationY = y;
+    phone.style.setProperty("transition", animate ? "transform 360ms cubic-bezier(.2,.8,.2,1)" : "none", "important");
+    phone.style.setProperty(
+      "transform",
+      "perspective(1400px) rotateX(" + rotationX + "deg) rotateY(" + rotationY + "deg) rotateZ(-1deg)",
+      "important"
+    );
+  };
+
+  phone.addEventListener("pointerdown", event => {
+    if (event.target.closest("a,button,input,select,textarea")) return;
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+
+    pointerId = event.pointerId;
+    startX = event.clientX;
+    startY = event.clientY;
+    startRotationX = rotationX;
+    startRotationY = rotationY;
+    lastDeltaX = 0;
+    lastDeltaY = 0;
+    moved = false;
+    phone.setPointerCapture(pointerId);
+    phone.style.cursor = "grabbing";
+    setRotation(rotationX + 2, rotationY, true);
+  });
+
+  phone.addEventListener("pointermove", event => {
+    if (pointerId === null || event.pointerId !== pointerId) return;
+    const deltaX = event.clientX - startX;
+    const deltaY = event.clientY - startY;
+    lastDeltaX = deltaX;
+    lastDeltaY = deltaY;
+    if (Math.abs(deltaX) + Math.abs(deltaY) > 4) moved = true;
+    setRotation(startRotationX - deltaY * 0.62, startRotationY + deltaX * 0.9);
+  });
+
+  const finishDrag = event => {
+    if (pointerId === null || (event && event.pointerId !== pointerId)) return;
+    const wasMoved = moved;
+    pointerId = null;
+    phone.style.cursor = "grab";
+
+    if (wasMoved) {
+      const inertiaY = clamp(lastDeltaX * 0.10, -15, 15);
+      const inertiaX = clamp(-lastDeltaY * 0.07, -8, 8);
+      setRotation(rotationX + inertiaX, rotationY + inertiaY, true);
+    } else {
+      setRotation(startRotationX, startRotationY, true);
+    }
+  };
+
+  phone.addEventListener("pointerup", finishDrag);
+  phone.addEventListener("pointercancel", finishDrag);
+  phone.addEventListener("lostpointercapture", finishDrag);
+
+  phone.addEventListener("keydown", event => {
+    const step = event.shiftKey ? 35 : 18;
+    if (event.key === "ArrowLeft") { event.preventDefault(); setRotation(rotationX, rotationY - step, true); }
+    else if (event.key === "ArrowRight") { event.preventDefault(); setRotation(rotationX, rotationY + step, true); }
+    else if (event.key === "ArrowUp") { event.preventDefault(); setRotation(rotationX - 10, rotationY, true); }
+    else if (event.key === "ArrowDown") { event.preventDefault(); setRotation(rotationX + 10, rotationY, true); }
+    else if (event.key === "Home") { event.preventDefault(); setRotation(2, 0, true); }
+  });
+
+  phone.setAttribute("tabindex", "0");
+  phone.setAttribute("role", "group");
+  phone.setAttribute("aria-label", "3D телефонды тінтуірмен немесе саусақпен сүйреп бұрыңыз. Пернетақта: бағыттауыш пернелер, Home — бастапқы қалып.");
+  setRotation(rotationX, rotationY);
+})();
+</script>
 </body>
 </html>
