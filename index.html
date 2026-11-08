@@ -3890,6 +3890,7 @@ verifyButton.addEventListener("click", async () => {
     const dy = point.y - rotationDrag.startY;
     const theta = rotationDrag.theta - dx * 0.008;
     const phi = Math.max(0.18,Math.min(Math.PI - 0.18,rotationDrag.phi + dy * 0.004));
+    rotationDebug.animationFrames++;
 
     viewer.cameraOrbit =
       theta + "rad " + phi + "rad " + rotationDrag.radius + "m";
@@ -3899,11 +3900,25 @@ verifyButton.addEventListener("click", async () => {
     }
   }
 
+  const rotationDebug = {
+    pointerDown:0, started:0, ignored:"", pointerMove:0, animationFrames:0,
+    lastTarget:"", beforeTheta:null, afterTheta:null
+  };
+
   function startRotationDrag(event) {
-    if (!opened || busy || !overlay.contains(event.target) ||
-        !event.isPrimary || event.button > 0 ||
-        event.target.closest(rotationInteractiveSelector) ||
-        typeof viewer.getCameraOrbit !== "function") return;
+    rotationDebug.pointerDown++;
+    rotationDebug.lastTarget = event.target?.tagName || String(event.target);
+    if (!opened) { rotationDebug.ignored = "form-not-open"; return; }
+    if (busy) { rotationDebug.ignored = "busy"; return; }
+    if (!overlay.contains(event.target)) { rotationDebug.ignored = "target-outside-overlay"; return; }
+    if (!event.isPrimary) { rotationDebug.ignored = "not-primary"; return; }
+    if (event.button > 0) { rotationDebug.ignored = "non-primary-button"; return; }
+    const targetElement = event.target instanceof Element ? event.target : null;
+    if (targetElement?.closest(rotationInteractiveSelector)) {
+      rotationDebug.ignored = "interactive-target:" + (targetElement.closest(rotationInteractiveSelector)?.tagName || "unknown");
+      return;
+    }
+    if (typeof viewer.getCameraOrbit !== "function") { rotationDebug.ignored = "camera-orbit-unavailable"; return; }
 
     const orbit = viewer.getCameraOrbit();
     rotationDrag = {
@@ -3914,6 +3929,9 @@ verifyButton.addEventListener("click", async () => {
       phi:orbit.phi,
       radius:orbit.radius
     };
+    rotationDebug.started++;
+    rotationDebug.ignored = "";
+    rotationDebug.beforeTheta = orbit.theta;
 
     // Temporarily remove the dynamic shadow while the 3D model is moving.
     viewer.shadowIntensity = 0;
@@ -3926,6 +3944,7 @@ verifyButton.addEventListener("click", async () => {
   // Track the drag at document level so it continues even when the pointer
   // briefly leaves the projected screen polygon.
   function trackRotationPointer(event) {
+    if (rotationDrag && event.pointerId === rotationDrag.pointerId) rotationDebug.pointerMove++;
     if (!rotationDrag || event.pointerId !== rotationDrag.pointerId) return;
     pendingRotationPoint = {x:event.clientX,y:event.clientY};
     if (!rotationFrame) rotationFrame = requestAnimationFrame(applyRotationFrame);
@@ -4137,7 +4156,8 @@ verifyButton.addEventListener("click", async () => {
     close:closePhoneForm,
     isOpen:()=>opened,
     getScreenRect:()=>lastScreenRect,
-    getState:()=>state
+    getState:()=>state,
+    getRotationDebug:()=>({...rotationDebug,rotationActive:!!rotationDrag})
   };
 })();
 </script>
