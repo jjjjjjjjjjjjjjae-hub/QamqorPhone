@@ -3914,15 +3914,16 @@ verifyButton.addEventListener("click", async () => {
     }
 
     state = "open";
-    busy = false;
     openRequested = false;
     window.qamqorOpenRequestWhenReady = false;
 
-    // Let the fully opened Duo pose paint before placing the request UI on it.
+    // Keep the transition locked until the open pose is visible and the form
+    // has been attached. This prevents rapid/repeated taps from racing the form.
     await nextFrame();
     await new Promise(resolve => setTimeout(resolve, 180));
 
     const formShown = await showRepairForm();
+    busy = false;
     if (!formShown) {
       state = "open";
       if (hadCameraControls) viewer.setAttribute("camera-controls","");
