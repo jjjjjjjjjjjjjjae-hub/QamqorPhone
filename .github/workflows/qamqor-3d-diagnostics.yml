@@ -156,9 +156,32 @@ jobs:
                       timeout=120000
                   )
 
-                  # The center and four corners are invisible probes only. The visible label
-                  # itself is textured geometry embedded in the GLB.
-                  angles = [0, 30, 45, 60, 75, 89, 91, 105, 120, 135, 150, 165, 180, 225, 270]
+                  # Add invisible 3D coordinate probes around the real button mesh.
+                  # They let Chromium measure the physical plane's perspective at every angle.
+                  page.evaluate(
+                      """() => {
+                        const v = document.querySelector('.qamqor-phone-model');
+                        const points = {
+                          'hotspot-button-center': [0, 0.0451825, 0.004502],
+                          'hotspot-button-left': [-0.02629, 0.0451825, 0.004502],
+                          'hotspot-button-right': [0.02629, 0.0451825, 0.004502],
+                          'hotspot-button-top': [0, 0.0517552, 0.004502],
+                          'hotspot-button-bottom': [0, 0.0386098, 0.004502]
+                        };
+                        for (const [slot, p] of Object.entries(points)) {
+                          const el = document.createElement('span');
+                          el.slot = slot;
+                          el.setAttribute('data-position', p.join(' '));
+                          el.setAttribute('data-normal', '0 0 1');
+                          el.setAttribute('aria-hidden', 'true');
+                          el.style.cssText = 'width:1px;height:1px;opacity:0;pointer-events:none';
+                          v.appendChild(el);
+                        }
+                      }"""
+                  )
+
+                  # Test frontal, oblique, edge-on and rear views, rather than only 0/180.
+                  angles = [0, 15, 30, 45, 60, 75, 85, 89, 90, 91, 95, 105, 120, 135, 150, 165, 180, 210, 240, 270]
                   tests = []
                   for angle in angles:
                       state = page.evaluate(
