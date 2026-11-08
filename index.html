@@ -2172,7 +2172,7 @@ main [data-app-page]:not([hidden]){
       camera-orbit="0deg 75deg 100%"
       field-of-view="30deg"
       tabindex="0">
-      <a slot="hotspot-apply" class="model-hotspot-apply" href="#repair" data-position="0 -0.02 0.03" data-normal="0 0 1" aria-label="Өтінім беру">Өтінім беру</a>
+      <a slot="hotspot-apply" class="model-hotspot-apply" href="#repair" data-position="0 -0.02 0.03" data-normal="0 0 1" data-visibility-attribute="visible" aria-label="Өтінім беру">Өтінім беру</a>
     </model-viewer>
   </div>
 </section>
@@ -3408,7 +3408,16 @@ body.qamqor-home-clean .hero#top{
   --max-hotspot-opacity:1;
   transition:opacity .12s ease;
 }
-.hero#top .qamqor-phone-model .model-hotspot-apply{
+.hero#top .qamqor-phone-model .model-hotspot-apply:not([data-ready]){
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+.hero#top .qamqor-phone-model .model-hotspot-apply[data-ready]:not([data-visible]){
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+.hero#top .qamqor-phone-model .model-hotspot-apply[data-ready][data-visible]{
   opacity:1!important;
   visibility:visible!important;
   pointer-events:auto!important;
@@ -3483,6 +3492,7 @@ body.qamqor-home-clean .hero#top{
     button.dataset.position = position;
     button.dataset.normal = normal;
     if (surface) button.dataset.surface = surface;
+    button.dataset.ready = "true";
     placed = true;
     return true;
   };
