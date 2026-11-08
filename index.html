@@ -3513,6 +3513,9 @@ verifyButton.addEventListener("click", async () => {
     const activePage = pages.find(page => page.id === id);
     if (!activePage) return;
 
+    if (window.qamqorPhoneForm && typeof window.qamqorPhoneForm.setHomeVisible === "function") {
+      window.qamqorPhoneForm.setHomeVisible(id === "top");
+    }
     document.body.classList.toggle("qamqor-home-clean", id === "top");
 
     pages.forEach(page => {
@@ -4058,7 +4061,7 @@ verifyButton.addEventListener("click", async () => {
       state = "closed";
       busy = false;
       if (hadCameraControls) viewer.setAttribute("camera-controls","");
-      placeLockScreenButton();
+      lockPlane.hidden = true;
       if (typeof window.qamqorShowPage === "function") {
         window.qamqorShowPage("repair", {updateHistory:true, scroll:true});
       }
@@ -4184,6 +4187,10 @@ verifyButton.addEventListener("click", async () => {
 
   window.qamqorPhoneForm = {
     open:requestOpenDuoForm,
+    setHomeVisible: visible => {
+      if (!visible) lockPlane.hidden = true;
+      else if (state === "closed" && !busy && !opened) placeLockScreenButton();
+    },
     close:closePhoneForm,
     isOpen:()=>opened,
     getScreenRect:()=>lastScreenRect,
