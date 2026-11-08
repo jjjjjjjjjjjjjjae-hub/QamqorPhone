@@ -5,7 +5,7 @@ from pathlib import Path
 import json
 import numpy as np
 import trimesh
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "iPhone 18 pro max.glb"
@@ -204,5 +204,4 @@ def main():
 
 
 if __name__ == "__main__":
-    from PIL import ImageFilter
     main()
