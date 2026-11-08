@@ -504,7 +504,7 @@
       event.stopPropagation?.();
     }
     const now = performance.now();
-    if (now - state.lastActivationAt < 550) return;
+    if (state.lastActivationAt && now - state.lastActivationAt < 550) return;
     state.lastActivationAt = now;
     openDuoFromPhysicalButton();
   }
@@ -559,8 +559,14 @@
 
   function tryDirectModelActivation(event) {
     if (!state.homeVisible || state.opened || state.busy) return;
-    if (state.phase !== "closed") return;
     if (!isRayOnPhysicalButton(event)) return;
+
+    if (state.phase === "loading" || state.phase === "initializing") {
+      state.pendingOpen = true;
+      initializeClosedDuo();
+      return;
+    }
+    if (state.phase !== "closed") return;
     activateButton(event);
   }
 
@@ -805,4 +811,11 @@
   // Also initialize if the browser completed the GLB load before this script ran.
   if (viewer.loaded) initializeClosedDuo();
   else scheduleLockRetry();
+
+  // The page router runs before this file. Restore the intended 3D entry
+  // when the browser returns from Telegram authorization or a deep link.
+  if (window.qamqorOpenRequestWhenReady) {
+    window.qamqorOpenRequestWhenReady = false;
+    requestOpenDuoForm();
+  }
 })();
