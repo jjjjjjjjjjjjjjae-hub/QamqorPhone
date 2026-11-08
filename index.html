@@ -2141,6 +2141,45 @@ main [data-app-page]:not([hidden]){
   }
 }
 </style>
+<style id="qamqor-mobile-apply-hitbox">
+/* Transparent front-facing touch target attached to the physical GLB button. */
+.hero#top .qamqor-phone-model .qamqor-apply-hitbox {
+  display:block!important;
+  width:min(56vw,220px)!important;
+  height:64px!important;
+  min-height:64px!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:999px!important;
+  background:rgba(255,255,255,.001)!important;
+  color:transparent!important;
+  opacity:.001!important;
+  box-shadow:none!important;
+  pointer-events:auto!important;
+  cursor:pointer!important;
+  touch-action:manipulation!important;
+  -webkit-tap-highlight-color:transparent!important;
+  outline:0!important;
+}
+@media(max-width:620px) {
+  .hero#top .qamqor-phone-model .qamqor-apply-hitbox {
+    width:min(56vw,210px)!important;
+    height:68px!important;
+    min-height:68px!important;
+  }
+}
+/* Keep the request form reachable within the phone viewport. */
+@media(max-width:760px) {
+  main [data-app-page]:not([hidden]) {
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+    overscroll-behavior-y:contain;
+    touch-action:pan-y;
+  }
+}
+</style>
 </head>
 <body>
 <div id="qamqor-video-background" aria-hidden="true">
@@ -2167,12 +2206,13 @@ main [data-app-page]:not([hidden]){
       loading="eager"
       reveal="auto"
       shadow-intensity="0.75"
-      exposure="1"
-      style="filter:none!important;opacity:1!important;mix-blend-mode:normal!important"
+      exposure="1.05"
+      environment-image="neutral"
       camera-orbit="0deg 75deg 100%"
       field-of-view="30deg"
       tabindex="0">
       <span slot="hotspot-probe" class="qamqor-button-probe" data-position="0 0.04201275 0.004502" data-normal="0 0 1" data-visibility-attribute="visible" aria-hidden="true"></span>
+      <button slot="hotspot-apply" class="qamqor-apply-hitbox" data-position="0 0.04201275 0.004502" data-normal="0 0 1" data-visibility-attribute="visible" type="button" aria-label="Өтінім беру"></button>
     </model-viewer>
   </div>
 </section>
@@ -3259,12 +3299,15 @@ verifyButton.addEventListener("click", async () => {
       window.history.pushState({qamqorPage:id},"","#" + id);
     }
     if (options.scroll !== false) {
+      activePage.scrollTop = 0;
       window.scrollTo({top:0,behavior:reduceMotion ? "auto" : "smooth"});
     }
     if (id === "repair" && typeof serviceMap !== "undefined" && serviceMap) {
       requestAnimationFrame(() => serviceMap.invalidateSize());
     }
   }
+
+  window.qamqorShowPage = showPage;
 
   document.addEventListener("click", event => {
     const link = event.target.closest('a[href^="#"]');
@@ -3380,7 +3423,7 @@ verifyButton.addEventListener("click", async () => {
 }
 </style>
 <script id="qamqor-physical-button-click">
-/* Click the real 3D mesh added to the GLB, not a screen-facing HTML hotspot. */
+/* Large 3D-attached hit target for touch screens, plus a ray-hit fallback on the real mesh. */
 (() => {
   const viewer = document.querySelector(".qamqor-phone-model");
   if (!viewer) return;
@@ -3393,30 +3436,48 @@ verifyButton.addEventListener("click", async () => {
     halfHeight: 0.0065727
   };
 
+  function openRepairPage(event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    if (typeof window.qamqorShowPage === "function") {
+      window.qamqorShowPage("repair", {updateHistory:true, scroll:true});
+    } else {
+      window.location.hash = "repair";
+    }
+  }
+
+  const hitbox = viewer.querySelector(".qamqor-apply-hitbox");
+  if (hitbox) {
+    // Touch/pen activates on pointer-up for a more immediate mobile response.
+    hitbox.addEventListener("pointerup", event => {
+      if (event.pointerType === "touch" || event.pointerType === "pen") {
+        openRepairPage(event);
+      }
+    }, {passive:false});
+    // Mouse, keyboard, and accessibility activation.
+    hitbox.addEventListener("click", openRepairPage);
+  }
+
+  // Fallback: the actual textured GLB button remains independently tappable.
   viewer.addEventListener("click", event => {
     if (!viewer.loaded ||
         typeof viewer.positionAndNormalFromPoint !== "function") return;
 
-    // model-viewer's hit-test API expects viewport (client) coordinates.
-    const hit = viewer.positionAndNormalFromPoint(
-      event.clientX,
-      event.clientY
-    );
+    const hit = viewer.positionAndNormalFromPoint(event.clientX, event.clientY);
     if (!hit || !hit.position || !hit.normal) return;
 
     const p = hit.position;
     const n = hit.normal;
     const insideButton =
-      Math.abs(p.x - button.x) <= button.halfWidth * 0.94 &&
-      Math.abs(p.y - button.y) <= button.halfHeight * 0.88 &&
-      p.z >= button.z - 0.00007 &&
-      p.z <= button.z + 0.00007 &&
-      n.z >= 0.98;
+      Math.abs(p.x - button.x) <= button.halfWidth * 1.15 &&
+      Math.abs(p.y - button.y) <= button.halfHeight * 1.55 &&
+      p.z >= button.z - 0.0002 &&
+      p.z <= button.z + 0.0002 &&
+      n.z >= 0.90;
 
-    if (!insideButton) return;
-
-    event.preventDefault();
-    window.location.hash = "repair";
+    if (insideButton) openRepairPage(event);
   });
 })();
 </script>
