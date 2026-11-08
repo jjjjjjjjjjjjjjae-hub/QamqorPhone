@@ -1,0 +1,46 @@
+name: Inspect iPhone Duo GLB
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "iPhone duo.glb"
+      - "scripts/inspect_duo_model.py"
+      - ".github/workflows/qamqor-duo-inspect.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: qamqor-duo-inspect
+  cancel-in-progress: true
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install GLB inspection dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy trimesh pygltflib
+      - name: Inspect Duo mesh and screen candidates
+        run: python scripts/inspect_duo_model.py
+      - name: Commit inspection report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add qamqor-duo-model-report.json
+          if git diff --cached --quiet; then
+            echo "No report changes."
+          else
+            git commit -m "chore: inspect iPhone Duo GLB geometry"
+            git push
+          fi
