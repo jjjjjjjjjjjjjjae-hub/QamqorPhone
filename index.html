@@ -3686,6 +3686,14 @@ verifyButton.addEventListener("click", async () => {
     requestAnimationFrame(() => requestAnimationFrame(resolve))
   );
 
+  // The GLB action wraps exact duration back to time 0. Hold just before
+  // the final keyframe so the Duo remains folded with its outer display visible.
+  function getClosedAnimationTime() {
+    const duration = Number(viewer.duration) || 0;
+    if (duration <= 0) return 0;
+    return Math.max(0, duration - Math.min(0.05, duration * 0.025));
+  }
+
   async function selectDuoAnimation() {
     viewer.animationName = animationName;
     // model-viewer applies animation-name in its asynchronous Lit update.
@@ -3704,7 +3712,8 @@ verifyButton.addEventListener("click", async () => {
     let settled = false;
     let fallbackTimer = null;
     const duration = viewer.duration;
-    const destination = direction < 0 ? 0 : duration;
+    const closedTime = getClosedAnimationTime();
+    const destination = direction < 0 ? 0 : closedTime;
 
     return new Promise(resolve => {
       const finish = () => {
@@ -3723,7 +3732,7 @@ verifyButton.addEventListener("click", async () => {
       viewer.play({repetitions:1});
       viewer.pause();
       viewer.timeScale = direction;
-      viewer.currentTime = direction < 0 ? duration : 0;
+      viewer.currentTime = direction < 0 ? closedTime : 0;
 
       requestAnimationFrame(() => {
         viewer.addEventListener("finished", finish, {once:true});
@@ -3934,18 +3943,26 @@ verifyButton.addEventListener("click", async () => {
       return;
     }
 
-    // A one-shot action can hold its final keyframe; an infinite loop wraps to zero.
+    // Never seek to exact duration: model-viewer wraps that boundary to time 0.
+    // The final 0.05s is visually indistinguishable from the closed keyframe.
+    const closedTime = getClosedAnimationTime();
     viewer.play({repetitions:1});
     viewer.pause();
     viewer.timeScale = 1;
-    viewer.currentTime = viewer.duration;
+    viewer.currentTime = closedTime;
     await nextFrame();
     viewer.pause();
 
-    // Read after the seek/render cycle so the initial state is genuinely closed.
-    if (Math.abs(viewer.currentTime - viewer.duration) > 0.05) {
-      viewer.currentTime = viewer.duration;
+    // Verify the near-final closed pose actually held after render.
+    if (Math.abs(viewer.currentTime - closedTime) > 0.05) {
+      viewer.currentTime = closedTime;
       await nextFrame();
+      viewer.pause();
+    }
+    if (Math.abs(viewer.currentTime - closedTime) > 0.08) {
+      state = "open";
+      console.error("Duo could not hold its folded display pose.");
+      return;
     }
 
     state = "closed";
