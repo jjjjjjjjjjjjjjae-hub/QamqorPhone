@@ -2201,70 +2201,7 @@ main [data-app-page]:not([hidden]){
   pointer-events:none!important;
 }
 /* No page, background, or 3D viewer sizing changes when the request form opens. */
-.qamqor-phone-form-overlay[hidden],
-.qamqor-ios-dark-screen[hidden]{display:none!important}
-.qamqor-ios-dark-screen{
-  position:fixed!important;
-  left:0!important;top:0!important;
-  z-index:19990!important;
-  overflow:hidden!important;
-  transform-origin:0 0!important;
-  border-radius:4% / 5.5%!important;
-  border:0!important;
-  color:#f5f7fc!important;
-  background:
-    radial-gradient(ellipse at 50% 40%,rgba(23,52,88,.34),transparent 58%),
-    linear-gradient(165deg,#090b11 0%,#030407 72%,#06080d 100%)!important;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)!important;
-  pointer-events:none!important;
-  will-change:transform,width,height;
-}
-.qamqor-ios-status{
-  position:absolute!important;top:3.8%!important;left:8.5%!important;right:8.5%!important;
-  height:4.5%!important;display:flex!important;align-items:center!important;
-  justify-content:space-between!important;color:#f7f8fb!important;
-  font:650 clamp(8px,2.3vw,11px)/1 -apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif!important;
-}
-.qamqor-ios-time{font-variant-numeric:tabular-nums!important}
-.qamqor-ios-island{
-  position:absolute!important;left:50%!important;top:-23%!important;
-  width:17%!important;height:112%!important;transform:translateX(-50%)!important;
-  border:1px solid rgba(255,255,255,.08)!important;border-radius:999px!important;
-  background:linear-gradient(180deg,#000 0%,#030407 100%)!important;
-  box-shadow:0 1px 3px rgba(255,255,255,.08),inset 0 -1px 2px rgba(255,255,255,.05)!important;
-}
-.qamqor-ios-island:after{
-  content:""!important;position:absolute!important;right:13%!important;top:34%!important;
-  width:13%!important;aspect-ratio:1!important;border-radius:50%!important;
-  background:radial-gradient(circle at 35% 35%,#263c66,#090d18 72%)!important;
-}
-.qamqor-ios-system-icons{display:flex!important;align-items:center!important;gap:3px!important;height:100%!important}
-.qamqor-ios-system-icons svg{display:block!important;width:clamp(9px,2.6vw,13px)!important;height:auto!important;fill:#f7f8fb!important}
-.qamqor-ios-battery{position:relative!important;width:clamp(14px,3.8vw,18px)!important;height:8px!important;border:1px solid rgba(247,248,251,.9)!important;border-radius:2px!important}
-.qamqor-ios-battery:before{content:""!important;position:absolute!important;left:1px!important;top:1px!important;bottom:1px!important;width:72%!important;border-radius:1px!important;background:#f7f8fb!important}
-.qamqor-ios-battery:after{content:""!important;position:absolute!important;right:-3px!important;top:2px!important;width:2px!important;height:3px!important;border-radius:0 2px 2px 0!important;background:#f7f8fb!important}
-.qamqor-ios-app{
-  position:absolute!important;top:25%!important;left:0!important;width:100%!important;
-  display:flex!important;flex-direction:column!important;align-items:center!important;
-  gap:clamp(5px,1.3vh,10px)!important;text-align:center!important;
-}
-.qamqor-ios-logo{
-  display:grid!important;place-items:center!important;width:12%!important;aspect-ratio:1!important;
-  overflow:hidden!important;border:1px solid rgba(255,255,255,.18)!important;border-radius:24%!important;
-  background:#f8f9fb!important;box-shadow:0 5px 18px rgba(0,0,0,.32)!important;
-}
-.qamqor-ios-logo img{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important}
-.qamqor-ios-brand{color:rgba(244,247,253,.72)!important;font:750 clamp(7px,1.8vw,9px)/1 -apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif!important;letter-spacing:.22em!important}
-.qamqor-ios-title{margin-top:clamp(5px,1.5vh,11px)!important;color:#f8f9fc!important;font:650 clamp(11px,3vw,15px)/1.18 -apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif!important;letter-spacing:-.035em!important}
-.qamqor-ios-apply{
-  position:absolute!important;left:25%!important;top:80%!important;width:50%!important;height:12%!important;
-  transform:translateY(-50%)!important;display:flex!important;align-items:center!important;justify-content:center!important;
-  border:1px solid rgba(255,255,255,.18)!important;border-radius:999px!important;color:#fff!important;
-  background:linear-gradient(180deg,#258fff,#0874e8)!important;
-  box-shadow:0 5px 18px rgba(0,105,255,.24),inset 0 1px rgba(255,255,255,.25)!important;
-  font:650 clamp(8px,2.5vw,12px)/1 -apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif!important;
-}
-.qamqor-ios-home-indicator{position:absolute!important;left:35%!important;bottom:2.3%!important;width:30%!important;height:3px!important;border-radius:999px!important;background:rgba(255,255,255,.88)!important}
+.qamqor-phone-form-overlay[hidden]{display:none!important}
 .qamqor-phone-form-overlay{
   position:fixed!important;
   left:0!important;
@@ -2483,8 +2420,9 @@ main [data-app-page]:not([hidden]){
   <div class="art premium-art" aria-label="QAMQOR PHONE нақты 3D телефоны">
     <model-viewer
       class="qamqor-phone-model"
-      src="./QAMQOR-iPhone-Duo.glb?v=duo-20261108"
+      src="./QAMQOR-iPhone-Duo.glb?v=duo-animation-20261108"
       alt="QAMQOR PHONE Duo 3D моделі"
+      animation-name="open-close"
       camera-controls
       disable-zoom
       disable-pan
@@ -2497,8 +2435,6 @@ main [data-app-page]:not([hidden]){
       camera-orbit="0deg 75deg 100%"
       field-of-view="30deg"
       tabindex="0">
-      <span slot="hotspot-probe" class="qamqor-button-probe" data-position="0 0.0256175518 0.0026460158" data-normal="0 0 1" data-visibility-attribute="visible" aria-hidden="true"></span>
-      <button slot="hotspot-apply" class="qamqor-apply-hitbox" data-position="0 0.0256175518 0.0026460158" data-normal="0 0 1" data-visibility-attribute="visible" type="button" aria-label="Өтінім беру"></button>
       <span slot="hotspot-screen-top-left" class="qamqor-screen-probe" data-position="-0.0792842135 0.1143482625 0.0024460158" data-normal="0 0 1" aria-hidden="true"></span>
       <span slot="hotspot-screen-top-right" class="qamqor-screen-probe" data-position="0.0792842135 0.1143482625 0.0024460158" data-normal="0 0 1" aria-hidden="true"></span>
       <span slot="hotspot-screen-bottom-right" class="qamqor-screen-probe" data-position="0.0792842135 0.0034348741 0.0024460158" data-normal="0 0 1" aria-hidden="true"></span>
@@ -3718,80 +3654,72 @@ verifyButton.addEventListener("click", async () => {
 }
 </style>
 <script id="qamqor-physical-button-click">
-/* Keep the camera on the real phone and portal the existing repair form onto its measured display. */
+/* Closed-state CTA is part of the animated outer display material.
+   Tapping it reverses the original open-close clip; closing the form plays it forward. */
 (() => {
   const viewer = document.querySelector(".qamqor-phone-model");
   const repair = document.getElementById("repair");
   if (!viewer || !repair) return;
-
-  const button = {
-    x: 0,
-    y: 0.0256175518,
-    z: 0.0026460158,
-    halfWidth: 0.0396421067,
-    halfHeight: 0.0067391551
-  };
-
-  const nativeScreen = document.createElement("div");
-  nativeScreen.className = "qamqor-ios-dark-screen";
-  nativeScreen.hidden = true;
-  nativeScreen.innerHTML =
-    '<div class="qamqor-ios-status">' +
-      '<time class="qamqor-ios-time">09:41</time>' +
-      '<div class="qamqor-ios-island" aria-hidden="true"></div>' +
-      '<div class="qamqor-ios-system-icons" aria-hidden="true">' +
-        '<svg viewBox="0 0 18 14"><path d="M1 12.5h2V9H1zm4 0h2V6H5zm4 0h2V3H9zm4 0h2V1h-2z"/></svg>' +
-        '<svg viewBox="0 0 18 14"><path d="M1 4.2C5.4.5 12.6.5 17 4.2l-1.6 1.7C11.8 3 6.2 3 2.6 5.9zm3 3.1c2.8-2.3 7.2-2.3 10 0l-1.7 1.8a5.2 5.2 0 0 0-6.6 0zm3.1 3.2a2.7 2.7 0 0 1 3.8 0L9 13.5z"/></svg>' +
-        '<span class="qamqor-ios-battery"></span>' +
-      '</div>' +
-    '</div>' +
-    '<div class="qamqor-ios-app">' +
-      '<div class="qamqor-ios-logo"><img src="QamqorPhone.png" alt=""></div>' +
-      '<div class="qamqor-ios-brand">QAMQOR PHONE</div>' +
-      '<div class="qamqor-ios-title">Телефон жөндеу</div>' +
-    '</div>' +
-    '<div class="qamqor-ios-apply">Өтінім беру</div>' +
-    '<div class="qamqor-ios-home-indicator"></div>';
-  document.body.appendChild(nativeScreen);
-  const nativeTime = nativeScreen.querySelector(".qamqor-ios-time");
-  function updateNativeTime(){
-    nativeTime.textContent = new Intl.DateTimeFormat("kk-KZ",{
-      hour:"2-digit",minute:"2-digit",hourCycle:"h23"
-    }).format(new Date());
-  }
-  updateNativeTime();
-  setInterval(updateNativeTime,15000);
 
   const overlay = document.createElement("div");
   overlay.id = "qamqor-phone-form-overlay";
   overlay.className = "qamqor-phone-form-overlay";
   overlay.hidden = true;
   overlay.innerHTML =
-    '<button type="button" class="qamqor-phone-form-close" aria-label="Телефон экранына қайту">×</button>' +
+    '<button type="button" class="qamqor-phone-form-close" aria-label="Duo телефонын жабу">×</button>' +
     '<div class="qamqor-phone-form-content"></div>';
   document.body.appendChild(overlay);
 
   const closeButton = overlay.querySelector(".qamqor-phone-form-close");
   const content = overlay.querySelector(".qamqor-phone-form-content");
-  const hitbox = viewer.querySelector(".qamqor-apply-hitbox");
+  const animationName = "open-close";
   let placeholder = null;
-  let opening = false;
+  let state = "loading"; // loading | closed | opening | open | form | closing
+  let busy = false;
   let opened = false;
   let lastScreenRect = null;
+  const hadCameraControls = viewer.hasAttribute("camera-controls");
 
   const nextFrame = () => new Promise(resolve =>
     requestAnimationFrame(() => requestAnimationFrame(resolve))
   );
 
-  let overlayUpdateFrame = 0;
-  function scheduleOverlayUpdate() {
-    if (overlayUpdateFrame) return;
-    // Let model-viewer finish its camera/render update before reading hotspots.
-    overlayUpdateFrame = requestAnimationFrame(() => {
-      overlayUpdateFrame = requestAnimationFrame(() => {
-        overlayUpdateFrame = 0;
-        if (opened) placeOverlay();
-        else placeNativeScreen();
+  function playDuoAnimation(direction) {
+    return new Promise(resolve => {
+      if (!viewer.availableAnimations ||
+          !viewer.availableAnimations.includes(animationName) ||
+          !Number.isFinite(viewer.duration) || viewer.duration <= 0) {
+        resolve(false);
+        return;
+      }
+
+      let settled = false;
+      let fallbackTimer = null;
+      const destination = direction < 0 ? 0 : viewer.duration;
+
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        if (fallbackTimer) clearTimeout(fallbackTimer);
+        viewer.removeEventListener("finished", finish);
+        viewer.pause();
+        viewer.currentTime = destination;
+        viewer.timeScale = 1;
+        resolve(true);
+      };
+
+      viewer.pause();
+      viewer.animationName = animationName;
+      viewer.timeScale = direction;
+      viewer.currentTime = direction < 0 ? viewer.duration : 0;
+
+      requestAnimationFrame(() => {
+        viewer.addEventListener("finished", finish, {once:true});
+        viewer.play({repetitions:1});
+        fallbackTimer = setTimeout(
+          finish,
+          Math.ceil(viewer.duration * 1000) + 1800
+        );
       });
     });
   }
@@ -3812,24 +3740,20 @@ verifyButton.addEventListener("click", async () => {
       !Number.isFinite(point.canvasPosition.y)
     )) return null;
 
-    // queryHotspot returns coordinates in model-viewer's render canvas.
-    // Scale them to the live CSS box so browser zoom and fractional sizes do not drift.
     const canvasWidth = viewer.clientWidth || viewerRect.width;
     const canvasHeight = viewer.clientHeight || viewerRect.height;
     const scaleX = viewerRect.width / canvasWidth;
     const scaleY = viewerRect.height / canvasHeight;
-
-    // Use all four current screen corners, not the last saved rectangle.
     const p = hotspots.map(point => ({
       x: viewerRect.left + point.canvasPosition.x * scaleX,
       y: viewerRect.top + point.canvasPosition.y * scaleY
     }));
+
     const distance = (a,b) => Math.hypot(b.x-a.x,b.y-a.y);
     const width = (distance(p[0],p[1]) + distance(p[3],p[2])) / 2;
     const height = (distance(p[0],p[3]) + distance(p[1],p[2])) / 2;
-    if (width < 90 || height < 180) return null;
+    if (width < 90 || height < 60) return null;
 
-    // Homography: map the form's rectangle onto the four projected screen corners.
     const [p0,p1,p2,p3] = p;
     const dx1 = p1.x-p2.x, dx2 = p3.x-p2.x;
     const dx3 = p0.x-p1.x+p2.x-p3.x;
@@ -3843,203 +3767,194 @@ verifyButton.addEventListener("click", async () => {
       h = (dx1*dy3-dx3*dy1)/denominator;
     }
 
-    const a = p1.x-p0.x+g*p1.x;
-    const b = p3.x-p0.x+h*p3.x;
-    const c = p0.x;
-    const d = p1.y-p0.y+g*p1.y;
-    const e = p3.y-p0.y+h*p3.y;
-    const f = p0.y;
-
-    // CSS matrix3d is column-major. Source dimensions are real CSS pixels,
-    // so the form's text and controls retain their natural readable size.
+    const aa = p1.x-p0.x+g*p1.x;
+    const bb = p3.x-p0.x+h*p3.x;
+    const cc = p0.x;
+    const dd = p1.y-p0.y+g*p1.y;
+    const ee = p3.y-p0.y+h*p3.y;
+    const ff = p0.y;
     const values = [
-      a/width, d/width, 0, g/width,
-      b/height, e/height, 0, h/height,
+      aa/width, dd/width, 0, g/width,
+      bb/height, ee/height, 0, h/height,
       0, 0, 1, 0,
-      c, f, 0, 1
+      cc, ff, 0, 1
     ];
-    const matrix = "matrix3d(" + values.map(v => Number(v.toFixed(8))).join(",") + ")";
-    const xs = p.map(point => point.x);
-    const ys = p.map(point => point.y);
     return {
-      points:p,
-      left:Math.min(...xs),
-      top:Math.min(...ys),
       width,
       height,
-      matrix
+      matrix:"matrix3d(" + values.map(v => Number(v.toFixed(8))).join(",") + ")"
     };
-  }
-
-  function setProjectedBox(element, screenRect) {
-    element.style.left = "0px";
-    element.style.top = "0px";
-    element.style.width = screenRect.width + "px";
-    element.style.height = screenRect.height + "px";
-    element.style.transform = screenRect.matrix;
-  }
-
-  function placeNativeScreen() {
-    if (opened) return false;
-    const screenRect = getProjectedScreenRect();
-    if (!screenRect) {
-      nativeScreen.hidden = true;
-      return false;
-    }
-    lastScreenRect = screenRect;
-    setProjectedBox(nativeScreen,screenRect);
-    nativeScreen.hidden = false;
-    return true;
   }
 
   function placeOverlay() {
     if (!opened) return false;
     const screenRect = getProjectedScreenRect();
-
-    // Never leave the form floating at an old angle when the display turns away.
     if (!screenRect) {
       overlay.hidden = true;
       return false;
     }
-
     lastScreenRect = screenRect;
-    setProjectedBox(overlay,screenRect);
+    overlay.style.left = "0px";
+    overlay.style.top = "0px";
+    overlay.style.width = screenRect.width + "px";
+    overlay.style.height = screenRect.height + "px";
+    overlay.style.transform = screenRect.matrix;
     overlay.hidden = false;
     return true;
   }
 
-  async function closePhoneForm() {
-    if (!opened && !opening) return;
-    opened = false;
-    opening = false;
-    overlay.hidden = true;
-    nativeScreen.hidden = true;
-
-    if (placeholder && placeholder.parentNode) {
-      placeholder.parentNode.insertBefore(repair, placeholder);
-      placeholder.remove();
-    }
-    placeholder = null;
-    repair.hidden = true;
-    repair.setAttribute("aria-hidden", "true");
-    repair.classList.remove("qamqor-phone-form-card");
-    viewer.classList.remove("qamqor-request-open");
-    if (hitbox) {
-      hitbox.hidden = false;
-      hitbox.removeAttribute("aria-hidden");
-    }
-
-    try { sessionStorage.removeItem("qamqorPhoneFormOpen"); } catch (_) {}
-    scheduleOverlayUpdate();
+  function scheduleOverlayUpdate() {
+    if (!opened) return;
+    requestAnimationFrame(() => requestAnimationFrame(placeOverlay));
   }
 
-  async function openPhoneForm(event) {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    if (opened || opening) return;
-    if (!viewer.loaded) {
-      alert("3D телефон әлі жүктеліп жатыр. Бір сәттен кейін қайталап көріңіз.");
-      return;
-    }
-
-    opening = true;
+  async function showRepairForm() {
+    if (opened || state !== "open") return false;
     if (typeof window.qamqorShowPage === "function") {
       window.qamqorShowPage("top", {updateHistory:false, scroll:false});
     }
-
-    // Keep the original 3D camera, phone size, and page background untouched.
-    // Only measure the phone screen at its current on-screen position.
     await nextFrame();
 
     const projected = getProjectedScreenRect();
     if (!projected) {
-      opening = false;
-      alert("Телефон экраны көрінбей тұр. Телефонды бастапқы қалпында қалдырдым.");
-      return;
+      alert("Duo ішкі экраны көрінбей тұр. Телефон ашық күйінде қалды.");
+      return false;
     }
 
     if (!placeholder && repair.parentNode) {
-      placeholder = document.createComment(" QAMQOR repair form returns here after closing phone overlay ");
+      placeholder = document.createComment(" QAMQOR repair form returns here after closing Duo ");
       repair.parentNode.insertBefore(placeholder, repair);
     }
+
     content.appendChild(repair);
     repair.hidden = false;
-    repair.setAttribute("aria-hidden", "false");
+    repair.setAttribute("aria-hidden","false");
     repair.classList.add("qamqor-phone-form-card");
-
     overlay.hidden = false;
-    nativeScreen.hidden = true;
     opened = true;
-    opening = false;
+    state = "form";
     viewer.classList.add("qamqor-request-open");
-    if (hitbox) {
-      hitbox.hidden = true;
-      hitbox.setAttribute("aria-hidden","true");
-    }
     placeOverlay();
-    repair.scrollTo({top:0, behavior:"auto"});
+    repair.scrollTo({top:0,behavior:"auto"});
 
-    try { sessionStorage.setItem("qamqorPhoneFormOpen", "yes"); } catch (_) {}
+    try { sessionStorage.setItem("qamqorPhoneFormOpen","yes"); } catch (_) {}
     requestAnimationFrame(() => {
       placeOverlay();
-      if (typeof serviceMap !== "undefined" && serviceMap) serviceMap.invalidateSize(true);
+      if (typeof serviceMap !== "undefined" && serviceMap) {
+        serviceMap.invalidateSize(true);
+      }
+    });
+    return true;
+  }
+
+  async function openDuoAndForm() {
+    if (state !== "closed" || busy || !viewer.loaded) return false;
+    busy = true;
+    state = "opening";
+    viewer.removeAttribute("camera-controls");
+
+    const openedAnimation = await playDuoAnimation(-1);
+    if (!openedAnimation) {
+      state = "closed";
+      busy = false;
+      if (hadCameraControls) viewer.setAttribute("camera-controls","");
+      alert("Duo ашылу анимациясын іске қоса алмадым.");
+      return false;
+    }
+
+    state = "open";
+    busy = false;
+    const formShown = await showRepairForm();
+    if (!formShown) {
+      state = "open";
+      if (hadCameraControls) viewer.setAttribute("camera-controls","");
+      return false;
+    }
+    return true;
+  }
+
+  async function closePhoneForm() {
+    if (!opened || busy || state !== "form") return;
+    busy = true;
+    state = "closing";
+    opened = false;
+    overlay.hidden = true;
+
+    if (placeholder && placeholder.parentNode) {
+      placeholder.parentNode.insertBefore(repair,placeholder);
+      placeholder.remove();
+    }
+    placeholder = null;
+    repair.hidden = true;
+    repair.setAttribute("aria-hidden","true");
+    repair.classList.remove("qamqor-phone-form-card");
+    viewer.classList.remove("qamqor-request-open");
+    try { sessionStorage.removeItem("qamqorPhoneFormOpen"); } catch (_) {}
+
+    const closedAnimation = await playDuoAnimation(1);
+    state = closedAnimation ? "closed" : "open";
+    busy = false;
+    if (hadCameraControls) viewer.setAttribute("camera-controls","");
+  }
+
+  function handleClosedDisplayPress(event) {
+    if (state !== "closed" || busy || opened ||
+        typeof viewer.materialFromPoint !== "function") return;
+    const material = viewer.materialFromPoint(event.clientX,event.clientY);
+    if (!material || material.name !== "QAMQOR_Duo_Closed_Display") return;
+    event.preventDefault();
+    event.stopPropagation();
+    openDuoAndForm();
+  }
+
+  function initializeClosedDuo() {
+    if (!viewer.loaded || state !== "loading") return;
+    if (!viewer.availableAnimations ||
+        !viewer.availableAnimations.includes(animationName)) {
+      state = "open";
+      console.error("Duo GLB open-close animation is missing.");
+      return;
+    }
+    viewer.pause();
+    viewer.animationName = animationName;
+    viewer.timeScale = 1;
+    viewer.currentTime = viewer.duration;
+    requestAnimationFrame(() => {
+      viewer.pause();
+      state = "closed";
+      if (shouldRestore) openDuoAndForm();
     });
   }
 
-  if (hitbox) {
-    hitbox.addEventListener("pointerup", event => {
-      if (event.pointerType === "touch" || event.pointerType === "pen") {
-        openPhoneForm(event);
-      }
-    }, {passive:false});
-    hitbox.addEventListener("click", openPhoneForm);
-  }
-
-  viewer.addEventListener("click", event => {
-    if (opened || opening || !viewer.loaded ||
-        typeof viewer.positionAndNormalFromPoint !== "function") return;
-    const hit = viewer.positionAndNormalFromPoint(event.clientX, event.clientY);
-    if (!hit || !hit.position || !hit.normal) return;
-    const p = hit.position;
-    const n = hit.normal;
-    const insideButton =
-      Math.abs(p.x - button.x) <= button.halfWidth * 1.15 &&
-      Math.abs(p.y - button.y) <= button.halfHeight * 1.55 &&
-      p.z >= button.z - 0.0002 &&
-      p.z <= button.z + 0.0002 &&
-      n.z >= 0.90;
-    if (insideButton) openPhoneForm(event);
+  viewer.addEventListener("pointerup",handleClosedDisplayPress,{passive:false});
+  viewer.addEventListener("click",handleClosedDisplayPress);
+  viewer.addEventListener("keydown",event=>{
+    if ((event.key==="Enter" || event.key===" ") && state==="closed") {
+      event.preventDefault();
+      openDuoAndForm();
+    }
   });
 
-  closeButton.addEventListener("click", closePhoneForm);
-  document.addEventListener("keydown", event => {
-    if (event.key === "Escape" && opened) closePhoneForm();
+  closeButton.addEventListener("click",closePhoneForm);
+  document.addEventListener("keydown",event=>{
+    if (event.key==="Escape" && opened) closePhoneForm();
   });
-  window.addEventListener("resize", scheduleOverlayUpdate);
-  window.addEventListener("scroll", scheduleOverlayUpdate, {passive:true});
-  viewer.addEventListener("camera-change", scheduleOverlayUpdate);
-  viewer.addEventListener("load", scheduleOverlayUpdate, {once:true});
-  if (viewer.loaded) scheduleOverlayUpdate();
+  window.addEventListener("resize",scheduleOverlayUpdate);
+  window.addEventListener("scroll",scheduleOverlayUpdate,{passive:true});
+  viewer.addEventListener("camera-change",scheduleOverlayUpdate);
+  viewer.addEventListener("load",initializeClosedDuo,{once:true});
+  if (viewer.loaded) initializeClosedDuo();
+
+  let shouldRestore = false;
+  try { shouldRestore = sessionStorage.getItem("qamqorPhoneFormOpen")==="yes"; } catch (_) {}
 
   window.qamqorPhoneForm = {
-    open: openPhoneForm,
-    close: closePhoneForm,
-    isOpen: () => opened,
-    getScreenRect: () => lastScreenRect
+    open:openDuoAndForm,
+    close:closePhoneForm,
+    isOpen:()=>opened,
+    getScreenRect:()=>lastScreenRect,
+    getState:()=>state
   };
-
-  // Return to the phone after Telegram's external authorization round-trip.
-  let shouldRestore = false;
-  try { shouldRestore = sessionStorage.getItem("qamqorPhoneFormOpen") === "yes"; } catch (_) {}
-  if (shouldRestore) {
-    if (viewer.loaded) {
-      setTimeout(() => openPhoneForm(), 80);
-    } else {
-      viewer.addEventListener("load", () => openPhoneForm(), {once:true});
-    }
-  }
 })();
 </script>
 
