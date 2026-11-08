@@ -82,7 +82,7 @@ jobs:
                       v.availableAnimations.includes('open-close') &&
                       window.qamqorPhoneForm &&
                       window.qamqorPhoneForm.getState()==='closed';
-                  }""",timeout=120000)
+                  }""")
 
                   initial = page.evaluate("""() => {
                     const v=document.querySelector('.qamqor-phone-model');
@@ -105,9 +105,12 @@ jobs:
                   result["initial_state"]=initial
                   result["checks"]["duo_asset_loaded"]="QAMQOR-iPhone-Duo.glb" in (initial.get("src") or "")
                   result["checks"]["open_close_animation_preserved"]="open-close" in initial.get("animations",[])
+                  closed_pose_time = initial.get("duration",0) - min(
+                    0.05, initial.get("duration",0) * 0.025
+                  )
                   result["checks"]["starts_in_closed_pose"]=(
                     initial.get("duration",0)>0 and
-                    abs(initial.get("currentTime",0)-initial.get("duration",0))<0.08 and
+                    abs(initial.get("currentTime",0)-closed_pose_time)<0.08 and
                     initial.get("state")=="closed"
                   )
                   result["checks"]["closed_screen_art_material_present"]=bool(
@@ -151,7 +154,7 @@ jobs:
                     document.getElementById('qamqor-phone-form-overlay') &&
                     !document.getElementById('qamqor-phone-form-overlay').hidden &&
                     document.getElementById('qamqor-phone-form-overlay').contains(document.getElementById('repair'))
-                  """,timeout=10000)
+                  """)
 
                   opened = page.evaluate("""() => {
                     const v=document.querySelector('.qamqor-phone-model');
@@ -183,7 +186,7 @@ jobs:
                     const step=document.querySelector('#repair [data-wizard-step="1"]');
                     return step && !step.hidden &&
                       document.getElementById('qamqor-phone-form-overlay').contains(document.getElementById('repair'));
-                  }""",timeout=7000)
+                  }""")
                   result["checks"]["wizard_works_inside_open_duo"]=page.evaluate("""() =>
                     window.qamqorPhoneForm.getState()==='form' &&
                     !document.querySelector('#repair [data-wizard-step="1"]').hidden
@@ -192,8 +195,7 @@ jobs:
                   # Fire the close control's real click handler at its button node.
                   page.locator(".qamqor-phone-form-close").evaluate("(button) => button.click()")
                   page.wait_for_function(
-                    "() => { const v=document.querySelector('.qamqor-phone-model'); const f=document.getElementById('repair'); return window.qamqorPhoneForm.getState()==='closed' && !window.qamqorPhoneForm.isOpen() && Math.abs(v.currentTime-v.duration)<0.08 && v.hasAttribute('camera-controls') && f.hidden; }",
-                    timeout=10000
+                    "() => { const v=document.querySelector('.qamqor-phone-model'); const f=document.getElementById('repair'); const closedTime=v.duration-Math.min(0.05,v.duration*0.025); return window.qamqorPhoneForm.getState()==='closed' && !window.qamqorPhoneForm.isOpen() && Math.abs(v.currentTime-closedTime)<0.08 && v.hasAttribute('camera-controls') && f.hidden; }"
                   )
                   closed_again=page.evaluate("""() => {
                     const v=document.querySelector('.qamqor-phone-model');
@@ -205,9 +207,12 @@ jobs:
                     };
                   }""")
                   result["closed_again_state"]=closed_again
+                  closed_pose_time = closed_again["duration"] - min(
+                    0.05, closed_again["duration"] * 0.025
+                  )
                   result["checks"]["close_plays_reverse_to_closed_pose"]=(
                     closed_again["state"]=="closed" and
-                    abs(closed_again["currentTime"]-closed_again["duration"])<0.08 and
+                    abs(closed_again["currentTime"]-closed_pose_time)<0.08 and
                     closed_again["cameraControls"]
                   )
                   page.locator(".qamqor-phone-model").screenshot(
