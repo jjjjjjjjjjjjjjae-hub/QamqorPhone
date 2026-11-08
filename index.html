@@ -3406,11 +3406,11 @@ body.qamqor-home-clean .hero#top{
   z-index:20;
   --min-hotspot-opacity:0;
   --max-hotspot-opacity:1;
-  opacity:0;
   transition:opacity .12s ease;
 }
-.hero#top .qamqor-phone-model .model-hotspot-apply[data-ready]{opacity:1;}
-.hero#top .qamqor-phone-model .model-hotspot-apply:not([data-visible]){pointer-events:none;}
+.hero#top .qamqor-phone-model .model-hotspot-apply:not([data-ready]){visibility:hidden!important;pointer-events:none!important;}
+.hero#top .qamqor-phone-model .model-hotspot-apply[data-ready]:not([data-visible]){opacity:0!important;pointer-events:none!important;}
+.hero#top .qamqor-phone-model .model-hotspot-apply[data-ready][data-visible]{opacity:1!important;visibility:visible!important;pointer-events:auto!important;}
 .hero#top .qamqor-phone-model .model-hotspot-apply:hover{
   filter:brightness(1.14);
 }
