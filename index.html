@@ -3962,19 +3962,8 @@ verifyButton.addEventListener("click", async () => {
     if (date) date.textContent = now.toLocaleDateString("kk-KZ",{weekday:"long",day:"numeric",month:"long"});
   }
 
-  let lockScreen = null;
-
-  function updateLockClock() {
-    if (!lockScreen) return;
-    const now = new Date();
-    const time = lockScreen.querySelector("[data-lock-time]");
-    const date = lockScreen.querySelector("[data-lock-date]");
-    if (time) time.textContent = now.toLocaleTimeString("kk-KZ",{hour:"2-digit",minute:"2-digit"});
-    if (date) date.textContent = now.toLocaleDateString("kk-KZ",{weekday:"long",day:"numeric",month:"long"});
-  }
-
   // The lock screen belongs to the OUTER display while Duo is folded.
-  // Swiping it upward is the only action that starts the unfold animation.
+  // Pressing its request button is the only action that starts the unfold animation.
   async function showLockScreen() {
     if (state !== "closed" || opened) return false;
     if (typeof window.qamqorShowPage === "function") {
