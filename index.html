@@ -3678,6 +3678,8 @@ verifyButton.addEventListener("click", async () => {
   let busy = false;
   let opened = false;
   let lastScreenRect = null;
+  let shouldRestore = false;
+  try { shouldRestore = sessionStorage.getItem("qamqorPhoneFormOpen")==="yes"; } catch (_) {}
   const hadCameraControls = viewer.hasAttribute("camera-controls");
 
   const nextFrame = () => new Promise(resolve =>
@@ -3944,9 +3946,6 @@ verifyButton.addEventListener("click", async () => {
   viewer.addEventListener("camera-change",scheduleOverlayUpdate);
   viewer.addEventListener("load",initializeClosedDuo,{once:true});
   if (viewer.loaded) initializeClosedDuo();
-
-  let shouldRestore = false;
-  try { shouldRestore = sessionStorage.getItem("qamqorPhoneFormOpen")==="yes"; } catch (_) {}
 
   window.qamqorPhoneForm = {
     open:openDuoAndForm,
