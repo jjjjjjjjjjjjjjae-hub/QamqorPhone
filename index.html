@@ -2439,10 +2439,14 @@ main [data-app-page]:not([hidden]){
       <span slot="hotspot-screen-top-right" class="qamqor-screen-probe" data-position="0.0792842135 0.1143482625 0.0024460158" data-normal="0 0 1" aria-hidden="true"></span>
       <span slot="hotspot-screen-bottom-right" class="qamqor-screen-probe" data-position="0.0792842135 0.0034348741 0.0024460158" data-normal="0 0 1" aria-hidden="true"></span>
       <span slot="hotspot-screen-bottom-left" class="qamqor-screen-probe" data-position="-0.0792842135 0.0034348741 0.0024460158" data-normal="0 0 1" aria-hidden="true"></span>
-      <span slot="hotspot-lock-top-left" class="qamqor-screen-probe" data-position="-0.0797 0.1146 -0.0031" data-normal="0 0 -1" aria-hidden="true"></span>
-      <span slot="hotspot-lock-top-right" class="qamqor-screen-probe" data-position="-0.0027 0.1146 -0.0031" data-normal="0 0 -1" aria-hidden="true"></span>
-      <span slot="hotspot-lock-bottom-right" class="qamqor-screen-probe" data-position="-0.0027 0.0031 -0.0031" data-normal="0 0 -1" aria-hidden="true"></span>
-      <span slot="hotspot-lock-bottom-left" class="qamqor-screen-probe" data-position="-0.0797 0.0031 -0.0031" data-normal="0 0 -1" aria-hidden="true"></span>
+      <span slot="hotspot-lock-top-left" class="qamqor-screen-probe" data-position="-0.0797 0.1146 -0.00295" data-normal="0 0 -1" aria-hidden="true"></span>
+      <span slot="hotspot-lock-top-right" class="qamqor-screen-probe" data-position="-0.0027 0.1146 -0.00295" data-normal="0 0 -1" aria-hidden="true"></span>
+      <span slot="hotspot-lock-bottom-right" class="qamqor-screen-probe" data-position="-0.0027 0.0031 -0.00295" data-normal="0 0 -1" aria-hidden="true"></span>
+      <span slot="hotspot-lock-bottom-left" class="qamqor-screen-probe" data-position="-0.0797 0.0031 -0.00295" data-normal="0 0 -1" aria-hidden="true"></span>
+      <span slot="hotspot-lock-alt-top-left" class="qamqor-screen-probe" data-position="-0.0797 0.1146 -0.00295" data-normal="0 0 1" aria-hidden="true"></span>
+      <span slot="hotspot-lock-alt-top-right" class="qamqor-screen-probe" data-position="-0.0027 0.1146 -0.00295" data-normal="0 0 1" aria-hidden="true"></span>
+      <span slot="hotspot-lock-alt-bottom-right" class="qamqor-screen-probe" data-position="-0.0027 0.0031 -0.00295" data-normal="0 0 1" aria-hidden="true"></span>
+      <span slot="hotspot-lock-alt-bottom-left" class="qamqor-screen-probe" data-position="-0.0797 0.0031 -0.00295" data-normal="0 0 1" aria-hidden="true"></span>
     </model-viewer>
   </div>
 </section>
@@ -3872,12 +3876,25 @@ verifyButton.addEventListener("click", async () => {
       lockPlane.hidden = true;
       return false;
     }
-    const rect = getProjectedScreenRect([
-      "hotspot-lock-top-left",
-      "hotspot-lock-top-right",
-      "hotspot-lock-bottom-right",
-      "hotspot-lock-bottom-left"
-    ]);
+    const candidateSets = [
+      [
+        "hotspot-lock-top-left",
+        "hotspot-lock-top-right",
+        "hotspot-lock-bottom-right",
+        "hotspot-lock-bottom-left"
+      ],
+      [
+        "hotspot-lock-alt-top-left",
+        "hotspot-lock-alt-top-right",
+        "hotspot-lock-alt-bottom-right",
+        "hotspot-lock-alt-bottom-left"
+      ]
+    ];
+    let rect = null;
+    for (const names of candidateSets) {
+      rect = getProjectedScreenRect(names);
+      if (rect) break;
+    }
     if (!rect) {
       lockPlane.hidden = true;
       return false;
