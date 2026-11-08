@@ -3992,13 +3992,14 @@ verifyButton.addEventListener("click", async () => {
     lockScreen?.remove();
     lockScreen = document.createElement("div");
     lockScreen.className = "qamqor-lock-screen-ui";
-    lockScreen.setAttribute("role","button");
-    lockScreen.setAttribute("tabindex","0");
-    lockScreen.setAttribute("aria-label","Құлыпты ашу үшін жоғары сырғытыңыз");
+    lockScreen.setAttribute("role","group");
     lockScreen.innerHTML =
       '<div class="qamqor-lock-top"><span>QAMQOR</span><span>●  Wi-Fi  ▰</span></div>' +
       '<div class="qamqor-lock-clock"><div data-lock-date></div><time data-lock-time></time></div>' +
-      '<div class="qamqor-lock-bottom"><span>Жоғары сырғытыңыз</span><i></i></div>';
+      '<div class="qamqor-lock-bottom">' +
+        '<button type="button" class="qamqor-lock-cta">Өтінім беру <span aria-hidden="true">↗</span></button>' +
+        '<span class="qamqor-lock-hint">QamqorPhone · Телефон жөндеу</span><i></i>' +
+      '</div>';
 
     content.appendChild(lockScreen);
     overlay.hidden = false;
@@ -4008,44 +4009,11 @@ verifyButton.addEventListener("click", async () => {
     lockScreen._clockTimer = setInterval(updateLockClock,30000);
     placeOverlay();
 
-    let swipeStart = null;
-    lockScreen.addEventListener("pointerdown", event => {
-      if (!event.isPrimary || event.button > 0 || busy) return;
-      swipeStart = {id:event.pointerId,x:event.clientX,y:event.clientY};
-      try { lockScreen.setPointerCapture(event.pointerId); } catch (_) {}
+    const requestButton = lockScreen.querySelector(".qamqor-lock-cta");
+    requestButton.addEventListener("click",event=>{
       event.preventDefault();
-    });
-    lockScreen.addEventListener("pointermove", event => {
-      if (!swipeStart || event.pointerId !== swipeStart.id) return;
-      const dy = Math.min(0,event.clientY-swipeStart.y);
-      lockScreen.style.setProperty("--lock-drag-y",Math.max(-lockScreen.clientHeight,dy)+"px");
-      if (event.cancelable) event.preventDefault();
-    });
-    const finishSwipe = event => {
-      if (!swipeStart || event.pointerId !== swipeStart.id) return;
-      const dy = event.clientY-swipeStart.y;
-      swipeStart = null;
-      if (dy < -Math.max(52,lockScreen.clientHeight*0.16)) {
-        unlockLockScreen();
-      } else {
-        lockScreen.classList.add("is-returning");
-        lockScreen.style.setProperty("--lock-drag-y","0px");
-        setTimeout(()=>lockScreen?.classList.remove("is-returning"),260);
-      }
-    };
-    lockScreen.addEventListener("pointerup",finishSwipe);
-    lockScreen.addEventListener("pointercancel",event=>{
-      if (!swipeStart || event.pointerId !== swipeStart.id) return;
-      swipeStart = null;
-      lockScreen.classList.add("is-returning");
-      lockScreen.style.setProperty("--lock-drag-y","0px");
-      setTimeout(()=>lockScreen?.classList.remove("is-returning"),260);
-    });
-    lockScreen.addEventListener("keydown",event=>{
-      if (event.key==="Enter" || event.key===" ") {
-        event.preventDefault();
-        unlockLockScreen();
-      }
+      event.stopPropagation();
+      unlockLockScreen();
     });
     return true;
   }
@@ -4063,7 +4031,7 @@ verifyButton.addEventListener("click", async () => {
     viewer.classList.remove("qamqor-lock-screen-visible");
     overlay.hidden = true;
 
-    // Only after the outer lock screen has been swiped away do we unfold Duo.
+    // Only after the user presses the outer lock-screen request button do we unfold Duo.
     state = "opening";
     viewer.removeAttribute("camera-controls");
     const openedAnimation = await playDuoAnimation(-1);
@@ -4442,9 +4410,41 @@ header .brand{gap:13px!important}
   display:flex!important;
   flex-direction:column!important;
   align-items:center!important;
-  gap:10px!important;
+  gap:8px!important;
   font:500 clamp(8px,1.8vw,10px)/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
   color:rgba(255,255,255,.88)!important;
+}
+.qamqor-lock-cta{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:12px!important;
+  width:min(100%,220px)!important;
+  min-height:42px!important;
+  padding:0 18px!important;
+  border:1px solid rgba(151,202,255,.78)!important;
+  border-radius:999px!important;
+  color:#fff!important;
+  background:linear-gradient(180deg,#258cff 0%,#0864d6 100%)!important;
+  box-shadow:0 5px 18px rgba(0,91,210,.28)!important;
+  font:650 clamp(11px,2.5vw,14px)/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+  letter-spacing:-.01em!important;
+  cursor:pointer!important;
+  touch-action:manipulation!important;
+  -webkit-tap-highlight-color:transparent!important;
+}
+.qamqor-lock-cta:active{
+  transform:scale(.975)!important;
+  background:linear-gradient(180deg,#1478e9 0%,#0755b7 100%)!important;
+}
+.qamqor-lock-cta span{
+  font-size:17px!important;
+  line-height:1!important;
+}
+.qamqor-lock-hint{
+  font:500 8px/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+  color:rgba(255,255,255,.7)!important;
+  letter-spacing:.02em!important;
 }
 .qamqor-lock-bottom i{
   display:block!important;
