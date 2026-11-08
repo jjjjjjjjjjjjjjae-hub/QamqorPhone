@@ -133,12 +133,13 @@ def main():
 
     faces = np.array([[0, 1, 2], [0, 2, 3]], dtype=np.int64)
 
-    # GLTF UV origin is top-left. Keep the text upright on the front glass.
+    # GLTF/model-viewer texture orientation: invert V so the label reads
+    # upright from the phone's front camera view.
     uv = np.array([
-        [0.0, 1.0],
-        [1.0, 1.0],
-        [1.0, 0.0],
         [0.0, 0.0],
+        [1.0, 0.0],
+        [1.0, 1.0],
+        [0.0, 1.0],
     ], dtype=np.float64)
 
     texture = build_button_texture()
