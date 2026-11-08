@@ -15,6 +15,66 @@ def material_name(geom):
     material = getattr(getattr(geom, "visual", None), "material", None)
     return getattr(material, "name", None) if material else None
 
+def inspect_glb_animations(path: Path):
+    """Read GLB JSON directly so animation data is not lost by geometry importers."""
+    import struct
+
+    data = path.read_bytes()
+    if len(data) < 20:
+        raise RuntimeError(f"{path.name} is too small to be a GLB")
+    magic, version, total_length = struct.unpack_from("<4sII", data, 0)
+    if magic != b"glTF" or version != 2 or total_length > len(data):
+        raise RuntimeError(f"{path.name} is not a valid GLB 2.0 file")
+    offset = 12
+    document = None
+    while offset + 8 <= total_length:
+        length, chunk_type = struct.unpack_from("<II", data, offset)
+        offset += 8
+        chunk = data[offset:offset + length]
+        offset += length
+        if chunk_type == 0x4E4F534A:
+            document = json.loads(chunk.decode("utf-8").rstrip(" \\0"))
+            break
+    if document is None:
+        raise RuntimeError(f"{path.name} has no GLB JSON chunk")
+
+    nodes = document.get("nodes", [])
+    node_names = {i: node.get("name", f"node_{i}") for i, node in enumerate(nodes)}
+    animations = []
+    for index, animation in enumerate(document.get("animations", [])):
+        channels = []
+        for channel in animation.get("channels", []):
+            target = channel.get("target", {})
+            node_index = target.get("node")
+            channels.append({
+                "node_index": node_index,
+                "node_name": node_names.get(node_index, "(no node target)"),
+                "path": target.get("path"),
+                "sampler": channel.get("sampler"),
+            })
+        samplers = animation.get("samplers", [])
+        animation_row = {
+            "index": index,
+            "name": animation.get("name", f"Animation_{index}"),
+            "channel_count": len(channels),
+            "sampler_count": len(samplers),
+            "channels": channels,
+            "samplers": samplers,
+        }
+        animations.append(animation_row)
+
+    return {
+        "file": path.name,
+        "glb_version": version,
+        "animations_count": len(animations),
+        "animations": animations,
+        "scene_nodes": [
+            {"index": i, "name": node_names[i], "children": node.get("children", [])}
+            for i, node in enumerate(nodes)
+        ],
+    }
+
+
 def main():
     if not SOURCE.is_file():
         raise FileNotFoundError(SOURCE)
@@ -58,8 +118,15 @@ def main():
         raise RuntimeError("GLB loaded but no geometry nodes were found")
     vertices = np.vstack(all_vertices)
     lo, hi = vertices.min(axis=0), vertices.max(axis=0)
+    source_animation_data = inspect_glb_animations(SOURCE)
+    generated_path = ROOT / "QAMQOR-iPhone-Duo.glb"
+    generated_animation_data = (
+        inspect_glb_animations(generated_path) if generated_path.exists() else None
+    )
     report = {
         "source": SOURCE.name,
+        "source_animation_data": source_animation_data,
+        "generated_animation_data": generated_animation_data,
         "source_size_bytes": SOURCE.stat().st_size,
         "geometry_count": len(scene.geometry),
         "node_count": len(geometries),
@@ -87,6 +154,22 @@ def main():
         "geometry_count": report["geometry_count"],
         "scene_size": report["scene_size"],
         "candidate_count": len(candidates),
+        "source_animations_count": source_animation_data["animations_count"],
+        "source_animations": [
+            {
+                "name": animation["name"],
+                "channel_count": animation["channel_count"],
+                "targets": sorted(set(
+                    channel["node_name"] + ":" + str(channel["path"])
+                    for channel in animation["channels"]
+                )),
+            }
+            for animation in source_animation_data["animations"]
+        ],
+        "generated_animations_count": (
+            generated_animation_data["animations_count"]
+            if generated_animation_data else None
+        ),
         "candidates": [{
             "node": x["node"], "mesh": x["mesh"], "material": x["material"],
             "vertices": x["vertices"], "size": x["size"]
