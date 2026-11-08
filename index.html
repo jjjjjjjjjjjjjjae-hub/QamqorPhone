@@ -2196,7 +2196,7 @@ main [data-app-page]:not([hidden]){
       camera-orbit="0deg 75deg 100%"
       field-of-view="30deg"
       tabindex="0">
-      <a slot="hotspot-apply" class="model-hotspot-apply" href="#repair">Өтінім беру</a>
+      <a slot="hotspot-apply" class="model-hotspot-apply" href="#repair" data-position="0 -0.02 0.03" data-normal="0 0 1" aria-label="Өтінім беру">Өтінім беру</a>
     </model-viewer>
   </div>
 </section>
@@ -3427,6 +3427,8 @@ body.qamqor-home-clean .hero#top{
   cursor:pointer;
   transform:translate(-50%,-50%);
   text-shadow:none!important;
+  pointer-events:auto;
+  z-index:20;
 }
 .hero#top .qamqor-phone-model .model-hotspot-apply:hover{
   filter:brightness(1.14);
@@ -3441,7 +3443,7 @@ body.qamqor-home-clean .hero#top{
 }
 </style>
 <script id="qamqor-model-screen-request-hotspot">
-/* Place the application button on the front glass of the actual GLB model. */
+/* Anchor the application button to the actual front glass of the uploaded GLB. */
 (() => {
   const viewer = document.querySelector(".qamqor-phone-model");
   if (!viewer) return;
@@ -3449,24 +3451,30 @@ body.qamqor-home-clean .hero#top{
   if (!button) return;
 
   const placeButton = () => {
-    if (typeof viewer.getDimensions !== "function" ||
+    if (!viewer.loaded || typeof viewer.getDimensions !== "function" ||
         typeof viewer.getBoundingBoxCenter !== "function") return;
 
     const size = viewer.getDimensions();
     const center = viewer.getBoundingBoxCenter();
-    if (!size || !center || !Number.isFinite(size.y) || !Number.isFinite(size.z)) return;
+    if (!size || !center ||
+        ![size.x,size.y,size.z,center.x,center.y,center.z].every(Number.isFinite)) return;
 
-    // Front screen: centered horizontally, slightly below the vertical midpoint.
-    const depthOffset = Math.max(size.z * 0.012, 0.001);
-    const x = center.x;
-    const y = center.y - size.y * 0.22;
-    const z = center.z + size.z * 0.5 + depthOffset;
-    button.setAttribute("data-position", [x,y,z].map(n => Number(n).toFixed(5)).join(" "));
-    button.setAttribute("data-normal", "0 0 1");
+    // The front face is the +Z side; keep the CTA in the lower half of the glass.
+    const depth = Math.max(Math.abs(size.z) * 0.505, 0.001);
+    const position = {
+      x: center.x,
+      y: center.y - size.y * 0.22,
+      z: center.z + depth
+    };
+    button.setAttribute("data-position",
+      [position.x,position.y,position.z].map(n => n.toFixed(6)).join(" "));
+    button.setAttribute("data-normal","0 0 1");
+    button.setAttribute("data-visibility-attribute","visible");
   };
 
-  viewer.addEventListener("load", placeButton);
-  if (viewer.loaded) placeButton();
+  viewer.addEventListener("load", () => requestAnimationFrame(placeButton));
+  viewer.addEventListener("model-visibility", placeButton);
+  if (viewer.loaded) requestAnimationFrame(placeButton);
 })();
 </script>
 </body>
