@@ -123,7 +123,7 @@ jobs:
                     for(let y=r.top+8;y<r.bottom-8;y+=14){
                       for(let x=r.left+8;x<r.right-8;x+=14){
                         const m=v.materialFromPoint(x,y);
-                        if(m && m.name==='QAMQOR_Duo_Closed_Display') found.push({x,y});
+                        if(m && ['QAMQOR_Duo_Closed_Display','C_SW_Screen_Outer','BASE_Glass_Black'].includes(m.name)) found.push({x,y,material:m.name});
                       }
                     }
                     if(!found.length) return null;
