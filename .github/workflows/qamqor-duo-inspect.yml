@@ -191,15 +191,10 @@ jobs:
 
                   # Fire the close control's real click handler at its button node.
                   page.locator(".qamqor-phone-form-close").evaluate("(button) => button.click()")
-                  page.wait_for_function("""() => {
-                    const v=document.querySelector('.qamqor-phone-model');
-                    const f=document.getElementById('repair');
-                    return window.qamqorPhoneForm.getState()==='closed' &&
-                      !window.qamqorPhoneForm.isOpen() &&
-                      Math.abs(v.currentTime-v.duration)<0.08 &&
-                      v.hasAttribute('camera-controls') &&
-                      f.hidden;
-                  }""",timeout:10000)
+                  page.wait_for_function(
+                    "() => { const v=document.querySelector('.qamqor-phone-model'); const f=document.getElementById('repair'); return window.qamqorPhoneForm.getState()==='closed' && !window.qamqorPhoneForm.isOpen() && Math.abs(v.currentTime-v.duration)<0.08 && v.hasAttribute('camera-controls') && f.hidden; }",
+                    timeout=10000
+                  )
                   closed_again=page.evaluate("""() => {
                     const v=document.querySelector('.qamqor-phone-model');
                     return {
