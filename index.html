@@ -3704,6 +3704,7 @@ verifyButton.addEventListener("click", async () => {
   const animationName = "open-close";
   let placeholder = null;
   let state = "loading"; // loading | closed | opening | open | form | closing
+  let homeVisible = !document.querySelector('[data-app-page="top"]')?.hidden;
   let busy = false;
   let opened = false;
   let lastScreenRect = null;
@@ -3865,7 +3866,7 @@ verifyButton.addEventListener("click", async () => {
   }
 
   function placeLockScreenButton() {
-    if (state !== "closed" || busy || opened) {
+    if (!homeVisible || state !== "closed" || busy || opened) {
       lockPlane.hidden = true;
       return false;
     }
@@ -4188,7 +4189,8 @@ verifyButton.addEventListener("click", async () => {
   window.qamqorPhoneForm = {
     open:requestOpenDuoForm,
     setHomeVisible: visible => {
-      if (!visible) lockPlane.hidden = true;
+      homeVisible = !!visible;
+      if (!homeVisible) lockPlane.hidden = true;
       else if (state === "closed" && !busy && !opened) placeLockScreenButton();
     },
     close:closePhoneForm,
