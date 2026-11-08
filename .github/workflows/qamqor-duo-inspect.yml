@@ -196,7 +196,7 @@ jobs:
                       const o=document.getElementById('qamqor-phone-form-overlay');
                       const r=window.qamqorPhoneForm.getScreenRect();
                       return v && o && !o.hidden && r && (() => {
-                        const nums = value => (value.match(/-?(?:\\d+\\.?\\d*|\\.\\d+)(?:e[-+]?\\d+)?/gi) || []).map(Number);
+                        const nums = value => String(value || "").slice(9,-1).split(",").map(Number);
                         const actual = nums(o.style.transform);
                         const expected = nums(r.matrix);
                         return actual.length===16 && expected.length===16 &&
@@ -211,7 +211,7 @@ jobs:
                     const v=document.querySelector('.qamqor-phone-model');
                     const o=document.getElementById('qamqor-phone-form-overlay');
                     const r=window.qamqorPhoneForm.getScreenRect();
-                    const nums = value => (value.match(/-?(?:\\d+\\.?\\d*|\\.\\d+)(?:e[-+]?\\d+)?/gi) || []).map(Number);
+                    const nums = value => String(value || "").slice(9,-1).split(",").map(Number);
                     const actual = nums(o.style.transform);
                     const expected = nums(r?.matrix || "");
                     return {
@@ -258,7 +258,7 @@ jobs:
                     const o=document.getElementById('qamqor-phone-form-overlay');
                     const r=window.qamqorPhoneForm.getScreenRect();
                     return o && !o.hidden && r && (() => {
-                        const nums = value => (value.match(/-?(?:\\d+\\.?\\d*|\\.\\d+)(?:e[-+]?\\d+)?/gi) || []).map(Number);
+                        const nums = value => String(value || "").slice(9,-1).split(",").map(Number);
                         const actual = nums(o.style.transform);
                         const expected = nums(r.matrix);
                         return actual.length===16 && expected.length===16 &&
