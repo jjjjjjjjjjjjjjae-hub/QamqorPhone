@@ -3408,9 +3408,11 @@ body.qamqor-home-clean .hero#top{
   --max-hotspot-opacity:1;
   transition:opacity .12s ease;
 }
-.hero#top .qamqor-phone-model .model-hotspot-apply:not([data-ready]){visibility:hidden!important;pointer-events:none!important;}
-.hero#top .qamqor-phone-model .model-hotspot-apply[data-ready]:not([data-visible]){opacity:0!important;pointer-events:none!important;}
-.hero#top .qamqor-phone-model .model-hotspot-apply[data-ready][data-visible]{opacity:1!important;visibility:visible!important;pointer-events:auto!important;}
+.hero#top .qamqor-phone-model .model-hotspot-apply{
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+}
 .hero#top .qamqor-phone-model .model-hotspot-apply:hover{
   filter:brightness(1.14);
 }
@@ -3424,7 +3426,7 @@ body.qamqor-home-clean .hero#top{
 }
 </style>
 <script id="qamqor-model-screen-request-hotspot">
-/* Hit-test the actual visible GLB screen and update the registered model-viewer hotspot. */
+/* Place the real request button on the front glass of the loaded 3D phone. */
 (() => {
   const viewer = document.querySelector(".qamqor-phone-model");
   if (!viewer) return;
@@ -3432,6 +3434,8 @@ body.qamqor-home-clean .hero#top{
   if (!button) return;
 
   let placed = false;
+  let attempts = 0;
+
   const cameraDirection = () => {
     const orbit = viewer.getCameraOrbit?.();
     if (!orbit) return {x:0,y:0,z:1};
@@ -3446,56 +3450,66 @@ body.qamqor-home-clean .hero#top{
   const placeOnActualScreen = () => {
     if (placed || !viewer.loaded ||
         typeof viewer.positionAndNormalFromPoint !== "function" ||
-        typeof viewer.updateHotspot !== "function") return;
+        typeof viewer.updateHotspot !== "function") return false;
 
     const rect = viewer.getBoundingClientRect();
-    if (rect.width < 20 || rect.height < 20) return;
+    if (rect.width < 20 || rect.height < 20) return false;
 
     const direction = cameraDirection();
     const candidates = [];
-    // Probe the lower-middle area of the visible phone screen, avoiding the bezel.
-    [0.62,0.66,0.58,0.70,0.54].forEach(yRatio => {
-      [0.50,0.47,0.53].forEach(xRatio => {
-        // positionAndNormalFromPoint expects viewport (client) coordinates.
+    // model-viewer 4.4 expects pixel coordinates relative to the viewer itself.
+    // Scan the lower half of the phone and select the closest front-facing screen point.
+    const xs = [0.38,0.42,0.46,0.50,0.54,0.58,0.62];
+    const ys = [0.42,0.47,0.52,0.57,0.62,0.67,0.72,0.77];
+    ys.forEach(yRatio => {
+      xs.forEach(xRatio => {
         const hit = viewer.positionAndNormalFromPoint(
-          rect.left + rect.width*xRatio,
-          rect.top + rect.height*yRatio
+          rect.width*xRatio,
+          rect.height*yRatio
         );
         if (!hit || !hit.position || !hit.normal) return;
-        const n=hit.normal;
-        const facing=n.x*direction.x+n.y*direction.y+n.z*direction.z;
-        candidates.push({hit,facing,score:facing-Math.abs(xRatio-.5)*.4-Math.abs(yRatio-.64)*.15});
+        const n = hit.normal;
+        const facing = n.x*direction.x+n.y*direction.y+n.z*direction.z;
+        if (facing < 0.35) return;
+        const score = facing
+          - Math.abs(xRatio-0.50)*0.55
+          - Math.abs(yRatio-0.67)*0.22;
+        candidates.push({hit,facing,score});
       });
     });
 
-    if (!candidates.length) return;
+    if (!candidates.length) return false;
     candidates.sort((a,b)=>b.score-a.score);
-    const best=candidates[0];
-    if (best.facing < 0.20) return;
+    const best = candidates[0];
 
-    // updateHotspot is required: model-viewer does not observe later data-position changes.
     viewer.updateHotspot({
       name:"hotspot-apply",
       position:best.hit.position.toString(),
       normal:best.hit.normal.toString()
     });
-    button.dataset.position=best.hit.position.toString();
-    button.dataset.normal=best.hit.normal.toString();
-    button.dataset.ready="true";
-    button.dataset.visible="true";
-    placed=true;
+    button.dataset.position = best.hit.position.toString();
+    button.dataset.normal = best.hit.normal.toString();
+    placed = true;
+    return true;
+  };
+
+  const tryPlace = () => {
+    if (placed || attempts++ > 50) return;
+    if (!placeOnActualScreen()) {
+      requestAnimationFrame(tryPlace);
+    }
   };
 
   viewer.addEventListener("load", () => {
-    requestAnimationFrame(() => requestAnimationFrame(placeOnActualScreen));
+    requestAnimationFrame(() => requestAnimationFrame(tryPlace));
   });
   viewer.addEventListener("camera-change", () => {
-    if (!placed) placeOnActualScreen();
+    if (!placed) tryPlace();
   });
   window.addEventListener("resize", () => {
-    if (!placed) requestAnimationFrame(placeOnActualScreen);
+    if (!placed) tryPlace();
   }, {passive:true});
-  if (viewer.loaded) requestAnimationFrame(placeOnActualScreen);
+  if (viewer.loaded) tryPlace();
 })();
 </script>
 </body>
