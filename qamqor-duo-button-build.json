@@ -2,7 +2,7 @@
   "source": "iPhone duo.glb",
   "output": "QAMQOR-iPhone-Duo.glb",
   "source_size_bytes": 5673908,
-  "output_size_bytes": 5773190,
+  "output_size_bytes": 5764003,
   "closed_screen_material_source": "C_SW_Screen_Outer",
   "closed_screen_material_output": "QAMQOR_Duo_Closed_Display",
   "screen_mesh_indices": [
@@ -12,7 +12,15 @@
     768,
     1120
   ],
-  "texture_bytes": 98870,
+  "texture_bytes": 89683,
+  "lock_screen_artwork": true,
+  "lock_screen_time": "9:41",
+  "physical_request_button_box_px": [
+    82,
+    835,
+    686,
+    965
+  ],
   "animations_preserved": true,
   "animations_count": 1,
   "animations": [

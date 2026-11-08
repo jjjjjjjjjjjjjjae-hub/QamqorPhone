@@ -5,15 +5,18 @@
     "open_close_animation_preserved": true,
     "starts_in_closed_pose": true,
     "closed_screen_art_material_present": true,
-    "closed_outer_screen_is_visible": true,
-    "tap_plays_open_animation": true,
-    "camera_stays_locked_for_form": true,
+    "lock_screen_texture_and_button_baked_into_glb": true,
+    "physical_lock_screen_button_opens_duo_and_form": true,
+    "camera_controls_enabled_for_form": true,
+    "drag_rotates_phone_and_form_follows": true,
+    "form_hides_when_screen_faces_away": true,
+    "form_returns_when_screen_faces_camera": true,
     "wizard_works_inside_open_duo": true,
-    "close_plays_forward_to_closed_pose": true
+    "close_returns_to_folded_lock_screen": true
   },
   "browser_errors": [],
   "initial_state": {
-    "src": "./QAMQOR-iPhone-Duo.glb?v=duo-apply-hitbox-20261108",
+    "src": "./QAMQOR-iPhone-Duo.glb?v=duo-native-lock-screen-20261108",
     "loaded": true,
     "animations": [
       "open-close"
@@ -30,27 +33,70 @@
         0.72
       ]
     },
+    "overlayHidden": true,
+    "lockPlaneHidden": false,
+    "physicalButtonVisible": true,
+    "buttonBounds": {
+      "x": 506.8715515136719,
+      "y": 603.34326171875,
+      "width": 187.25387573242188,
+      "height": 51.35089111328125
+    },
     "viewer": {
       "width": 560,
       "height": 870
     }
-  },
-  "closed_screen_hit_test": {
-    "x": 601.0823974609375,
-    "y": 627.4069213867188,
-    "width": 190,
-    "height": 40
   },
   "opened_state": {
     "state": "form",
     "currentTime": 0,
     "duration": 2,
     "formInsideOverlay": true,
-    "cameraControls": false,
+    "cameraControls": true,
     "innerScreenRect": {
       "width": 473.31660236204425,
       "height": 319.93237130879487,
       "matrix": "matrix3d(1.03881037,0,0,0,0.18173684,1.17313121,0,0.00025241,0,0,1,0,473.51241747,373.03775191,0,1)"
+    }
+  },
+  "rotation_drag": {
+    "before": {
+      "theta": 0,
+      "matrix": "matrix3d(1.03881037,0,0,0,0.18173684,1.17313121,0,0.00025241,0,0,1,0,473.51241747,373.03775191,0,1)",
+      "overlayRect": {
+        "x": 473.5124206542969,
+        "y": 373.0377502441406,
+        "width": 491.6819152832031,
+        "height": 319.3973693847656,
+        "top": 373.0377502441406,
+        "right": 965.1943359375,
+        "bottom": 692.4351196289062,
+        "left": 473.5124206542969
+      }
+    },
+    "after": {
+      "theta": -0.496,
+      "matrix": "matrix3d(1.5240268,0.13914252,0,0.00054041,0.18759353,1.28389504,0,0.00026055,0,0,1,0,488.39163293,385.4083109,0,1)",
+      "overlayTransform": "matrix3d(1.52403, 0.139143, 0, 0.0005404, 0.187594, 1.2839, 0, 0.0002605, 0, 0, 1, 0, 488.392, 385.408, 0, 1)",
+      "matrixAligned": true,
+      "debug": {
+        "pointerDown": 2,
+        "started": 1,
+        "ignored": "",
+        "pointerMove": 5,
+        "animationFrames": 5,
+        "lastTarget": "DIV",
+        "beforeTheta": 0,
+        "afterTheta": null,
+        "rotationActive": false
+      }
+    },
+    "wait_error": null,
+    "heading_box": {
+      "x": 488.43328857421875,
+      "y": 417.87939453125,
+      "width": 461.85443115234375,
+      "height": 61.313751220703125
     }
   },
   "closed_again_state": {
