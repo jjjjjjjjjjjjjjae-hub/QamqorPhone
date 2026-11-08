@@ -76,7 +76,7 @@ def build_button_texture() -> Image.Image:
 
     draw = ImageDraw.Draw(image)
     label = "Өтінім беру"
-    font = load_font(104)
+    font = load_font(132)
     bounds = draw.textbbox((0, 0), label, font=font, stroke_width=0)
     text_w, text_h = bounds[2] - bounds[0], bounds[3] - bounds[1]
     x = (width - text_w) / 2 - bounds[0]
@@ -119,7 +119,7 @@ def main():
     button_height = screen_width * 0.18
     button_center_x = float((screen_min[0] + screen_max[0]) / 2)
     # Move the button slightly lower on the front display (model Y grows upward).
-    button_center_y = float(screen_min[1] + screen_height * 0.27)
+    button_center_y = float(screen_min[1] + screen_height * 0.32)
     button_z = screen_front_z + 0.00018
 
     half_w = button_width / 2
