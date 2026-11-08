@@ -2439,6 +2439,10 @@ main [data-app-page]:not([hidden]){
       <span slot="hotspot-screen-top-right" class="qamqor-screen-probe" data-position="0.0792842135 0.1143482625 0.0024460158" data-normal="0 0 1" aria-hidden="true"></span>
       <span slot="hotspot-screen-bottom-right" class="qamqor-screen-probe" data-position="0.0792842135 0.0034348741 0.0024460158" data-normal="0 0 1" aria-hidden="true"></span>
       <span slot="hotspot-screen-bottom-left" class="qamqor-screen-probe" data-position="-0.0792842135 0.0034348741 0.0024460158" data-normal="0 0 1" aria-hidden="true"></span>
+      <span slot="hotspot-lock-top-left" class="qamqor-screen-probe" data-position="-0.0800431963 0.1151045291 -0.0022994630" data-normal="0 0 -1" aria-hidden="true"></span>
+      <span slot="hotspot-lock-top-right" class="qamqor-screen-probe" data-position="-0.0023292068 0.1151045291 -0.0022994630" data-normal="0 0 -1" aria-hidden="true"></span>
+      <span slot="hotspot-lock-bottom-right" class="qamqor-screen-probe" data-position="-0.0023292068 0.0027413544 -0.0022994630" data-normal="0 0 -1" aria-hidden="true"></span>
+      <span slot="hotspot-lock-bottom-left" class="qamqor-screen-probe" data-position="-0.0800431963 0.0027413544 -0.0022994630" data-normal="0 0 -1" aria-hidden="true"></span>
       <button
         type="button"
         slot="hotspot-duo-apply"
@@ -3784,15 +3788,22 @@ verifyButton.addEventListener("click", async () => {
     });
   }
 
-  function getProjectedScreenRect() {
+  function getProjectedScreenRect(display = "inner") {
     if (typeof viewer.queryHotspot !== "function") return null;
     const viewerRect = viewer.getBoundingClientRect();
-    const names = [
-      "hotspot-screen-top-left",
-      "hotspot-screen-top-right",
-      "hotspot-screen-bottom-right",
-      "hotspot-screen-bottom-left"
-    ];
+    const names = display === "outer"
+      ? [
+          "hotspot-lock-top-left",
+          "hotspot-lock-top-right",
+          "hotspot-lock-bottom-right",
+          "hotspot-lock-bottom-left"
+        ]
+      : [
+          "hotspot-screen-top-left",
+          "hotspot-screen-top-right",
+          "hotspot-screen-bottom-right",
+          "hotspot-screen-bottom-left"
+        ];
     const hotspots = names.map(name => viewer.queryHotspot(name));
     if (hotspots.some(point =>
       !point || !point.facingCamera || !point.canvasPosition ||
@@ -3848,7 +3859,9 @@ verifyButton.addEventListener("click", async () => {
 
   function placeOverlay() {
     if (!opened && state !== "locked" && state !== "unlocking") return false;
-    const screenRect = getProjectedScreenRect();
+    const screenRect = (state === "locked" || state === "unlocking")
+      ? getProjectedScreenRect("outer")
+      : getProjectedScreenRect("inner");
     if (!screenRect) {
       overlay.hidden = true;
       return false;
@@ -3949,29 +3962,43 @@ verifyButton.addEventListener("click", async () => {
     if (date) date.textContent = now.toLocaleDateString("kk-KZ",{weekday:"long",day:"numeric",month:"long"});
   }
 
+  let lockScreen = null;
+
+  function updateLockClock() {
+    if (!lockScreen) return;
+    const now = new Date();
+    const time = lockScreen.querySelector("[data-lock-time]");
+    const date = lockScreen.querySelector("[data-lock-date]");
+    if (time) time.textContent = now.toLocaleTimeString("kk-KZ",{hour:"2-digit",minute:"2-digit"});
+    if (date) date.textContent = now.toLocaleDateString("kk-KZ",{weekday:"long",day:"numeric",month:"long"});
+  }
+
+  // The lock screen belongs to the OUTER display while Duo is folded.
+  // Swiping it upward is the only action that starts the unfold animation.
   async function showLockScreen() {
-    if (state !== "open" || opened) return false;
+    if (state !== "closed" || opened) return false;
     if (typeof window.qamqorShowPage === "function") {
       window.qamqorShowPage("top", {updateHistory:false, scroll:false});
     }
     await nextFrame();
 
-    const projected = getProjectedScreenRect();
+    const projected = getProjectedScreenRect("outer");
     if (!projected) {
-      alert("Duo ішкі экраны көрінбей тұр. Телефон ашық күйінде қалды.");
+      alert("Duo сыртқы экраны көрінбей тұр. Телефон жабық күйінде қалды.");
       return false;
     }
 
-    if (lockScreen) lockScreen.remove();
+    if (lockScreen?._clockTimer) clearInterval(lockScreen._clockTimer);
+    lockScreen?.remove();
     lockScreen = document.createElement("div");
     lockScreen.className = "qamqor-lock-screen-ui";
     lockScreen.setAttribute("role","button");
     lockScreen.setAttribute("tabindex","0");
-    lockScreen.setAttribute("aria-label","Экранды жоғары сырғытып ашу");
+    lockScreen.setAttribute("aria-label","Құлыпты ашу үшін жоғары сырғытыңыз");
     lockScreen.innerHTML =
       '<div class="qamqor-lock-top"><span>QAMQOR</span><span>●  Wi-Fi  ▰</span></div>' +
       '<div class="qamqor-lock-clock"><div data-lock-date></div><time data-lock-time></time></div>' +
-      '<div class="qamqor-lock-bottom"><span>Құлыпты ашу үшін жоғары сырғытыңыз</span><i></i></div>';
+      '<div class="qamqor-lock-bottom"><span>Жоғары сырғытыңыз</span><i></i></div>';
 
     content.appendChild(lockScreen);
     overlay.hidden = false;
@@ -4035,14 +4062,34 @@ verifyButton.addEventListener("click", async () => {
     lockScreen = null;
     viewer.classList.remove("qamqor-lock-screen-visible");
     overlay.hidden = true;
-    state = "open";
-    busy = false;
 
-    const formShown = await showRepairForm();
-    if (!formShown && state === "open") {
+    // Only after the outer lock screen has been swiped away do we unfold Duo.
+    state = "opening";
+    viewer.removeAttribute("camera-controls");
+    const openedAnimation = await playDuoAnimation(-1);
+    if (!openedAnimation) {
+      viewer.currentTime = getClosedAnimationTime();
+      await nextFrame();
+      viewer.pause();
+      state = "closed";
+      busy = false;
+      if (hadCameraControls) viewer.setAttribute("camera-controls","");
       await showLockScreen();
+      alert("Duo ашылу анимациясын іске қоса алмадым.");
+      return false;
     }
-    return formShown;
+
+    state = "open";
+    await nextFrame();
+    await new Promise(resolve=>setTimeout(resolve,140));
+    busy = false;
+    const formShown = await showRepairForm();
+    if (hadCameraControls) viewer.setAttribute("camera-controls","");
+    if (!formShown) {
+      state = "open";
+      return false;
+    }
+    return true;
   }
 
   async function showRepairForm() {
@@ -4086,36 +4133,7 @@ verifyButton.addEventListener("click", async () => {
 
   async function openDuoToLockScreen() {
     if (state !== "closed" || busy || !viewer.loaded) return false;
-    busy = true;
-    state = "opening";
-    viewer.removeAttribute("camera-controls");
-
-    const openedAnimation = await playDuoAnimation(-1);
-    if (!openedAnimation) {
-      state = "closed";
-      busy = false;
-      if (hadCameraControls) viewer.setAttribute("camera-controls","");
-      alert("Duo ашылу анимациясын іске қоса алмадым.");
-      return false;
-    }
-
-    state = "open";
-    openRequested = false;
-    window.qamqorOpenRequestWhenReady = false;
-
-    // Reveal the lock screen first. The request form is shown only after an
-    // explicit upward swipe from the user.
-    await nextFrame();
-    await new Promise(resolve => setTimeout(resolve, 180));
-
-    const lockShown = await showLockScreen();
-    busy = false;
-    if (hadCameraControls) viewer.setAttribute("camera-controls","");
-    if (!lockShown) {
-      state = "open";
-      return false;
-    }
-    return true;
+    return showLockScreen();
   }
 
   async function requestOpenDuoForm() {
@@ -4169,12 +4187,12 @@ verifyButton.addEventListener("click", async () => {
     viewer.classList.remove("qamqor-request-open");
     try { sessionStorage.removeItem("qamqorPhoneFormOpen"); } catch (_) {}
 
-    const closedAnimation = await playDuoAnimation(1);
+    const closedAnimation = wasLockScreen ? true : await playDuoAnimation(1);
     state = closedAnimation ? "closed" : "open";
     busy = false;
     if (hadCameraControls) viewer.setAttribute("camera-controls","");
-    if (closedAnimation && (openRequested || window.qamqorOpenRequestWhenReady)) {
-      requestOpenDuoForm();
+    if (closedAnimation && wasForm) {
+      await showLockScreen();
     }
   }
 
@@ -4226,9 +4244,10 @@ verifyButton.addEventListener("click", async () => {
     }
 
     state = "closed";
-    if (shouldRestore || openRequested || window.qamqorOpenRequestWhenReady) {
-      requestOpenDuoForm();
-    }
+    await showLockScreen();
+    // A restored request still requires the user to unlock the folded phone.
+    openRequested = false;
+    window.qamqorOpenRequestWhenReady = false;
   }
 
   const applyHitbox = viewer.querySelector(".qamqor-apply-hitbox");
