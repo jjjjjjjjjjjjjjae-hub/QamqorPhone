@@ -16,7 +16,7 @@ def material_name(geom):
     return getattr(material, "name", None) if material else None
 
 def inspect_glb_animations(path: Path):
-    """Read GLB JSON directly so animation data is not lost by geometry importers."""
+    """Read GLB JSON/BIN directly and summarize animation tracks and endpoint poses."""
     import struct
 
     data = path.read_bytes()
@@ -25,8 +25,10 @@ def inspect_glb_animations(path: Path):
     magic, version, total_length = struct.unpack_from("<4sII", data, 0)
     if magic != b"glTF" or version != 2 or total_length > len(data):
         raise RuntimeError(f"{path.name} is not a valid GLB 2.0 file")
+
     offset = 12
     document = None
+    binary = b""
     while offset + 8 <= total_length:
         length, chunk_type = struct.unpack_from("<II", data, offset)
         offset += 8
@@ -34,34 +36,64 @@ def inspect_glb_animations(path: Path):
         offset += length
         if chunk_type == 0x4E4F534A:
             document = json.loads(chunk.decode("utf-8").rstrip(" \\0"))
-            break
+        elif chunk_type == 0x004E4942:
+            binary = chunk
     if document is None:
         raise RuntimeError(f"{path.name} has no GLB JSON chunk")
 
     nodes = document.get("nodes", [])
     node_names = {i: node.get("name", f"node_{i}") for i, node in enumerate(nodes)}
+    component_types = {5120:("b",1),5121:("B",1),5122:("h",2),5123:("H",2),5125:("I",4),5126:("f",4)}
+    type_components = {"SCALAR":1,"VEC2":2,"VEC3":3,"VEC4":4,"MAT2":4,"MAT3":9,"MAT4":16}
+
+    def accessor_values(index):
+        accessor = document["accessors"][index]
+        view = document["bufferViews"][accessor["bufferView"]]
+        fmt, component_bytes = component_types[accessor["componentType"]]
+        components = type_components[accessor["type"]]
+        count = accessor["count"]
+        stride = view.get("byteStride", component_bytes * components)
+        base = view.get("byteOffset", 0) + accessor.get("byteOffset", 0)
+        values = []
+        for row in range(count):
+            row_values = []
+            for column in range(components):
+                pos = base + row * stride + column * component_bytes
+                row_values.append(struct.unpack_from("<" + fmt, binary, pos)[0])
+            values.append(row_values[0] if components == 1 else row_values)
+        return values
+
     animations = []
     for index, animation in enumerate(document.get("animations", [])):
         channels = []
         for channel in animation.get("channels", []):
             target = channel.get("target", {})
             node_index = target.get("node")
+            sampler_index = channel.get("sampler")
+            sampler = animation.get("samplers", [])[sampler_index]
+            times = accessor_values(sampler["input"])
+            values = accessor_values(sampler["output"])
             channels.append({
                 "node_index": node_index,
                 "node_name": node_names.get(node_index, "(no node target)"),
                 "path": target.get("path"),
-                "sampler": channel.get("sampler"),
+                "interpolation": sampler.get("interpolation", "LINEAR"),
+                "key_count": len(times),
+                "time_start": float(times[0]) if times else None,
+                "time_end": float(times[-1]) if times else None,
+                "first_value": values[0] if values else None,
+                "last_value": values[-1] if values else None,
+                "input_accessor": sampler["input"],
+                "output_accessor": sampler["output"],
             })
         samplers = animation.get("samplers", [])
-        animation_row = {
+        animations.append({
             "index": index,
             "name": animation.get("name", f"Animation_{index}"),
             "channel_count": len(channels),
             "sampler_count": len(samplers),
             "channels": channels,
-            "samplers": samplers,
-        }
-        animations.append(animation_row)
+        })
 
     return {
         "file": path.name,
@@ -69,11 +101,16 @@ def inspect_glb_animations(path: Path):
         "animations_count": len(animations),
         "animations": animations,
         "scene_nodes": [
-            {"index": i, "name": node_names[i], "children": node.get("children", [])}
+            {
+                "index": i,
+                "name": node_names[i],
+                "children": node.get("children", []),
+                "translation": node.get("translation"),
+                "rotation": node.get("rotation"),
+            }
             for i, node in enumerate(nodes)
         ],
     }
-
 
 def main():
     if not SOURCE.is_file():
