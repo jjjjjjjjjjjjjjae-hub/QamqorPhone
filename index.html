@@ -3821,7 +3821,7 @@ verifyButton.addEventListener("click", async () => {
     opened = true;
     opening = false;
     placeOverlay();
-    repair.scrollTo({top:0, behavior:"instant"});
+    repair.scrollTo({top:0, behavior:"auto"});
 
     try { sessionStorage.setItem("qamqorPhoneFormOpen", "yes"); } catch (_) {}
     requestAnimationFrame(() => {
