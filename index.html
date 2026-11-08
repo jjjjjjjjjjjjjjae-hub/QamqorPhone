@@ -2413,7 +2413,7 @@ main [data-app-page]:not([hidden]){
 </div>
 
 <div class="wrap">
-<header class="site-header"><a class="brand" href="#top" aria-label="QAMQOR PHONE басты беті"><div class="mark"><img src="QamqorPhone.png" alt="QAMQOR PHONE логотипі" width="46" height="46"></div><div>QAMQOR PHONE<small>PHONE REPAIR SERVICE</small></div></a><nav class="main-nav" aria-label="Негізгі навигация"><a href="#top">Басты бет</a><a href="#services">Қызметтер</a><a href="#repair">Өтінім</a></nav></header>
+<header class="site-header"><a class="brand" href="#top" aria-label="QAMQOR PHONE басты беті"><div class="mark"><img src="QamqorPhone.png" alt="QAMQOR PHONE логотипі" width="46" height="46"></div><div>QAMQOR PHONE<small>PHONE REPAIR SERVICE</small></div></a></header>
 <main>
 
 <section class="hero" id="top" data-app-page="home">
@@ -3510,6 +3510,12 @@ verifyButton.addEventListener("click", async () => {
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function showPage(id, options = {}) {
+    const openRepairOnDuo = id === "repair";
+    if (openRepairOnDuo) {
+      window.qamqorOpenRequestWhenReady = true;
+      id = "top";
+    }
+
     const activePage = pages.find(page => page.id === id);
     if (!activePage) return;
 
@@ -3547,6 +3553,10 @@ verifyButton.addEventListener("click", async () => {
     }
     if (id === "repair" && typeof serviceMap !== "undefined" && serviceMap) {
       requestAnimationFrame(() => serviceMap.invalidateSize());
+    }
+    if (openRepairOnDuo && window.qamqorPhoneForm &&
+        typeof window.qamqorPhoneForm.open === "function") {
+      window.qamqorPhoneForm.open();
     }
   }
 
@@ -3792,7 +3802,7 @@ verifyButton.addEventListener("click", async () => {
     "hotspot-screen-top-right",
     "hotspot-screen-bottom-right",
     "hotspot-screen-bottom-left"
-  ], requireFacingCamera = true) {
+  ], requireFacingCamera = true, minWidth = 90, minHeight = 60) {
     if (typeof viewer.queryHotspot !== "function") return null;
     const viewerRect = viewer.getBoundingClientRect();
     const hotspots = names.map(name => viewer.queryHotspot(name));
@@ -3814,7 +3824,7 @@ verifyButton.addEventListener("click", async () => {
     const distance = (a,b) => Math.hypot(b.x-a.x,b.y-a.y);
     const width = (distance(p[0],p[1]) + distance(p[3],p[2])) / 2;
     const height = (distance(p[0],p[3]) + distance(p[1],p[2])) / 2;
-    if (width < 90 || height < 60) return null;
+    if (width < minWidth || height < minHeight) return null;
 
     const [p0,p1,p2,p3] = p;
     const dx1 = p1.x-p2.x, dx2 = p3.x-p2.x;
@@ -3889,7 +3899,7 @@ verifyButton.addEventListener("click", async () => {
       // The folded outer display uses a reverse-facing material normal. Its
       // canvas positions are still valid while visible, so do not reject these
       // four points just because model-viewer reports facingCamera=false.
-      rect = getProjectedScreenRect(names, false);
+      rect = getProjectedScreenRect(names, false, 28, 28);
       if (rect) break;
     }
     if (!rect) {
@@ -4016,11 +4026,7 @@ verifyButton.addEventListener("click", async () => {
 
     const projected = getProjectedScreenRect();
     if (!projected) {
-      if (typeof window.qamqorShowPage === "function") {
-        window.qamqorShowPage("repair", {updateHistory:true, scroll:true});
-      } else {
-        repair.hidden = false;
-      }
+      alert("Duo ішкі экраны көрінбей тұр. Телефон ашық күйінде қалды.");
       return false;
     }
 
@@ -4062,10 +4068,8 @@ verifyButton.addEventListener("click", async () => {
       state = "closed";
       busy = false;
       if (hadCameraControls) viewer.setAttribute("camera-controls","");
-      lockPlane.hidden = true;
-      if (typeof window.qamqorShowPage === "function") {
-        window.qamqorShowPage("repair", {updateHistory:true, scroll:true});
-      }
+      placeLockScreenButton();
+      alert("Duo ашылу анимациясын іске қоса алмадым.");
       return false;
     }
 
@@ -4085,13 +4089,16 @@ verifyButton.addEventListener("click", async () => {
   }
 
   async function requestOpenDuoForm() {
+    if (opened || state === "form") return true;
     if (typeof window.qamqorShowPage === "function") {
-      window.qamqorShowPage("repair", {updateHistory:true, scroll:true});
+      window.qamqorShowPage("top", {updateHistory:false, scroll:false});
+    }
+    if (state === "loading" || state === "initializing" || state === "closed") {
+      viewer.scrollIntoView({behavior:"smooth",block:"center"});
       return true;
     }
-    repair.hidden = false;
-    repair.scrollIntoView({behavior:"smooth",block:"start"});
-    return true;
+    if (state === "open") return showRepairForm();
+    return false;
   }
 
   async function closePhoneForm() {
