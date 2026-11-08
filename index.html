@@ -3426,7 +3426,7 @@ body.qamqor-home-clean .hero#top{
 }
 </style>
 <script id="qamqor-model-screen-request-hotspot">
-/* Place the real request button on the front glass of the loaded 3D phone. */
+/* Anchor the request button to the visible front-glass point of the 3D phone. */
 (() => {
   const viewer = document.querySelector(".qamqor-phone-model");
   if (!viewer) return;
@@ -3436,18 +3436,7 @@ body.qamqor-home-clean .hero#top{
   let placed = false;
   let attempts = 0;
 
-  const cameraDirection = () => {
-    const orbit = viewer.getCameraOrbit?.();
-    if (!orbit) return {x:0,y:0,z:1};
-    const sinPhi = Math.sin(orbit.phi);
-    return {
-      x:Math.sin(orbit.theta)*sinPhi,
-      y:Math.cos(orbit.phi),
-      z:Math.cos(orbit.theta)*sinPhi
-    };
-  };
-
-  const placeOnActualScreen = () => {
+  const placeOnScreen = () => {
     if (placed || !viewer.loaded ||
         typeof viewer.positionAndNormalFromPoint !== "function" ||
         typeof viewer.updateHotspot !== "function") return false;
@@ -3455,61 +3444,65 @@ body.qamqor-home-clean .hero#top{
     const rect = viewer.getBoundingClientRect();
     if (rect.width < 20 || rect.height < 20) return false;
 
-    const direction = cameraDirection();
-    const candidates = [];
-    // model-viewer 4.4 expects pixel coordinates relative to the viewer itself.
-    // Scan the lower half of the phone and select the closest front-facing screen point.
-    const xs = [0.38,0.42,0.46,0.50,0.54,0.58,0.62];
-    const ys = [0.42,0.47,0.52,0.57,0.62,0.67,0.72,0.77];
-    ys.forEach(yRatio => {
-      xs.forEach(xRatio => {
-        const hit = viewer.positionAndNormalFromPoint(
-          rect.width*xRatio,
-          rect.height*yRatio
-        );
-        if (!hit || !hit.position || !hit.normal) return;
-        const n = hit.normal;
-        const facing = n.x*direction.x+n.y*direction.y+n.z*direction.z;
-        if (facing < 0.35) return;
-        const score = facing
-          - Math.abs(xRatio-0.50)*0.55
-          - Math.abs(yRatio-0.67)*0.22;
-        candidates.push({hit,facing,score});
-      });
-    });
+    // The API uses coordinates relative to the model-viewer canvas.
+    // Probe the lower-middle glass area, then choose the hit closest to the button target.
+    const targetX = 0.50;
+    const targetY = 0.68;
+    const xs = [0.44,0.47,0.50,0.53,0.56];
+    const ys = [0.54,0.58,0.62,0.66,0.70,0.74];
+    let best = null;
 
-    if (!candidates.length) return false;
-    candidates.sort((a,b)=>b.score-a.score);
-    const best = candidates[0];
+    for (const y of ys) {
+      for (const x of xs) {
+        const hit = viewer.positionAndNormalFromPoint(rect.width*x,rect.height*y);
+        if (!hit?.position || !hit?.normal) continue;
+        // A ray hit is already the visible surface; do not compare model-space
+        // normals with world-space camera directions (that moves the button off target).
+        const score = Math.hypot((x-targetX)*1.0,(y-targetY)*0.8);
+        if (!best || score < best.score) {
+          best = {hit,x,y,score};
+        }
+      }
+    }
+
+    if (!best) return false;
+
+    const position = best.hit.position.toString();
+    const normal = best.hit.normal.toString();
+    let surface;
+    if (typeof viewer.surfaceFromPoint === "function") {
+      surface = viewer.surfaceFromPoint(rect.width*best.x,rect.height*best.y) || undefined;
+    }
 
     viewer.updateHotspot({
       name:"hotspot-apply",
-      position:best.hit.position.toString(),
-      normal:best.hit.normal.toString()
+      position,
+      normal,
+      ...(surface ? {surface} : {})
     });
-    button.dataset.position = best.hit.position.toString();
-    button.dataset.normal = best.hit.normal.toString();
+    button.dataset.position = position;
+    button.dataset.normal = normal;
+    if (surface) button.dataset.surface = surface;
     placed = true;
     return true;
   };
 
-  const tryPlace = () => {
-    if (placed || attempts++ > 50) return;
-    if (!placeOnActualScreen()) {
-      requestAnimationFrame(tryPlace);
-    }
+  const retry = () => {
+    if (placed || attempts++ >= 60) return;
+    if (!placeOnScreen()) requestAnimationFrame(retry);
   };
 
   viewer.addEventListener("load", () => {
-    requestAnimationFrame(() => requestAnimationFrame(tryPlace));
+    attempts = 0;
+    requestAnimationFrame(() => requestAnimationFrame(retry));
   });
   viewer.addEventListener("camera-change", () => {
-    if (!placed) tryPlace();
+    if (!placed) retry();
   });
   window.addEventListener("resize", () => {
-    if (!placed) tryPlace();
+    if (!placed) retry();
   }, {passive:true});
-  if (viewer.loaded) tryPlace();
+  if (viewer.loaded) retry();
 })();
 </script>
 </body>
