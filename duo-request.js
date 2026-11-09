@@ -163,8 +163,11 @@
   }
 
   function getOuterScreenRect() {
+    // Only use the outer-display hotspot whose normal faces the current camera.
+    // The first hotspot set points away from the default front view; accepting it
+    // without facingCamera can place the invisible CTA hitbox on the back surface.
     for (const names of OUTER_HOTSPOTS) {
-      const rect = projectedRect(names, false, 28, 28);
+      const rect = projectedRect(names, true, 28, 28);
       if (rect) return rect;
     }
     return null;
