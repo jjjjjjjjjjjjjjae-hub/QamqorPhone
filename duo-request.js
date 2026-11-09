@@ -159,7 +159,16 @@
   }
 
   function getInnerScreenRect() {
-    return projectedRect(INNER_HOTSPOTS, true, 90, 60);
+    // Prefer model-viewer's front-facing test. Some mobile WebGL builds report
+    // facingCamera=false for these baked inner-screen probes after the hinge
+    // animation, even while the inner display is visibly facing the user.
+    const frontFacing = projectedRect(INNER_HOTSPOTS, true, 90, 60);
+    if (frontFacing) return frontFacing;
+
+    // Fallback: retain the same four measured inner-screen corners and require
+    // a realistically sized projection. This avoids blocking the form solely
+    // because the mobile facingCamera flag is unreliable after the animation.
+    return projectedRect(INNER_HOTSPOTS, false, 90, 60);
   }
 
   function getOuterScreenRect() {
