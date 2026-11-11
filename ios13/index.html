@@ -147,6 +147,16 @@ body > .h-100.w-100 > .phone-section > .flex-column {
   height: var(--ios13-icon-size) !important;
   border-radius: var(--ios13-icon-radius) !important;
 }
+
+/* Keep the iOS13 interface clean: the phone model supplies the status area. */
+.date-time,
+.lock-screen .unlock-hint,
+#unlocked-time,
+.time,
+.date {
+  display: none !important;
+  visibility: hidden !important;
+}
 </style>
 
 
