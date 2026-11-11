@@ -91,28 +91,13 @@ body > .h-100.w-100 > .phone-section > .flex-column {
 .settings-container {
   display: none !important;
 }
+
+.phone-section-bottom,
+.touch-id {
+  display: none !important;
+}
 </style>
 
-<style id="qamqor-embedded-repair-button-style">
-#qamqorEmbeddedRepairButton{
-  position:absolute;
-  z-index:50;
-  left:50%;
-  bottom:8px;
-  display:block;
-  min-height:25px;
-  padding:6px 11px;
-  border:1px solid rgba(255,255,255,.8);
-  border-radius:999px;
-  color:#07111e;
-  background:rgba(255,255,255,.94);
-  box-shadow:0 4px 14px rgba(0,0,0,.35);
-  font:700 9px/1 system-ui,sans-serif;
-  cursor:pointer;
-  transform:translateX(-50%);
-}
-#qamqorEmbeddedRepairButton:hover{background:#fff}
-</style>
 
 </head>
 
@@ -129,8 +114,7 @@ body > .h-100.w-100 > .phone-section > .flex-column {
           <div class="phone-section-mid w-100 d-flex justify-content-center align-items-center">
             <div class="phone-screen">
               <div class="display">
-              <button id="qamqorEmbeddedRepairButton" type="button" aria-label="Өтінім беру">Өтінім беру</button>
-                <div class="lock-screen">
+<div class="lock-screen">
                   <div class="text-white date-time">
                     <div class="time"></div>
                     <div class="date"></div>
@@ -326,50 +310,56 @@ body > .h-100.w-100 > .phone-section > .flex-column {
   <script src="https://iphone-7-ios13.netlify.app/assets/js/settings.js"></script>
   <script src="https://iphone-7-ios13.netlify.app/assets/js/ios13.js"></script>
 
-  <script>
-    // Scale the complete phone to the smaller of the viewport width/height.
-    // This also reacts to mobile browser chrome and orientation changes.
-    (() => {
-      const phone = document.querySelector('.iphone-7');
-      if (!phone) return;
-
-      const fitPhone = () => {
-        const viewport = window.visualViewport;
-        const width = viewport?.width || document.documentElement.clientWidth || window.innerWidth;
-        const height = viewport?.height || document.documentElement.clientHeight || window.innerHeight;
-        const scale = Math.min(
-          1,
-          Math.max(0.1, (width - 24) / 340),
-          Math.max(0.1, (height - 24) / 695)
-        );
-        phone.style.setProperty('--phone-scale', scale.toFixed(4));
-      };
-
-      let frame = 0;
-      const scheduleFit = () => {
-        if (frame) cancelAnimationFrame(frame);
-        frame = requestAnimationFrame(() => {
-          frame = 0;
-          fitPhone();
-        });
-      };
-
-      fitPhone();
-      window.addEventListener('resize', scheduleFit, {passive: true});
-      window.addEventListener('orientationchange', scheduleFit, {passive: true});
-      window.visualViewport?.addEventListener('resize', scheduleFit, {passive: true});
-    })();
-  </script>
-
-<script id="qamqor-embedded-repair-bridge">
+<script id="qamqor-embedded-ios13-init">
 (() => {
-  const button = document.getElementById("qamqorEmbeddedRepairButton");
-  if (!button) return;
-  button.addEventListener("click", event => {
-    event.preventDefault();
-    event.stopPropagation();
-    window.parent.postMessage({type:"qamqor-open-repair"}, window.location.origin);
-  });
+  const phone = document.querySelector(".iphone-7");
+  const pages = document.querySelector(".pages");
+
+  const fitPhone = () => {
+    if (!phone) return;
+    const viewport = window.visualViewport;
+    const width = viewport?.width || document.documentElement.clientWidth || window.innerWidth;
+    const height = viewport?.height || document.documentElement.clientHeight || window.innerHeight;
+    const scale = Math.min(
+      1,
+      Math.max(0.1, (width - 24) / 340),
+      Math.max(0.1, (height - 24) / 695)
+    );
+    phone.style.setProperty("--phone-scale", scale.toFixed(4));
+  };
+
+  const showHomeScreen = () => {
+    const touchId = document.getElementById("touch-id");
+    if (touchId) touchId.click();
+
+    window.setTimeout(() => {
+      const phoneScreen = document.querySelector(".phone-screen");
+      const lockScreen = document.querySelector(".lock-screen");
+      const dock = document.querySelector(".bottom-dock");
+      if (phoneScreen) phoneScreen.style.opacity = "1";
+      if (pages) pages.style.transform = "translate3d(-25%, 0, 0)";
+      if (lockScreen) lockScreen.style.transform = "translate3d(0, -101%, 0)";
+      if (dock) dock.style.transform = "translate3d(0, -100%, 0)";
+      document.querySelectorAll(".home-icons .icon, .home-icons-2 .icon").forEach(icon => {
+        icon.style.opacity = "1";
+      });
+    }, 650);
+  };
+
+  let frame = 0;
+  const scheduleFit = () => {
+    if (frame) cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => {
+      frame = 0;
+      fitPhone();
+    });
+  };
+
+  fitPhone();
+  showHomeScreen();
+  window.addEventListener("resize", scheduleFit, {passive: true});
+  window.addEventListener("orientationchange", scheduleFit, {passive: true});
+  window.visualViewport?.addEventListener("resize", scheduleFit, {passive: true});
 })();
 </script>
 
