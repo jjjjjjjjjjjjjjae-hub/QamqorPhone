@@ -2221,13 +2221,29 @@ body.qamqor-phone-app-open{
   overflow:visible!important;
 }
 .qamqor-phone-app-open .hero#top .qamqor-phone-model{
-  width:100vw!important;
-  height:100dvh!important;
-  min-height:100dvh!important;
-  max-height:100dvh!important;
-  flex:none!important;
+  width:min(100%,560px)!important;
+  height:min(72vh,620px,calc(100dvh - 136px))!important;
+  min-height:260px!important;
+  max-height:calc(100dvh - 130px)!important;
+  flex:1 1 auto!important;
   background:transparent!important;
-  touch-action:pan-y!important;
+  touch-action:none!important;
+}
+@media(max-width:900px){
+  .qamqor-phone-app-open .hero#top .qamqor-phone-model{
+    width:min(100%,520px)!important;
+    height:min(66vh,540px,calc(100dvh - 150px))!important;
+    min-height:245px!important;
+    max-height:calc(100dvh - 140px)!important;
+  }
+}
+@media(max-width:620px){
+  .qamqor-phone-app-open .hero#top .qamqor-phone-model{
+    width:min(100%,420px)!important;
+    height:min(63vh,520px,calc(100dvh - 145px))!important;
+    min-height:220px!important;
+    max-height:calc(100dvh - 135px)!important;
+  }
 }
 .qamqor-phone-app-open .qamqor-apply-hitbox{
   opacity:0!important;
@@ -2402,7 +2418,7 @@ body.qamqor-phone-app-open{
       interaction-prompt="none"
       loading="eager"
       reveal="auto"
-      shadow-intensity="0.75"
+      shadow-intensity="0.28"
       exposure="1.05"
       environment-image="neutral"
       camera-orbit="0deg 75deg 100%"
@@ -2416,6 +2432,10 @@ body.qamqor-phone-app-open{
         aria-label="QAMQOR PHONE өтінім формасы">
         <button id="qamqorPhoneScreenClose" class="qamqor-phone-screen-close" type="button" aria-label="Телефонның басты экранына қайту">×</button>
       </div>
+      <span slot="hotspot-screen-top-left" class="qamqor-screen-probe" data-position="-0.0365150012 0.1608780026 0.0043219999" data-normal="0 0 1" data-visibility-attribute="visible" aria-hidden="true"></span>
+      <span slot="hotspot-screen-top-right" class="qamqor-screen-probe" data-position="0.0365150012 0.1608780026 0.0043219999" data-normal="0 0 1" data-visibility-attribute="visible" aria-hidden="true"></span>
+      <span slot="hotspot-screen-bottom-right" class="qamqor-screen-probe" data-position="0.0365150012 0.0023910001 0.0043219999" data-normal="0 0 1" data-visibility-attribute="visible" aria-hidden="true"></span>
+      <span slot="hotspot-screen-bottom-left" class="qamqor-screen-probe" data-position="-0.0365150012 0.0023910001 0.0043219999" data-normal="0 0 1" data-visibility-attribute="visible" aria-hidden="true"></span>
       <span slot="hotspot-probe" class="qamqor-button-probe" data-position="0 0.04201275 0.004502" data-normal="0 0 1" data-visibility-attribute="visible" aria-hidden="true"></span>
       <button slot="hotspot-apply" class="qamqor-apply-hitbox" data-position="0 0.04201275 0.004502" data-normal="0 0 1" data-visibility-attribute="visible" type="button" aria-label="Өтінім беру"></button>
     </model-viewer>
@@ -3624,7 +3644,8 @@ verifyButton.addEventListener("click", async () => {
 
 <style id="qamqor-physical-button-probe">
 /* Invisible calibration point only. The visible button is a textured mesh inside the GLB. */
-.hero#top .qamqor-phone-model .qamqor-button-probe {
+.hero#top .qamqor-phone-model .qamqor-button-probe,
+.hero#top .qamqor-phone-model .qamqor-screen-probe {
   display:block;
   width:1px;
   height:1px;
@@ -3637,6 +3658,26 @@ verifyButton.addEventListener("click", async () => {
 (() => {
   const viewer = document.querySelector(".qamqor-phone-model");
   if (!viewer) return;
+
+  // The background video competes with WebGL while the phone is being
+  // rotated. Pause it only during the gesture, then resume it afterwards.
+  const backgroundVideo = document.getElementById("qamqor-background-video");
+  let resumeVideoTimer = 0;
+  const pauseBackgroundVideo = () => {
+    if (resumeVideoTimer) clearTimeout(resumeVideoTimer);
+    backgroundVideo?.pause();
+  };
+  const resumeBackgroundVideo = () => {
+    if (!backgroundVideo) return;
+    if (resumeVideoTimer) clearTimeout(resumeVideoTimer);
+    resumeVideoTimer = window.setTimeout(() => {
+      const playback = backgroundVideo.play();
+      if (playback?.catch) playback.catch(() => {});
+    }, 260);
+  };
+  viewer.addEventListener("pointerdown", pauseBackgroundVideo, {passive:true});
+  viewer.addEventListener("pointerup", resumeBackgroundVideo, {passive:true});
+  viewer.addEventListener("pointercancel", resumeBackgroundVideo, {passive:true});
 
   const button = {
     x: 0,
@@ -3713,6 +3754,61 @@ verifyButton.addEventListener("click", async () => {
   const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
   const round = n => Math.round(Number(n) * 1000000) / 1000000;
 
+  // The generated iPhone 18 Pro Max GLB already contains the measured screen
+  // bounds. Reuse them directly so opening the request form never rotates the
+  // model or runs an expensive four-angle raycast scan.
+  const FIXED_SCREEN = {
+    material: "COLOUR_Blue_Screen",
+    center: {x:0, y:0.0816345000, z:0.0043219999},
+    normal: {x:0, y:0, z:1},
+    worldBounds: {
+      min: {x:-0.0365150012, y:0.0023910001, z:0.0043219999},
+      max: {x:0.0365150012, y:0.1608780026, z:0.0043219999}
+    }
+  };
+  const SCREEN_PROBES = [
+    "hotspot-screen-top-left", "hotspot-screen-top-right",
+    "hotspot-screen-bottom-right", "hotspot-screen-bottom-left"
+  ];
+
+  function projectedScreenSize() {
+    if (typeof viewer.queryHotspot !== "function") return null;
+    const rect = viewer.getBoundingClientRect();
+    const width = viewer.clientWidth || rect.width;
+    const height = viewer.clientHeight || rect.height;
+    if (!width || !height || !rect.width || !rect.height) return null;
+    const points = SCREEN_PROBES.map(name => viewer.queryHotspot(name));
+    if (points.some(point => !point || !point.canvasPosition)) return null;
+    const sx = rect.width / width;
+    const sy = rect.height / height;
+    const xs = points.map(point => point.canvasPosition.x * sx);
+    const ys = points.map(point => point.canvasPosition.y * sy);
+    return {
+      width: Math.max(...xs) - Math.min(...xs),
+      height: Math.max(...ys) - Math.min(...ys)
+    };
+  }
+
+  function fixedScreenLayout() {
+    const rect = viewer.getBoundingClientRect();
+    const viewportWidth = rect.width || viewer.clientWidth || 420;
+    const viewportHeight = rect.height || viewer.clientHeight || 520;
+    const projected = projectedScreenSize();
+    const width = projected?.width > 40
+      ? projected.width + 4
+      : Math.max(150, Math.min(viewportWidth * 0.55, 290));
+    const height = projected?.height > 80
+      ? projected.height + 4
+      : Math.max(300, Math.min(viewportHeight * 0.72, 520));
+    return {
+      ...FIXED_SCREEN,
+      sampleCount: 0,
+      theta: 0,
+      surface: null,
+      pixelBounds: {left:0, top:0, right:width, bottom:height, width, height}
+    };
+  }
+
   const originalParent = repair.parentNode;
   const placeholder = document.createComment(" QAMQOR repair form original position ");
   originalParent.insertBefore(placeholder, repair);
@@ -3783,6 +3879,9 @@ verifyButton.addEventListener("click", async () => {
   }
 
   async function detectScreenWithMaterialScan() {
+    return fixedScreenLayout();
+
+    /* Legacy diagnostic scan retained below for reference only. */
     if (!viewer.loaded) throw new Error("3D модель әлі жүктелмеді.");
     if (typeof viewer.positionAndNormalFromPoint !== "function" ||
         typeof viewer.materialFromPoint !== "function" ||
@@ -3908,6 +4007,12 @@ verifyButton.addEventListener("click", async () => {
       window.qamqorShowPage("top",{updateHistory:false,scroll:false});
     }
     viewer.removeAttribute("camera-controls");
+    // Keep the phone at its normal front-facing framing while the form opens.
+    // Do not retarget the camera to the screen or reduce the field of view;
+    // both make the device jump forward and hide its rear shell.
+    viewer.setAttribute("camera-orbit", "0deg 75deg 100%");
+    viewer.removeAttribute("camera-target");
+    viewer.setAttribute("field-of-view", "30deg");
     try {
       await waitFrame();
       const screen=await detectScreenWithMaterialScan();
