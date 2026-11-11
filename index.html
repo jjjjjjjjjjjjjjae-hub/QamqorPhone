@@ -2424,6 +2424,16 @@ body.qamqor-phone-app-open{
   pointer-events:none!important;
 }
 
+
+/* The iOS13 document owns the complete display; keep the hotspot edge invisible. */
+.qamqor-phone-screen-hotspot {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.qamqor-phone-screen-hotspot,
+.qamqor-ios13-frame {
+  border-radius: inherit;
+}
 </style>
 </head>
 <body>
@@ -2472,8 +2482,7 @@ body.qamqor-phone-app-open{
       <span slot="hotspot-screen-bottom-right" class="qamqor-screen-probe" data-position="0.0365150012 0.0023910001 0.0043219999" data-normal="0 0 1" data-visibility-attribute="visible" aria-hidden="true"></span>
       <span slot="hotspot-screen-bottom-left" class="qamqor-screen-probe" data-position="-0.0365150012 0.0023910001 0.0043219999" data-normal="0 0 1" data-visibility-attribute="visible" aria-hidden="true"></span>
       <span slot="hotspot-probe" class="qamqor-button-probe" data-position="0 0.04201275 0.004502" data-normal="0 0 1" data-visibility-attribute="visible" aria-hidden="true"></span>
-      <button slot="hotspot-apply" class="qamqor-apply-hitbox" data-position="0 0.04201275 0.004502" data-normal="0 0 1" data-visibility-attribute="visible" type="button" aria-label="Өтінім беру"></button>
-    </model-viewer>
+</model-viewer>
   </div>
 </section>
 
@@ -4124,13 +4133,6 @@ verifyButton.addEventListener("click", async () => {
   window.qamqorOpenPhoneApp=openPhoneApp;
   window.qamqorClosePhoneApp=closePhoneApp;
   window.qamqorShowIOS13=showIOS13Home;
-  window.addEventListener("message", event => {
-    if (!ios13Frame || event.source !== ios13Frame.contentWindow) return;
-    if (event.origin !== window.location.origin) return;
-    if (event.data && event.data.type === "qamqor-open-repair") {
-      openPhoneApp({updateHistory:true});
-    }
-  });
 
   closeButton.addEventListener("click",event=>{
     event.preventDefault();
