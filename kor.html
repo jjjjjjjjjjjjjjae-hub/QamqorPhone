@@ -34,11 +34,10 @@ pre {
 <body>
 
 <h2>QAMQOR — GLB диагностика</h2>
-<p id="status">3D модель жүктелуде...</p>
 
 <model-viewer
  id="phone"
- src="./iPhone%2018%20pro%20max.glb"
+ src="./QAMQOR-iPhone-18-Pro-Max.glb"
  camera-controls
  environment-image="neutral"
  shadow-intensity="1"
@@ -51,7 +50,6 @@ pre {
 <script>
 (() => {
   const viewer = document.getElementById("phone");
-  const status = document.getElementById("status");
   const result = document.getElementById("result");
 
   const sleep = ms =>
@@ -200,12 +198,11 @@ pre {
     if (!viewer.loaded) return;
 
     diag.ready = true;
-    status.textContent = "3D модель дайын. Автоматты диагностика іске қосуға әзір.";
   }
 
   viewer.addEventListener("load", setReady);
   viewer.addEventListener("error", () => {
-    status.textContent = "GLB жүктелмеді. Файл жолын тексер.";
+    console.error("GLB жүктелмеді. Файл жолын тексер.");
   });
 
   customElements.whenDefined("model-viewer").then(setReady);
@@ -214,3 +211,4 @@ pre {
 
 </body>
 </html>
+
