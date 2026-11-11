@@ -1039,7 +1039,7 @@ main [data-app-page]:not([hidden]){animation:pageIn .28s ease both}
   }
 }
 @media(prefers-reduced-motion:reduce){
-  #qamqor-video-background video{display:none}
+  #qamqor-video-background video{display:block;opacity:.72!important}
 }
 
 
@@ -2188,7 +2188,7 @@ main [data-app-page]:not([hidden]){
 /* Form overlay is placed using the live GLB material scan. */
 body.qamqor-phone-app-open{
   overflow:hidden!important;
-  background:#05080d!important;
+  background:transparent!important;
 }
 .qamqor-phone-app-open .site-header,
 .qamqor-phone-app-open footer{display:none!important}
@@ -2204,9 +2204,7 @@ body.qamqor-phone-app-open{
   margin:0!important;
   padding:0!important;
   overflow:hidden!important;
-  background:
-    radial-gradient(ellipse at 50% 48%,rgba(25,107,198,.2),transparent 48%),
-    #05080d!important;
+  background:transparent!important;
 }
 .qamqor-phone-app-open .hero#top .premium-art{
   display:flex!important;
@@ -2396,7 +2394,7 @@ body.qamqor-phone-app-open{
 </head>
 <body>
 <div id="qamqor-video-background" aria-hidden="true">
-  <video id="qamqor-background-video" autoplay muted playsinline preload="metadata" tabindex="-1" volume="0.12">
+  <video id="qamqor-background-video" autoplay muted loop playsinline preload="auto" tabindex="-1" volume="0">
     <source src="https://pub-60f67fee510b4876ad5634ad1d313b01.r2.dev/1108%282%29.mp4" type="video/mp4">
   </video>
   <div class="qamqor-video-shade"></div>
@@ -3576,9 +3574,12 @@ verifyButton.addEventListener("click", async () => {
   if (!video) return;
 
   const startAt = 6;
-  const backgroundVolume = 0.12;
-  let audioEnabled = false;
+  const backgroundVolume = 0;
 
+  video.autoplay = true;
+  video.loop = true;
+  video.muted = true;
+  video.defaultMuted = true;
   video.volume = backgroundVolume;
 
   const seekToStart = () => {
@@ -3586,32 +3587,15 @@ verifyButton.addEventListener("click", async () => {
     try { video.currentTime = startAt; } catch (_) {}
   };
 
-  const playMutedFallback = () => {
+  const playBackground = () => {
     video.muted = true;
+    video.defaultMuted = true;
     const playback = video.play();
     if (playback && typeof playback.catch === "function") playback.catch(() => {});
   };
 
-  const tryAudibleAutoplay = () => {
-    video.volume = backgroundVolume;
-    video.muted = false;
-    const playback = video.play();
-    if (playback && typeof playback.catch === "function") {
-      playback.catch(() => {
-        if (!audioEnabled) playMutedFallback();
-      });
-    }
-  };
-
   const enableAudioAfterInteraction = () => {
-    if (audioEnabled) return;
-    audioEnabled = true;
-    video.volume = backgroundVolume;
-    video.muted = false;
-    const playback = video.play();
-    if (playback && typeof playback.catch === "function") {
-      playback.catch(() => { video.muted = true; });
-    }
+    playBackground();
     ["pointerdown", "touchstart", "keydown"].forEach(type => {
       document.removeEventListener(type, enableAudioAfterInteraction, true);
     });
@@ -3619,7 +3603,7 @@ verifyButton.addEventListener("click", async () => {
 
   video.addEventListener("loadedmetadata", () => {
     seekToStart();
-    tryAudibleAutoplay();
+    playBackground();
     ["pointerdown", "touchstart", "keydown"].forEach(type => {
       document.addEventListener(type, enableAudioAfterInteraction, {once:true, capture:true, passive:true});
     });
@@ -3627,13 +3611,12 @@ verifyButton.addEventListener("click", async () => {
 
   video.addEventListener("ended", () => {
     seekToStart();
-    const playback = video.play();
-    if (playback && typeof playback.catch === "function") playback.catch(() => {});
+    playBackground();
   });
 
   if (video.readyState >= 1) {
     seekToStart();
-    tryAudibleAutoplay();
+    playBackground();
     ["pointerdown", "touchstart", "keydown"].forEach(type => {
       document.addEventListener(type, enableAudioAfterInteraction, {once:true, capture:true, passive:true});
     });
@@ -3659,25 +3642,13 @@ verifyButton.addEventListener("click", async () => {
   const viewer = document.querySelector(".qamqor-phone-model");
   if (!viewer) return;
 
-  // The background video competes with WebGL while the phone is being
-  // rotated. Pause it only during the gesture, then resume it afterwards.
+  // Keep the background layer mounted during every phone interaction.
+  // It must remain visible while the model is rotated or the form is opened.
   const backgroundVideo = document.getElementById("qamqor-background-video");
-  let resumeVideoTimer = 0;
-  const pauseBackgroundVideo = () => {
-    if (resumeVideoTimer) clearTimeout(resumeVideoTimer);
-    backgroundVideo?.pause();
-  };
-  const resumeBackgroundVideo = () => {
-    if (!backgroundVideo) return;
-    if (resumeVideoTimer) clearTimeout(resumeVideoTimer);
-    resumeVideoTimer = window.setTimeout(() => {
-      const playback = backgroundVideo.play();
-      if (playback?.catch) playback.catch(() => {});
-    }, 260);
-  };
-  viewer.addEventListener("pointerdown", pauseBackgroundVideo, {passive:true});
-  viewer.addEventListener("pointerup", resumeBackgroundVideo, {passive:true});
-  viewer.addEventListener("pointercancel", resumeBackgroundVideo, {passive:true});
+  if (backgroundVideo) {
+    backgroundVideo.style.display = "block";
+    backgroundVideo.style.visibility = "visible";
+  }
 
   const button = {
     x: 0,
