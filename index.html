@@ -2454,6 +2454,17 @@ body.qamqor-phone-app-open{
     0 1px 4px rgba(0,0,0,.55);
   pointer-events: none;
 }
+
+/* The iframe is clipped to the GLB screen surface; no floating card behind it. */
+.qamqor-phone-screen-hotspot {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+.qamqor-ios13-frame {
+  border-radius: inherit;
+}
 </style>
 
 <style id="qamqor-mobile-phone-centering">
@@ -2483,7 +2494,6 @@ body.qamqor-phone-app-open{
       class="qamqor-phone-model"
       src="./QAMQOR-iPhone-18-Pro-Max.glb?v=iphone18-pro-max-20261111"
       alt="QAMQOR PHONE iPhone 18 Pro Max 3D моделі"
-      camera-controls
       disable-zoom
       disable-pan
       interaction-prompt="none"
@@ -2503,7 +2513,7 @@ body.qamqor-phone-app-open{
         data-position="-0.0365150012 0.1608780026 0.0043219999"
         data-normal="0 0 1"
         aria-label="QAMQOR PHONE өтінім формасы">
-        <iframe id="qamqorIOS13Frame" class="qamqor-ios13-frame" title="iOS 13 интерфейсі — iPhone 18 Pro Max" src="./ios13/index.html?v=ios13-island-20261111" loading="eager" referrerpolicy="no-referrer" allow="fullscreen"></iframe>
+        <iframe id="qamqorIOS13Frame" class="qamqor-ios13-frame" title="iOS 13 интерфейсі — iPhone 18 Pro Max" src="./ios13/index.html?v=ios13-integrated-20261111" loading="eager" referrerpolicy="no-referrer" allow="fullscreen"></iframe>
         <div id="qamqorDynamicIsland" class="qamqor-dynamic-island" aria-hidden="true"></div>
         <button id="qamqorPhoneScreenClose" class="qamqor-phone-screen-close" type="button" aria-label="Телефонның басты экранына қайту">×</button>
       </div>
@@ -3868,8 +3878,8 @@ verifyButton.addEventListener("click", async () => {
       `${round(anchor.x)} ${round(anchor.y)} ${round(anchor.z)}`);
     hotspot.setAttribute("data-normal",
       `${round(screen.normal.x)} ${round(screen.normal.y)} ${round(screen.normal.z)}`);
-    hotspot.style.width=`${Math.ceil(screen.pixelBounds.width+4)}px`;
-    hotspot.style.height=`${Math.ceil(screen.pixelBounds.height+4)}px`;
+    hotspot.style.width=`${Math.ceil(screen.pixelBounds.width)}px`;
+    hotspot.style.height=`${Math.ceil(screen.pixelBounds.height)}px`;
     hotspot.style.borderRadius=`${Math.min(34,Math.max(16,screen.pixelBounds.width*.075))}px`;
   }
   const originalParent = repair.parentNode;
