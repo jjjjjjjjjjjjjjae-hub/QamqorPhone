@@ -96,6 +96,56 @@ body > .h-100.w-100 > .phone-section > .flex-column {
 .touch-id {
   display: none !important;
 }
+
+:root {
+  --ios13-icon-size: 46px;
+  --ios13-icon-radius: 10px;
+  --ios13-col-padding: 0px;
+  --ios13-dock-height: 70px;
+  --ios13-dock-padding: 23px;
+  --ios13-dock-bottom: -71px;
+  --ios13-status-height: 15px;
+  --ios13-status-font: 11px;
+  --ios13-status-padding: 5px;
+}
+.top-bar {
+  height: var(--ios13-status-height) !important;
+  padding: var(--ios13-status-padding) !important;
+  font-size: var(--ios13-status-font) !important;
+}
+.pages {
+  height: calc(100% - var(--ios13-status-height)) !important;
+}
+.home-icons > .row,
+.home-icons-2 > .row {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.home-icons > .row > [class*="col-"],
+.home-icons-2 > .row > [class*="col-"] {
+  display: flex !important;
+  justify-content: center !important;
+  padding-left: var(--ios13-col-padding) !important;
+  padding-right: var(--ios13-col-padding) !important;
+}
+.home-icons .icon,
+.home-icons-2 .icon {
+  width: var(--ios13-icon-size) !important;
+  height: var(--ios13-icon-size) !important;
+  border-radius: var(--ios13-icon-radius) !important;
+}
+.bottom-dock {
+  height: var(--ios13-dock-height) !important;
+  min-height: var(--ios13-dock-height) !important;
+  bottom: var(--ios13-dock-bottom) !important;
+  padding-left: var(--ios13-dock-padding) !important;
+  padding-right: var(--ios13-dock-padding) !important;
+}
+.bottom-dock-icons {
+  width: var(--ios13-icon-size) !important;
+  height: var(--ios13-icon-size) !important;
+  border-radius: var(--ios13-icon-radius) !important;
+}
 </style>
 
 
@@ -314,18 +364,35 @@ body > .h-100.w-100 > .phone-section > .flex-column {
 (() => {
   const phone = document.querySelector(".iphone-7");
   const pages = document.querySelector(".pages");
+  const root = document.documentElement;
+
+  const setResponsiveUI = () => {
+    const width = window.visualViewport?.width || root.clientWidth || window.innerWidth;
+    const scale = Math.min(1, Math.max(0.76, width / 296));
+    const px = value => `${Math.round(value * scale * 10) / 10}px`;
+    root.style.setProperty("--ios13-icon-size", px(46));
+    root.style.setProperty("--ios13-icon-radius", px(10));
+    root.style.setProperty("--ios13-col-padding", px(0));
+    root.style.setProperty("--ios13-dock-height", px(70));
+    root.style.setProperty("--ios13-dock-padding", px(23));
+    root.style.setProperty("--ios13-dock-bottom", `-${Math.round((71 * scale) * 10) / 10}px`);
+    root.style.setProperty("--ios13-status-height", px(15));
+    root.style.setProperty("--ios13-status-font", px(11));
+    root.style.setProperty("--ios13-status-padding", px(5));
+  };
 
   const fitPhone = () => {
     if (!phone) return;
     const viewport = window.visualViewport;
-    const width = viewport?.width || document.documentElement.clientWidth || window.innerWidth;
-    const height = viewport?.height || document.documentElement.clientHeight || window.innerHeight;
+    const width = viewport?.width || root.clientWidth || window.innerWidth;
+    const height = viewport?.height || root.clientHeight || window.innerHeight;
     const scale = Math.min(
       1,
       Math.max(0.1, (width - 24) / 340),
       Math.max(0.1, (height - 24) / 695)
     );
     phone.style.setProperty("--phone-scale", scale.toFixed(4));
+    setResponsiveUI();
   };
 
   const showHomeScreen = () => {
@@ -334,12 +401,8 @@ body > .h-100.w-100 > .phone-section > .flex-column {
 
     window.setTimeout(() => {
       const phoneScreen = document.querySelector(".phone-screen");
-      const lockScreen = document.querySelector(".lock-screen");
-      const dock = document.querySelector(".bottom-dock");
       if (phoneScreen) phoneScreen.style.opacity = "1";
       if (pages) pages.style.transform = "translate3d(-25%, 0, 0)";
-      if (lockScreen) lockScreen.style.transform = "translate3d(0, -101%, 0)";
-      if (dock) dock.style.transform = "translate3d(0, -100%, 0)";
       document.querySelectorAll(".home-icons .icon, .home-icons-2 .icon").forEach(icon => {
         icon.style.opacity = "1";
       });
