@@ -2249,7 +2249,8 @@ body.qamqor-phone-app-open{
   pointer-events:none!important;
 }
 .qamqor-phone-screen-hotspot{
-  position:static;
+  position:absolute;
+  z-index:2;
   display:block;
   box-sizing:border-box;
   overflow:hidden;
@@ -2459,6 +2460,8 @@ body.qamqor-phone-app-open{
         id="qamqorPhoneScreenHotspot"
         class="qamqor-phone-screen-hotspot"
         data-visibility-attribute="visible"
+        data-position="-0.0365150012 0.1608780026 0.0043219999"
+        data-normal="0 0 1"
         aria-label="QAMQOR PHONE өтінім формасы">
         <iframe id="qamqorIOS13Frame" class="qamqor-ios13-frame" title="iOS 13 интерфейсі — iPhone 18 Pro Max" src="./ios13/index.html" loading="eager" referrerpolicy="no-referrer" allow="fullscreen"></iframe>
         <button id="qamqorPhoneScreenClose" class="qamqor-phone-screen-close" type="button" aria-label="Телефонның басты экранына қайту">×</button>
