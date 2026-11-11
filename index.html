@@ -3815,8 +3815,14 @@ verifyButton.addEventListener("click", async () => {
   }
 
   function applyScreenLayout(screen) {
+    const bounds = screen.worldBounds;
+    const anchor = bounds && bounds.min && bounds.max ? {
+      x: bounds.min.x,
+      y: bounds.max.y,
+      z: screen.center.z
+    } : screen.center;
     hotspot.setAttribute("data-position",
-      `${round(screen.center.x)} ${round(screen.center.y)} ${round(screen.center.z)}`);
+      `${round(anchor.x)} ${round(anchor.y)} ${round(anchor.z)}`);
     hotspot.setAttribute("data-normal",
       `${round(screen.normal.x)} ${round(screen.normal.y)} ${round(screen.normal.z)}`);
     hotspot.style.width=`${Math.ceil(screen.pixelBounds.width+4)}px`;
