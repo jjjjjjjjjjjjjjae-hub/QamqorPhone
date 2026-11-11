@@ -2434,6 +2434,26 @@ body.qamqor-phone-app-open{
 .qamqor-ios13-frame {
   border-radius: inherit;
 }
+
+.qamqor-dynamic-island {
+  position: absolute;
+  z-index: 5;
+  top: 9px;
+  left: 50%;
+  width: 30%;
+  min-width: 58px;
+  max-width: 78px;
+  height: 4.3%;
+  min-height: 17px;
+  max-height: 23px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: #000;
+  box-shadow:
+    inset 0 -1px 2px rgba(255,255,255,.08),
+    0 1px 4px rgba(0,0,0,.55);
+  pointer-events: none;
+}
 </style>
 </head>
 <body>
@@ -2474,7 +2494,8 @@ body.qamqor-phone-app-open{
         data-position="-0.0365150012 0.1608780026 0.0043219999"
         data-normal="0 0 1"
         aria-label="QAMQOR PHONE өтінім формасы">
-        <iframe id="qamqorIOS13Frame" class="qamqor-ios13-frame" title="iOS 13 интерфейсі — iPhone 18 Pro Max" src="./ios13/index.html?v=ios13-airy-20261111" loading="eager" referrerpolicy="no-referrer" allow="fullscreen"></iframe>
+        <iframe id="qamqorIOS13Frame" class="qamqor-ios13-frame" title="iOS 13 интерфейсі — iPhone 18 Pro Max" src="./ios13/index.html?v=ios13-island-20261111" loading="eager" referrerpolicy="no-referrer" allow="fullscreen"></iframe>
+        <div id="qamqorDynamicIsland" class="qamqor-dynamic-island" aria-hidden="true"></div>
         <button id="qamqorPhoneScreenClose" class="qamqor-phone-screen-close" type="button" aria-label="Телефонның басты экранына қайту">×</button>
       </div>
       <span slot="hotspot-screen-top-left" class="qamqor-screen-probe" data-position="-0.0365150012 0.1608780026 0.0043219999" data-normal="0 0 1" data-visibility-attribute="visible" aria-hidden="true"></span>
