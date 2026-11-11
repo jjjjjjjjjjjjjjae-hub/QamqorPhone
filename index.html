@@ -2455,6 +2455,15 @@ body.qamqor-phone-app-open{
   pointer-events: none;
 }
 </style>
+
+<style id="qamqor-mobile-phone-centering">
+/* The GLB's visible body is slightly right of its canvas on narrow screens. */
+@media(max-width:620px){
+  body:not(.qamqor-phone-app-open) .hero#top .qamqor-phone-model{
+    transform:translate3d(-14vw,0,0)!important;
+  }
+}
+</style>
 </head>
 <body>
 <div id="qamqor-video-background" aria-hidden="true">
