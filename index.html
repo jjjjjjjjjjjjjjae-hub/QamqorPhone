@@ -2394,16 +2394,32 @@ body.qamqor-phone-app-open{
 
 
 <style id="qamqor-ios13-screen-embed">
+/* The live iOS overlay must sit inside the measured front-glass boundary,
+   not over the model's metal frame. Keep the GLB rim visible on every edge. */
+.qamqor-phone-screen-hotspot{
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:clamp(16px,7.2%,30px)!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  isolation:isolate;
+}
 .qamqor-ios13-frame{
-  position:absolute;
-  inset:0;
-  z-index:1;
-  display:block;
-  width:100%;
-  height:100%;
-  border:0;
-  border-radius:inherit;
-  background:#000;
+  position:absolute!important;
+  inset:0!important;
+  z-index:1!important;
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  box-sizing:border-box!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:inherit!important;
+  overflow:hidden!important;
+  background:#000!important;
   opacity:0;
   pointer-events:none;
 }
@@ -2423,47 +2439,28 @@ body.qamqor-phone-app-open{
   opacity:0!important;
   pointer-events:none!important;
 }
-
-
-/* The iOS13 document owns the complete display; keep the hotspot edge invisible. */
-.qamqor-phone-screen-hotspot {
-  border: 0 !important;
-  box-shadow: none !important;
+/* The model's own glass outline is the only bezel; do not draw a second frame. */
+.qamqor-dynamic-island{
+  position:absolute;
+  z-index:5;
+  top:9px;
+  left:50%;
+  width:30%;
+  min-width:58px;
+  max-width:78px;
+  height:4.3%;
+  min-height:17px;
+  max-height:23px;
+  transform:translateX(-50%);
+  border-radius:999px;
+  background:#000;
+  box-shadow:inset 0 -1px 2px rgba(255,255,255,.08),0 1px 4px rgba(0,0,0,.55);
+  pointer-events:none;
 }
-.qamqor-phone-screen-hotspot,
-.qamqor-ios13-frame {
-  border-radius: inherit;
-}
-
-.qamqor-dynamic-island {
-  position: absolute;
-  z-index: 5;
-  top: 9px;
-  left: 50%;
-  width: 30%;
-  min-width: 58px;
-  max-width: 78px;
-  height: 4.3%;
-  min-height: 17px;
-  max-height: 23px;
-  transform: translateX(-50%);
-  border-radius: 999px;
-  background: #000;
-  box-shadow:
-    inset 0 -1px 2px rgba(255,255,255,.08),
-    0 1px 4px rgba(0,0,0,.55);
-  pointer-events: none;
-}
-
-/* The iframe is clipped to the GLB screen surface; no floating card behind it. */
-.qamqor-phone-screen-hotspot {
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  overflow: hidden !important;
-}
-.qamqor-ios13-frame {
-  border-radius: inherit;
+@media(max-width:620px){
+  .qamqor-phone-screen-hotspot{
+    border-radius:clamp(14px,7.2%,26px)!important;
+  }
 }
 </style>
 
