@@ -101,6 +101,7 @@ body > .h-100.w-100 > .phone-section > .flex-column {
   --ios13-icon-size: 46px;
   --ios13-icon-radius: 10px;
   --ios13-col-padding: 0px;
+  --ios13-row-padding: 10px;
   --ios13-dock-height: 70px;
   --ios13-dock-padding: 23px;
   --ios13-dock-bottom: -71px;
@@ -118,8 +119,8 @@ body > .h-100.w-100 > .phone-section > .flex-column {
 }
 .home-icons > .row,
 .home-icons-2 > .row {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+  padding-left: var(--ios13-row-padding) !important;
+  padding-right: var(--ios13-row-padding) !important;
 }
 .home-icons > .row > [class*="col-"],
 .home-icons-2 > .row > [class*="col-"] {
@@ -373,6 +374,7 @@ body > .h-100.w-100 > .phone-section > .flex-column {
     root.style.setProperty("--ios13-icon-size", px(46));
     root.style.setProperty("--ios13-icon-radius", px(10));
     root.style.setProperty("--ios13-col-padding", px(0));
+    root.style.setProperty("--ios13-row-padding", px(10));
     root.style.setProperty("--ios13-dock-height", px(70));
     root.style.setProperty("--ios13-dock-padding", px(23));
     root.style.setProperty("--ios13-dock-bottom", `-${Math.round((71 * scale) * 10) / 10}px`);
