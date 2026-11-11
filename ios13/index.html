@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iOS13</title>
+  <link rel="shortcut icon" href="#" />
+  <link rel="stylesheet" href="https://iphone-7-ios13.netlify.app/assets/css/jquery-ui.css">
+  <link rel="stylesheet" href="https://iphone-7-ios13.netlify.app/assets/css/bootstrap.css">
+  <link rel="stylesheet" href="https://iphone-7-ios13.netlify.app/assets/css/index.css">
+
+<style id="qamqor-embedded-ios13">
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background: #000;
+  overflow: hidden;
+}
+body > .h-100.w-100 {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  position: relative !important;
+}
+body > .h-100.w-100 > .phone-section,
+body > .h-100.w-100 > .phone-section > .flex-column {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+.iphone-7 {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  background: #000 !important;
+}
+.phone-section-top {
+  display: none !important;
+}
+.phone-section-mid {
+  width: 100% !important;
+  height: 100% !important;
+}
+.phone-screen {
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 1;
+  border-radius: 0 !important;
+}
+.display {
+  width: 100% !important;
+  height: 100% !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+.phone-section-bottom {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 20 !important;
+  display: flex !important;
+  width: 100% !important;
+  height: 36px !important;
+  pointer-events: none !important;
+}
+.touch-id {
+  width: 31px !important;
+  height: 31px !important;
+  margin: 0 !important;
+  pointer-events: auto !important;
+}
+#power-btn {
+  top: 10px !important;
+  right: 6px !important;
+  left: auto !important;
+  z-index: 30 !important;
+  width: 9px !important;
+  height: 72px !important;
+  transform: none !important;
+}
+.side-swipe-slider,
+.quick-settings-slider,
+.author,
+.settings-container {
+  display: none !important;
+}
+</style>
+</head>
+
+<body>
+  <div class="h-100 w-100 d-flex d-flex justify-content-center align-items-center">
+    <div class="phone-section">
+      <div class="flex-column">
+        <div class="iphone iphone-7">
+          <div class="phone-section-top w-100 d-flex justify-content-center align-items-center">
+            <div class="front-cam mr-3"></div>
+            <div class="speaker-grill"></div>
+            <div class="ml-3" style="width: 8px"></div>
+          </div>
+          <div class="phone-section-mid w-100 d-flex justify-content-center align-items-center">
+            <div class="phone-screen">
+              <div class="display">
+                <div class="lock-screen">
+                  <div class="text-white date-time">
+                    <div class="time"></div>
+                    <div class="date"></div>
+                  </div>
+                  <div class="text-white unlock-hint">
+                    <div class="hint-1">
+                      <span>P</span>
+                      <span>r</span>
+                      <span>e</span>
+                      <span>s</span>
+                      <span class="mr-2">s</span>
+                      <span>H</span>
+                      <span>o</span>
+                      <span>m</span>
+                      <span>e</span>
+                    </div>
+                    <div class="hint-2">
+                      <span class="ml-2">T</span>
+                      <span class="mr-2">o</span>
+                      <span>U</span>
+                      <span>n</span>
+                      <span>l</span>
+                      <span>o</span>
+                      <span>c</span>
+                      <span>k</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="top-bar text-white d-flex justify-content-between align-items-center">
+                  <span>Network</span>
+                  <span id="unlocked-time"></span>
+                  <div class="battery d-flex align-items-center">
+                    <div class="percent-value text-white"></div>
+                    <div class="shell">
+                      <div class="percent"></div>
+                    </div>
+                    <div class="lead">
+                      <div class="tip"></div>
+                    </div>
+                  </div>
+                </div>
+                <div id="pages" class="pages d-flex">
+                  <div class="fav-icons">
+                    <div id="scrollable" class="text-white scrollable p-1">
+                      <div class="transparent-dark-card w-100 mb-1">Test</div>
+                      <div class="transparent-dark-card w-100 mb-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+                    </div>
+                  </div>
+                  <div class="home-screens d-flex">
+                    <div class="home-icons">
+                      <div class="row mt-2">
+                        <div class="col-3"><div class="icon"></div></div>
+                        <div class="col-3"><div class="icon"></div></div>
+                        <div class="col-3"><div class="icon"></div></div>
+                        <div class="col-3"><div class="icon"></div></div>
+                      </div>
+          
+                      <div class="row mt-4">
+                        <div class="col-3"><div class="icon"></div></div>
+                        <div class="col-3"><div class="icon"></div></div>
+                        <div class="col-3"><div class="icon"></div></div>
+                        <div class="col-3"><div class="icon"></div></div>
+                      </div>
+          
+                      <div class="row mt-4">
+                        <div class="col-3"><div class="icon"></div></div>
+                        <div class="col-3"><div class="icon"></div></div>
+                        <div class="col-3"><div class="icon"></div></div>
+                        <div class="col-3"><div class="icon"></div></div>
+                      </div>
+           
+                      <div class="row mt-4">
+                        <div class="col-3"><div class="icon"></div></div>
+                        <div class="col-3"><div class="icon"></div></div>
+                        <div class="col-3"><div class="icon"></div></div>
+                      </div>
+                    </div>
+                    <div class="home-icons-2">
+                      <div class="row mt-2">
+                        <div class="col-3"><div class="icon"></div></div>
+                        <div class="col-3"><div class="icon"></div></div>
+                        <div class="col-3"><div class="icon"></div></div>
+                        <div class="col-3"><div class="icon"></div></div>
+                      </div>
+          
+                      <div class="row mt-4">
+                        <div class="col-3"><div class="icon"></div></div>
+                        <div class="col-3"><div class="icon"></div></div>
+                      </div>
+                    </div>
+                    <div class="bottom-dock d-flex justify-content-between align-items-center">
+                      <div class="bottom-dock-icons phone-app"></div>
+                      <div class="bottom-dock-icons safari-app"></div>
+                      <div class="bottom-dock-icons message-app"></div>
+                      <div class="bottom-dock-icons itunes-app"></div>
+                    </div>
+                  </div>
+                  <div class="lock-screen-temp"></div>
+                </div>
+                <div class="quick-swipe-settings">
+                  <div class=settings-grid>
+                    <div class="row">
+                      <div class="col-6 p-0">
+                        <div class="ml-4 four-by-four-background d-flex justify-content-between flex-column padded-icons">
+                          <div class="d-flex justify-content-between">
+                            <div class="round-icon"></div>
+                            <div class="round-icon"></div>
+                          </div>
+                          <div class="d-flex justify-content-between">
+                            <div class="round-icon"></div>
+                            <div class="round-icon"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6 p-0">
+                        <div class="ml-1 four-by-four-background"></div>
+                      </div>
+                    </div>
+                    <div class="row mt-2">
+                      <div class="col-6 p-0">
+                        <div class="ml-4 four-by-four-transparent d-flex justify-content-between flex-column">
+                          <div class="d-flex justify-content-between">
+                            <div class="two-by-two-black"></div>
+                            <div class="two-by-two-black"></div>
+                          </div>
+                          <div class="two-by-four-black"></div>
+                        </div>
+                      </div>
+                      <div class="col-6 p-0">
+                        <div class="ml-1 four-by-four-transparent d-flex justify-content-between">
+                          <div class="brightness-control four-by-two-black">
+                            <div class="brightness-track"></div>
+                            <div class="brightness-filled"></div>
+                          </div>
+                          <div class="volume-control four-by-two-black">
+                            <div class="volume-track"></div>
+                            <div class="volume-filled"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mt-2">
+                      <div class="col-6 p-0">
+                        <div class="ml-4 four-by-four-transparent d-flex justify-content-between flex-column">
+                          <div class="d-flex justify-content-between">
+                            <div class="two-by-two-black"></div>
+                            <div class="two-by-two-black"></div>
+                          </div>
+                          <div class="d-flex justify-content-between">
+                            <div class="two-by-two-black"></div>
+                            <div class="two-by-two-black"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6 p-0">
+                        <div class="ml-1 four-by-four-transparent d-flex justify-content-between flex-column">
+                          <div class="d-flex justify-content-between">
+                            <div class="two-by-two-black"></div>
+                            <div class="two-by-two-black"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="phone-section-bottom w-100 d-flex justify-content-center align-items-center">
+            <div id="touch-id" class="touch-id mb-2"></div>
+          </div>
+          <div id="power-btn" class="power-btn"></div>
+        </div>
+        <div class="side-swipe-slider"></div>
+      </div>
+    </div>
+    <div class="quick-settings-slider"></div>
+
+
+    <!-- <div class="d-flex author">
+      <a href="https://soorajsnair333.netlify.app/" target="_blank" class="btn btn-dark btn-sm">Creator</a>
+      <a href="https://github.com/SoorajSNBlaze333" target="_blank" class="btn btn-dark btn-sm ml-2">Github</a>
+    </div> -->
+  </div>
+
+  <script src="https://iphone-7-ios13.netlify.app/assets/packages/jquery.js"></script>
+  <script src="https://iphone-7-ios13.netlify.app/assets/packages/jquery-ui.js"></script>
+  <script src="https://iphone-7-ios13.netlify.app/assets/packages/jquery-touch-punch.min.js"></script>
+  <script src="https://iphone-7-ios13.netlify.app/assets/packages/moment.min.js"></script>
+  <script src="https://iphone-7-ios13.netlify.app/assets/packages/gsap.min.js"></script>
+
+  <script src="https://iphone-7-ios13.netlify.app/assets/js/notifications.js"></script>
+  <script src="https://iphone-7-ios13.netlify.app/assets/js/settings.js"></script>
+  <script src="https://iphone-7-ios13.netlify.app/assets/js/ios13.js"></script>
+
+  <script>
+    // Scale the complete phone to the smaller of the viewport width/height.
+    // This also reacts to mobile browser chrome and orientation changes.
+    (() => {
+      const phone = document.querySelector('.iphone-7');
+      if (!phone) return;
+
+      const fitPhone = () => {
+        const viewport = window.visualViewport;
+        const width = viewport?.width || document.documentElement.clientWidth || window.innerWidth;
+        const height = viewport?.height || document.documentElement.clientHeight || window.innerHeight;
+        const scale = Math.min(
+          1,
+          Math.max(0.1, (width - 24) / 340),
+          Math.max(0.1, (height - 24) / 695)
+        );
+        phone.style.setProperty('--phone-scale', scale.toFixed(4));
+      };
+
+      let frame = 0;
+      const scheduleFit = () => {
+        if (frame) cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => {
+          frame = 0;
+          fitPhone();
+        });
+      };
+
+      fitPhone();
+      window.addEventListener('resize', scheduleFit, {passive: true});
+      window.addEventListener('orientationchange', scheduleFit, {passive: true});
+      window.visualViewport?.addEventListener('resize', scheduleFit, {passive: true});
+    })();
+  </script>
+</body>
+</html>
+
