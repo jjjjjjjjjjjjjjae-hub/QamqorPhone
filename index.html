@@ -2423,6 +2423,35 @@ body.qamqor-phone-app-open{
   opacity:0!important;
   pointer-events:none!important;
 }
+
+<style id="qamqor-ios13-repair-shortcut">
+.qamqor-ios13-repair{
+  position:absolute;
+  z-index:25;
+  left:50%;
+  bottom:12px;
+  display:none;
+  min-height:30px;
+  padding:7px 13px;
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:999px;
+  color:#07111e;
+  background:rgba(255,255,255,.94);
+  box-shadow:0 5px 16px rgba(0,0,0,.32);
+  font:700 10px/1 system-ui,sans-serif;
+  cursor:pointer;
+  transform:translateX(-50%);
+}
+.qamqor-phone-screen-hotspot.qamqor-ios13-ready .qamqor-ios13-repair{
+  display:block;
+}
+.qamqor-phone-app-open .qamqor-ios13-repair{
+  display:none!important;
+}
+.qamqor-ios13-repair:hover{
+  background:#fff;
+}
+</style>
 </style>
 </head>
 <body>
@@ -2464,6 +2493,7 @@ body.qamqor-phone-app-open{
         data-normal="0 0 1"
         aria-label="QAMQOR PHONE өтінім формасы">
         <iframe id="qamqorIOS13Frame" class="qamqor-ios13-frame" title="iOS 13 интерфейсі — iPhone 18 Pro Max" src="./ios13/index.html" loading="eager" referrerpolicy="no-referrer" allow="fullscreen"></iframe>
+        <button id="qamqorIOS13Repair" class="qamqor-ios13-repair" type="button">Өтінім беру</button>
         <button id="qamqorPhoneScreenClose" class="qamqor-phone-screen-close" type="button" aria-label="Телефонның басты экранына қайту">×</button>
       </div>
       <span slot="hotspot-screen-top-left" class="qamqor-screen-probe" data-position="-0.0365150012 0.1608780026 0.0043219999" data-normal="0 0 1" data-visibility-attribute="visible" aria-hidden="true"></span>
@@ -3753,6 +3783,7 @@ verifyButton.addEventListener("click", async () => {
   const repair = document.getElementById("repair");
   const closeButton = document.getElementById("qamqorPhoneScreenClose");
   const ios13Frame = document.getElementById("qamqorIOS13Frame");
+  const ios13Repair = document.getElementById("qamqorIOS13Repair");
   if (!viewer || !hotspot || !repair || !closeButton) return;
 
   const SCREEN_MATERIAL = "COLOUR_Blue_Screen";
@@ -4124,6 +4155,13 @@ verifyButton.addEventListener("click", async () => {
   window.qamqorClosePhoneApp=closePhoneApp;
   window.qamqorShowIOS13=showIOS13Home;
 
+  if (ios13Repair) {
+    ios13Repair.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      openPhoneApp({updateHistory:true});
+    });
+  }
   closeButton.addEventListener("click",event=>{
     event.preventDefault();
     event.stopPropagation();
