@@ -2391,6 +2391,38 @@ body.qamqor-phone-app-open{
 }
 </style>
 
+
+<style id="qamqor-ios13-screen-embed">
+.qamqor-ios13-frame{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  display:block;
+  width:100%;
+  height:100%;
+  border:0;
+  border-radius:inherit;
+  background:#000;
+  opacity:0;
+  pointer-events:none;
+}
+.qamqor-phone-screen-hotspot.qamqor-ios13-ready{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+.qamqor-phone-screen-hotspot.qamqor-ios13-ready .qamqor-ios13-frame{
+  opacity:1;
+  pointer-events:auto;
+}
+.qamqor-phone-screen-hotspot.qamqor-ios13-ready .qamqor-phone-screen-close{
+  display:none!important;
+}
+.qamqor-phone-app-open .qamqor-ios13-frame{
+  opacity:0!important;
+  pointer-events:none!important;
+}
+</style>
 </head>
 <body>
 <div id="qamqor-video-background" aria-hidden="true">
@@ -2428,6 +2460,7 @@ body.qamqor-phone-app-open{
         class="qamqor-phone-screen-hotspot"
         data-visibility-attribute="visible"
         aria-label="QAMQOR PHONE өтінім формасы">
+        <iframe id="qamqorIOS13Frame" class="qamqor-ios13-frame" title="iOS 13 интерфейсі — iPhone 18 Pro Max" src="./ios13/index.html" loading="eager" referrerpolicy="no-referrer" allow="fullscreen"></iframe>
         <button id="qamqorPhoneScreenClose" class="qamqor-phone-screen-close" type="button" aria-label="Телефонның басты экранына қайту">×</button>
       </div>
       <span slot="hotspot-screen-top-left" class="qamqor-screen-probe" data-position="-0.0365150012 0.1608780026 0.0043219999" data-normal="0 0 1" data-visibility-attribute="visible" aria-hidden="true"></span>
@@ -3716,6 +3749,7 @@ verifyButton.addEventListener("click", async () => {
   const hotspot = document.getElementById("qamqorPhoneScreenHotspot");
   const repair = document.getElementById("repair");
   const closeButton = document.getElementById("qamqorPhoneScreenClose");
+  const ios13Frame = document.getElementById("qamqorIOS13Frame");
   if (!viewer || !hotspot || !repair || !closeButton) return;
 
   const SCREEN_MATERIAL = "COLOUR_Blue_Screen";
@@ -3780,6 +3814,15 @@ verifyButton.addEventListener("click", async () => {
     };
   }
 
+  function applyScreenLayout(screen) {
+    hotspot.setAttribute("data-position",
+      `${round(screen.center.x)} ${round(screen.center.y)} ${round(screen.center.z)}`);
+    hotspot.setAttribute("data-normal",
+      `${round(screen.normal.x)} ${round(screen.normal.y)} ${round(screen.normal.z)}`);
+    hotspot.style.width=`${Math.ceil(screen.pixelBounds.width+4)}px`;
+    hotspot.style.height=`${Math.ceil(screen.pixelBounds.height+4)}px`;
+    hotspot.style.borderRadius=`${Math.min(34,Math.max(16,screen.pixelBounds.width*.075))}px`;
+  }
   const originalParent = repair.parentNode;
   const placeholder = document.createComment(" QAMQOR repair form original position ");
   originalParent.insertBefore(placeholder, repair);
@@ -3787,6 +3830,22 @@ verifyButton.addEventListener("click", async () => {
   let appOpen = false;
   let appBusy = false;
   let originalState = null;
+
+  function hideIOS13Home() {
+    hotspot.classList.remove("qamqor-ios13-ready");
+  }
+
+  async function showIOS13Home() {
+    if (!ios13Frame || appOpen || appBusy || !viewer.loaded) return;
+    try {
+      await waitFrame();
+      if (appOpen || appBusy) return;
+      applyScreenLayout(fixedScreenLayout());
+      hotspot.classList.add("qamqor-ios13-ready");
+    } catch (error) {
+      console.error("QAMQOR iOS13 overlay:", error);
+    }
+  }
 
   function readOrbit() {
     const orbit = viewer.getCameraOrbit();
@@ -3962,6 +4021,7 @@ verifyButton.addEventListener("click", async () => {
   async function openPhoneApp(options={}) {
     if (appOpen || appBusy) return;
     appBusy=true;
+    hideIOS13Home();
     originalState={
       cameraOrbit:viewer.getAttribute("camera-orbit"),
       cameraTarget:viewer.getAttribute("camera-target"),
@@ -3988,13 +4048,7 @@ verifyButton.addEventListener("click", async () => {
       await waitFrame();
       const screen=await detectScreenWithMaterialScan();
 
-      hotspot.setAttribute("data-position",
-        `${round(screen.center.x)} ${round(screen.center.y)} ${round(screen.center.z)}`);
-      hotspot.setAttribute("data-normal",
-        `${round(screen.normal.x)} ${round(screen.normal.y)} ${round(screen.normal.z)}`);
-      hotspot.style.width=`${Math.ceil(screen.pixelBounds.width+4)}px`;
-      hotspot.style.height=`${Math.ceil(screen.pixelBounds.height+4)}px`;
-      hotspot.style.borderRadius=`${Math.min(34,Math.max(16,screen.pixelBounds.width*.075))}px`;
+      applyScreenLayout(screen);
 
       hotspot.appendChild(repair);
       repair.hidden=false;
@@ -4054,10 +4108,12 @@ verifyButton.addEventListener("click", async () => {
     if (typeof window.qamqorShowPage==="function") {
       window.qamqorShowPage("top",{updateHistory:false,scroll:false});
     }
+    window.setTimeout(() => showIOS13Home(), 0);
   }
 
   window.qamqorOpenPhoneApp=openPhoneApp;
   window.qamqorClosePhoneApp=closePhoneApp;
+  window.qamqorShowIOS13=showIOS13Home;
 
   closeButton.addEventListener("click",event=>{
     event.preventDefault();
@@ -4072,12 +4128,24 @@ verifyButton.addEventListener("click", async () => {
     if(appOpen && window.location.hash!=="#repair") closePhoneApp({updateHistory:false});
   });
 
-  if (window.location.hash==="#repair" ||
-      sessionStorage.getItem("qamqorPendingRequest") ||
-      sessionStorage.getItem("qamqorQuoteRequest") ||
-      new URLSearchParams(window.location.search).has("code")) {
+  const shouldOpenRepair = window.location.hash==="#repair" ||
+    sessionStorage.getItem("qamqorPendingRequest") ||
+    sessionStorage.getItem("qamqorQuoteRequest") ||
+    new URLSearchParams(window.location.search).has("code");
+
+  if (shouldOpenRepair) {
     openPhoneApp({updateHistory:false});
+  } else if (viewer.loaded) {
+    showIOS13Home();
+  } else {
+    viewer.addEventListener("load", showIOS13Home, {once:true});
   }
+
+  window.addEventListener("resize", () => {
+    if (!appOpen && !appBusy && ios13Frame && hotspot.classList.contains("qamqor-ios13-ready")) {
+      showIOS13Home();
+    }
+  }, {passive:true});
 })();
 </script>
 
