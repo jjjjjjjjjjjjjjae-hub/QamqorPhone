@@ -92,6 +92,28 @@ body > .h-100.w-100 > .phone-section > .flex-column {
   display: none !important;
 }
 </style>
+
+<style id="qamqor-embedded-repair-button-style">
+#qamqorEmbeddedRepairButton{
+  position:absolute;
+  z-index:50;
+  left:50%;
+  bottom:8px;
+  display:block;
+  min-height:25px;
+  padding:6px 11px;
+  border:1px solid rgba(255,255,255,.8);
+  border-radius:999px;
+  color:#07111e;
+  background:rgba(255,255,255,.94);
+  box-shadow:0 4px 14px rgba(0,0,0,.35);
+  font:700 9px/1 system-ui,sans-serif;
+  cursor:pointer;
+  transform:translateX(-50%);
+}
+#qamqorEmbeddedRepairButton:hover{background:#fff}
+</style>
+
 </head>
 
 <body>
@@ -107,6 +129,7 @@ body > .h-100.w-100 > .phone-section > .flex-column {
           <div class="phone-section-mid w-100 d-flex justify-content-center align-items-center">
             <div class="phone-screen">
               <div class="display">
+              <button id="qamqorEmbeddedRepairButton" type="button" aria-label="Өтінім беру">Өтінім беру</button>
                 <div class="lock-screen">
                   <div class="text-white date-time">
                     <div class="time"></div>
@@ -337,6 +360,19 @@ body > .h-100.w-100 > .phone-section > .flex-column {
       window.visualViewport?.addEventListener('resize', scheduleFit, {passive: true});
     })();
   </script>
+
+<script id="qamqor-embedded-repair-bridge">
+(() => {
+  const button = document.getElementById("qamqorEmbeddedRepairButton");
+  if (!button) return;
+  button.addEventListener("click", event => {
+    event.preventDefault();
+    event.stopPropagation();
+    window.parent.postMessage({type:"qamqor-open-repair"}, window.location.origin);
+  });
+})();
+</script>
+
 </body>
 </html>
 
